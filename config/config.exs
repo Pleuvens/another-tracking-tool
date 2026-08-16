@@ -14,7 +14,11 @@ config :another_tracking_tool, Oban,
   queues: [default: 10, sync: 5, imports: 3, metadata: 5],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
-    {Oban.Plugins.Cron, crontab: []}
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 3 * * *", AnotherTrackingTool.Providers.Tmdb.SyncGenresWorker},
+       {"0 * * * *", AnotherTrackingTool.Providers.Tmdb.SeedWorker, args: %{source: "trending"}}
+     ]}
   ]
 
 config :another_tracking_tool,

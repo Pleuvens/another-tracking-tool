@@ -18,15 +18,21 @@ defmodule AnotherTrackingTool.Providers.Tmdb do
   @impl true
   def search(query, opts \\ []) do
     with {:ok, %{"results" => results}} <- Tmdb.search_multi(query, opts) do
-      items =
-        Enum.flat_map(results, fn m ->
-          case MediaEnums.to_existing_cinema_kind(m["media_type"]) do
-            nil -> []
-            kind -> [media_item_attrs(kind, m)]
-          end
-        end)
+      {:ok, map_results(results)}
+    end
+  end
 
-      {:ok, items}
+  @doc "Normalized attrs for a page of trending movies/TV."
+  def trending(opts \\ []) do
+    with {:ok, %{"results" => results}} <- Tmdb.trending(opts) do
+      {:ok, map_results(results)}
+    end
+  end
+
+  @doc "Normalized attrs for a page of discover results of a known kind."
+  def discover(kind, params, opts \\ []) do
+    with {:ok, %{"results" => results}} <- Tmdb.discover(kind, params, opts) do
+      {:ok, Enum.map(results, &media_item_attrs(kind, &1))}
     end
   end
 
@@ -178,4 +184,13 @@ defmodule AnotherTrackingTool.Providers.Tmdb do
 
   defp index_genres(%{"genres" => genres}),
     do: Map.new(genres, &{&1["id"], &1["name"]})
+
+  defp map_results(results) do
+    Enum.flat_map(results, fn m ->
+      case MediaEnums.to_existing_cinema_kind(m["media_type"]) do
+        nil -> []
+        kind -> [media_item_attrs(kind, m)]
+      end
+    end)
+  end
 end
