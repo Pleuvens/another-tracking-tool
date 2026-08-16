@@ -76,3 +76,8 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# Local dev secrets (TMDB token, etc.) — copy dev.secrets.exs.example, git-ignored.
+if File.exists?(Path.expand("dev.secrets.exs", __DIR__)) do
+  import_config "dev.secrets.exs"
+end

@@ -35,3 +35,6 @@ another_tracking_tool-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Local dev secrets.
+/config/dev.secrets.exs
+
