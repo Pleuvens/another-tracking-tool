@@ -27,6 +27,16 @@ defmodule AnotherTrackingTool.CatalogTest do
       assert item.tmdb_id == 603
       assert item.title_fr == "Matrix"
     end
+
+    test "schedules enrichment for its results" do
+      TmdbStub.stub([
+        {"/3/search/multi",
+         %{"results" => [%{"media_type" => "movie", "id" => 603, "title" => "Matrix"}]}}
+      ])
+
+      assert {:ok, [item]} = Catalog.search("matrix")
+      assert_enqueued(worker: EnrichMediaItemWorker, args: %{media_item_id: item.id})
+    end
   end
 
   describe "upsert_media_item/1" do

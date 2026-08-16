@@ -22,14 +22,20 @@ defmodule AnotherTrackingTool.Catalog do
   def provider_for(kind) when kind in @cinema_kinds, do: Providers.Tmdb
 
   def search(query, opts \\ []) do
-    Enum.reduce_while(search_providers(), {:ok, []}, fn provider, {:ok, acc} ->
-      with {:ok, results} <- provider.search(query, opts),
-           {:ok, items} <- upsert_all(results) do
-        {:cont, {:ok, acc ++ items}}
-      else
-        error -> {:halt, error}
-      end
-    end)
+    result =
+      Enum.reduce_while(search_providers(), {:ok, []}, fn provider, {:ok, acc} ->
+        with {:ok, results} <- provider.search(query, opts),
+             {:ok, items} <- upsert_all(results) do
+          {:cont, {:ok, acc ++ items}}
+        else
+          error -> {:halt, error}
+        end
+      end)
+
+    with {:ok, items} <- result do
+      Enum.each(items, &ensure_details/1)
+      {:ok, items}
+    end
   end
 
   def upsert_media_item(%{source: source, source_id: source_id} = attrs) do
