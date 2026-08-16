@@ -40,6 +40,7 @@ defmodule AnotherTrackingTool.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:oban, "~> 2.0"},
       {:phoenix, "~> 1.8.9"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.13"},
@@ -89,7 +90,11 @@ defmodule AnotherTrackingTool.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind another_tracking_tool", "esbuild another_tracking_tool"],
+      "assets.build": [
+        "compile",
+        "tailwind another_tracking_tool",
+        "esbuild another_tracking_tool"
+      ],
       "assets.deploy": [
         "tailwind another_tracking_tool --minify",
         "esbuild another_tracking_tool --minify",

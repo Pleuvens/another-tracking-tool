@@ -7,9 +7,24 @@
 # General application configuration
 import Config
 
+config :another_tracking_tool, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  repo: AnotherTrackingTool.Repo,
+  queues: [default: 10, sync: 5, imports: 3, metadata: 5],
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
+    {Oban.Plugins.Cron, crontab: []}
+  ]
+
 config :another_tracking_tool,
   ecto_repos: [AnotherTrackingTool.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
+
+config :another_tracking_tool, AnotherTrackingTool.Repo,
+  migration_primary_key: [type: :binary_id],
+  migration_foreign_key: [type: :binary_id],
+  migration_timestamps: [type: :utc_datetime]
 
 # Configure the endpoint
 config :another_tracking_tool, AnotherTrackingToolWeb.Endpoint,

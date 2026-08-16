@@ -10,7 +10,9 @@ defmodule AnotherTrackingTool.Application do
     children = [
       AnotherTrackingToolWeb.Telemetry,
       AnotherTrackingTool.Repo,
-      {DNSCluster, query: Application.get_env(:another_tracking_tool, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:another_tracking_tool, :dns_cluster_query) || :ignore},
+      {Oban, Application.fetch_env!(:another_tracking_tool, Oban)},
       {Phoenix.PubSub, name: AnotherTrackingTool.PubSub},
       # Start a worker by calling: AnotherTrackingTool.Worker.start_link(arg)
       # {AnotherTrackingTool.Worker, arg},

@@ -1,4 +1,5 @@
 import Config
+config :another_tracking_tool, Oban, testing: :manual
 
 # Configure your database
 #
