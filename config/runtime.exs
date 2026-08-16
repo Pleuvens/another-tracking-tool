@@ -23,6 +23,10 @@ end
 config :another_tracking_tool, AnotherTrackingToolWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+if token = System.get_env("TMDB_ACCESS_TOKEN") do
+  config :another_tracking_tool, AnotherTrackingTool.Tmdb, access_token: token
+end
+
 if config_env() == :dev do
   # Reload browser tabs when matching files change.
   config :another_tracking_tool, AnotherTrackingToolWeb.Endpoint,

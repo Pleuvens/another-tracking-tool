@@ -1,6 +1,10 @@
 import Config
 config :another_tracking_tool, Oban, testing: :manual
 
+config :another_tracking_tool, AnotherTrackingTool.Tmdb,
+  access_token: "test-token",
+  req_options: [plug: {Req.Test, AnotherTrackingTool.Tmdb}]
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used

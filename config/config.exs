@@ -26,6 +26,10 @@ config :another_tracking_tool, AnotherTrackingTool.Repo,
   migration_foreign_key: [type: :binary_id],
   migration_timestamps: [type: :utc_datetime]
 
+config :another_tracking_tool, AnotherTrackingTool.Tmdb,
+  base_url: "https://api.themoviedb.org/3",
+  language: "fr-FR"
+
 # Configure the endpoint
 config :another_tracking_tool, AnotherTrackingToolWeb.Endpoint,
   url: [host: "localhost"],
