@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: oklch(97% 0.012 75); }
+  a { color: oklch(45% 0.09 145); text-decoration: none; }
+  a:hover { color: oklch(38% 0.09 145); text-decoration: underline; }
+  ::selection { background: oklch(80% 0.09 85 / 0.5); }
+  @keyframes glowPulse { 0%,100% { opacity: .55; } 50% { opacity: .85; } }
+</style>
+</helmet>
+
+<div style="font-family: 'Nunito Sans', sans-serif; color: oklch(22% 0.015 60); max-width: 1180px; margin: 0 auto; padding: 64px 40px 120px; display: flex; flex-direction: column; gap: 96px;">
+
+  <!-- HERO -->
+  <section style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="font-family: 'Nunito Sans', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: oklch(45% 0.02 60);">Design System — Media Tracker</div>
+    <h1 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 56px; line-height: 1.05; margin: 0; max-width: 780px;">Light, quiet, and let the posters do the talking.</h1>
+    <p style="font-size: 18px; line-height: 1.6; max-width: 620px; color: oklch(38% 0.02 60); margin: 0;">A warm paper-toned UI with no fixed brand color — every accent, glow, and highlight is pulled straight from the artwork of the title on screen. Rounded, friendly type. Balanced density. Built for fast logging, not spreadsheets.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+      <span style="font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 100px; background: oklch(94% 0.014 70); color: oklch(38% 0.02 60);">Light &amp; warm</span>
+      <span style="font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 100px; background: oklch(94% 0.014 70); color: oklch(38% 0.02 60);">Poster-driven color</span>
+      <span style="font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 100px; background: oklch(94% 0.014 70); color: oklch(38% 0.02 60);">Rounded friendly type</span>
+      <span style="font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 100px; background: oklch(94% 0.014 70); color: oklch(38% 0.02 60);">Balanced density</span>
+    </div>
+  </section>
+
+  <!-- FOUNDATIONS: NEUTRALS -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Neutrals — the paper</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 560px;">Everything structural stays low-chroma and warm. No cool grays, no pure black/white.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(98.5% 0.008 75); border: 1px solid oklch(90% 0.012 70);"></div><div style="font-size:12px; font-weight:700;">Paper 0</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">98.5% .008 75</div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(97% 0.012 75);"></div><div style="font-size:12px; font-weight:700;">Paper</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">97% .012 75</div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(94% 0.014 70);"></div><div style="font-size:12px; font-weight:700;">Paper 2 / card</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">94% .014 70</div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(88% 0.012 70);"></div><div style="font-size:12px; font-weight:700;">Line</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">88% .012 70</div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(45% 0.02 60);"></div><div style="font-size:12px; font-weight:700; color: oklch(97% 0.012 75);">Ink soft</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">45% .02 60</div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;"><div style="height:88px; border-radius:14px; background: oklch(22% 0.015 60);"></div><div style="font-size:12px; font-weight:700;">Ink</div><div style="font-size:11px; color: oklch(45% 0.02 60); font-family: monospace;">22% .015 60</div></div>
+    </div>
+  </section>
+
+  <!-- STATUS COLORS -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Status hues</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 620px;">The only fixed colors in the system — for watch status only, never for branding. Same muted chroma, different hue each, so they read as a family.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+      <div style="display:flex; flex-direction:column; gap:10px; padding:20px; border-radius:16px; background: oklch(94% 0.014 70);">
+        <span style="align-self:flex-start; font-size:13px; font-weight:800; padding:6px 12px; border-radius:100px; background: oklch(70% 0.09 85); color: oklch(25% 0.02 60);">Watching</span>
+        <span style="font-family:monospace; font-size:11px; color: oklch(45% 0.02 60);">70% .09 85</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:20px; border-radius:16px; background: oklch(94% 0.014 70);">
+        <span style="align-self:flex-start; font-size:13px; font-weight:800; padding:6px 12px; border-radius:100px; background: oklch(65% 0.08 145); color: oklch(98% 0.01 75);">Completed</span>
+        <span style="font-family:monospace; font-size:11px; color: oklch(45% 0.02 60);">65% .08 145</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:20px; border-radius:16px; background: oklch(94% 0.014 70);">
+        <span style="align-self:flex-start; font-size:13px; font-weight:800; padding:6px 12px; border-radius:100px; background: oklch(62% 0.09 25); color: oklch(98% 0.01 75);">Dropped</span>
+        <span style="font-family:monospace; font-size:11px; color: oklch(45% 0.02 60);">62% .09 25</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:20px; border-radius:16px; background: oklch(94% 0.014 70);">
+        <span style="align-self:flex-start; font-size:13px; font-weight:800; padding:6px 12px; border-radius:100px; background: oklch(65% 0.06 250); color: oklch(98% 0.01 75);">Planned</span>
+        <span style="font-family:monospace; font-size:11px; color: oklch(45% 0.02 60);">65% .06 250</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTER-DRIVEN COLOR MECHANIC -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Poster-driven color</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 640px;">Each title's dominant artwork color becomes its own ambient accent — a soft glow behind the poster, the highlight ring on hover, the tint on a rating chip. Move to the next title and the whole card's mood shifts with it. No two rows need to look the same.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+
+      <div style="position:relative; border-radius:20px; padding:16px; background: oklch(94% 0.014 70); overflow:hidden;">
+        <div style="position:absolute; inset:-20% -20% auto -20%; height:70%; background: oklch(62% 0.15 250); filter: blur(30px); opacity:.5; animation: glowPulse 5s ease-in-out infinite;"></div>
+        <div style="position:relative; aspect-ratio:2/3; border-radius:12px; background: repeating-linear-gradient(45deg, oklch(62% 0.15 250 / 0.35) 0px, oklch(62% 0.15 250 / 0.35) 10px, oklch(70% 0.1 250 / 0.25) 10px, oklch(70% 0.1 250 / 0.25) 20px); display:flex; align-items:center; justify-content:center; text-align:center; padding:12px;">
+          <span style="font-family:monospace; font-size:11px; color: oklch(20% 0.02 250 / .7);">poster art<br/>(sci-fi, blue)</span>
+        </div>
+        <div style="position:relative; margin-top:10px; font-size:13px; font-weight:800;">Deep Signal</div>
+      </div>
+
+      <div style="position:relative; border-radius:20px; padding:16px; background: oklch(94% 0.014 70); overflow:hidden;">
+        <div style="position:absolute; inset:-20% -20% auto -20%; height:70%; background: oklch(60% 0.16 25); filter: blur(30px); opacity:.5; animation: glowPulse 5s ease-in-out infinite;"></div>
+        <div style="position:relative; aspect-ratio:2/3; border-radius:12px; background: repeating-linear-gradient(45deg, oklch(60% 0.16 25 / 0.35) 0px, oklch(60% 0.16 25 / 0.35) 10px, oklch(70% 0.1 25 / 0.25) 10px, oklch(70% 0.1 25 / 0.25) 20px); display:flex; align-items:center; justify-content:center; text-align:center; padding:12px;">
+          <span style="font-family:monospace; font-size:11px; color: oklch(20% 0.02 25 / .7);">poster art<br/>(horror, red)</span>
+        </div>
+        <div style="position:relative; margin-top:10px; font-size:13px; font-weight:800;">When It Wakes</div>
+      </div>
+
+      <div style="position:relative; border-radius:20px; padding:16px; background: oklch(94% 0.014 70); overflow:hidden;">
+        <div style="position:absolute; inset:-20% -20% auto -20%; height:70%; background: oklch(68% 0.15 145); filter: blur(30px); opacity:.5; animation: glowPulse 5s ease-in-out infinite;"></div>
+        <div style="position:relative; aspect-ratio:2/3; border-radius:12px; background: repeating-linear-gradient(45deg, oklch(68% 0.15 145 / 0.35) 0px, oklch(68% 0.15 145 / 0.35) 10px, oklch(76% 0.1 145 / 0.25) 10px, oklch(76% 0.1 145 / 0.25) 20px); display:flex; align-items:center; justify-content:center; text-align:center; padding:12px;">
+          <span style="font-family:monospace; font-size:11px; color: oklch(20% 0.02 145 / .7);">poster art<br/>(comedy, green)</span>
+        </div>
+        <div style="position:relative; margin-top:10px; font-size:13px; font-weight:800;">Small Talk</div>
+      </div>
+
+      <!-- graceful fallback for missing/low-quality art -->
+      <div style="position:relative; border-radius:20px; padding:16px; background: oklch(94% 0.014 70); overflow:hidden;">
+        <div style="position:absolute; inset:-20% -20% auto -20%; height:70%; background: oklch(70% 0.03 70); filter: blur(30px); opacity:.6;"></div>
+        <div style="position:relative; aspect-ratio:2/3; border-radius:12px; background: linear-gradient(160deg, oklch(88% 0.014 70), oklch(78% 0.02 70)); display:flex; align-items:center; justify-content:center; text-align:center; padding:12px;">
+          <span style="font-family:monospace; font-size:11px; color: oklch(40% 0.02 60 / .8);">no artwork found —<br/>soft gradient fallback</span>
+        </div>
+        <div style="position:relative; margin-top:10px; font-size:13px; font-weight:800;">Unlisted Short Film</div>
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 13px; color: oklch(45% 0.02 60);">When scraped art is missing or low-res, we never show a broken image or a loud placeholder icon — just a quiet blurred gradient in the neutral palette, so gaps in the catalog fade into the background instead of standing out.</p>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Typography</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 620px;">Quicksand for headings — round, friendly, a little playful. Nunito Sans for everything else, kept plain and legible: titles, dates, and ratings never get cute.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 28px; border-radius: 20px; background: oklch(94% 0.014 70);">
+      <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:44px; line-height:1.1;">Display / Quicksand 700 · 44px</div>
+      <div style="font-family:'Quicksand', sans-serif; font-weight:600; font-size:28px;">Heading / Quicksand 600 · 28px</div>
+      <div style="font-family:'Quicksand', sans-serif; font-weight:600; font-size:20px;">Subheading / Quicksand 600 · 20px</div>
+      <div style="font-family:'Nunito Sans', sans-serif; font-weight:400; font-size:16px; line-height:1.6; max-width: 560px;">Body / Nunito Sans 400 · 16px — years after a group of heroes defeated a horde of monsters, the townsfolk must band together again. Plain, readable, no personality of its own.</div>
+      <div style="font-family:'Nunito Sans', sans-serif; font-weight:800; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color: oklch(45% 0.02 60);">Eyebrow / label — Nunito Sans 800 · 12px uppercase</div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Components</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 620px;">Rounded corners throughout (12–20px), generous tap targets, no drop shadows — depth comes from the paper/card tone shift, not shadows.</p>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+      <button style="font-family:'Nunito Sans', sans-serif; font-weight:800; font-size:15px; padding:14px 26px; border-radius:100px; border:none; background: oklch(22% 0.015 60); color: oklch(98% 0.01 75); cursor:pointer;">Mark as watched</button>
+      <button style="font-family:'Nunito Sans', sans-serif; font-weight:800; font-size:15px; padding:14px 26px; border-radius:100px; border: 1.5px solid oklch(85% 0.014 70); background: transparent; color: oklch(22% 0.015 60); cursor:pointer;">Add to watchlist</button>
+      <button style="font-family:'Nunito Sans', sans-serif; font-weight:700; font-size:14px; padding:12px 18px; border-radius:100px; border:none; background: none; color: oklch(45% 0.02 60); cursor:pointer;">Skip →</button>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+      <span style="font-size:13px; font-weight:800; padding:7px 14px; border-radius:100px; background: oklch(70% 0.09 85 / 0.35); color: oklch(35% 0.06 85);">● Watching</span>
+      <span style="font-size:13px; font-weight:800; padding:7px 14px; border-radius:100px; background: oklch(65% 0.08 145 / 0.3); color: oklch(32% 0.06 145);">● Completed</span>
+      <span style="font-size:13px; font-weight:800; padding:7px 14px; border-radius:100px; background: oklch(62% 0.09 25 / 0.3); color: oklch(32% 0.07 25);">● Dropped</span>
+      <span style="font-size:13px; font-weight:800; padding:7px 14px; border-radius:100px; background: oklch(65% 0.06 250 / 0.3); color: oklch(32% 0.06 250);">● Planned</span>
+    </div>
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:12px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color: oklch(45% 0.02 60);">Rating — 0 to 5</div>
+        <div style="font-size:22px; letter-spacing:4px; color: oklch(22% 0.015 60);">★★★★<span style="color: oklch(85% 0.012 70);">★</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:12px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color: oklch(45% 0.02 60);">Who's watched this</div>
+        <div style="display:flex;">
+          <div style="width:36px; height:36px; border-radius:50%; background: oklch(70% 0.1 250); border:2px solid oklch(97% 0.012 75); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:white;">M</div>
+          <div style="width:36px; height:36px; margin-left:-10px; border-radius:50%; background: oklch(65% 0.09 25); border:2px solid oklch(97% 0.012 75); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:white;">J</div>
+          <div style="width:36px; height:36px; margin-left:-10px; border-radius:50%; background: oklch(65% 0.08 145); border:2px solid oklch(97% 0.012 75); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:white;">L</div>
+          <div style="width:36px; height:36px; margin-left:-10px; border-radius:50%; background: oklch(90% 0.014 70); border:2px solid oklch(97% 0.012 75); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color: oklch(45% 0.02 60);">+2</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; max-width:440px; padding: 14px 20px; border-radius:100px; background: oklch(94% 0.014 70);">
+      <span style="color: oklch(45% 0.02 60);">⌕</span>
+      <span style="font-size:15px; color: oklch(55% 0.02 60);">Search titles to log…</span>
+    </div>
+  </section>
+
+  <!-- CARD PATTERNS -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Card patterns</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 620px;">Poster-forward, moderate density — two to three columns, not a dense wall of thumbnails.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+
+      <div style="display:flex; gap:14px; padding:16px; border-radius:18px; background: oklch(94% 0.014 70); align-items:flex-start;">
+        <div style="flex-shrink:0; width:64px; aspect-ratio:2/3; border-radius:10px; background: repeating-linear-gradient(45deg, oklch(60% 0.16 25 / 0.35) 0px, oklch(60% 0.16 25 / 0.35) 8px, oklch(70% 0.1 25 / 0.25) 8px, oklch(70% 0.1 25 / 0.25) 16px);"></div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="font-size:12px; color: oklch(45% 0.02 60);">Marie · yesterday</div>
+          <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;">When It Wakes</div>
+          <div style="font-size:13px; font-weight:800; padding:4px 10px; border-radius:100px; background: oklch(65% 0.08 145 / 0.3); color: oklch(32% 0.06 145); align-self:flex-start;">Completed · ★★★★☆</div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; padding:16px; border-radius:18px; background: oklch(94% 0.014 70);">
+        <div style="aspect-ratio:2/3; border-radius:12px; background: repeating-linear-gradient(45deg, oklch(62% 0.15 250 / 0.35) 0px, oklch(62% 0.15 250 / 0.35) 8px, oklch(70% 0.1 250 / 0.25) 8px, oklch(70% 0.1 250 / 0.25) 16px);"></div>
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:15px;">Deep Signal</div>
+        <button style="font-family:'Nunito Sans', sans-serif; font-weight:800; font-size:13px; padding:10px; border-radius:100px; border:none; background: oklch(22% 0.015 60); color: oklch(98% 0.01 75); cursor:pointer;">＋ Mark watched</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; padding:16px; border-radius:18px; background: oklch(94% 0.014 70);">
+        <div style="aspect-ratio:2/3; border-radius:12px; background: linear-gradient(160deg, oklch(88% 0.014 70), oklch(78% 0.02 70)); display:flex; align-items:center; justify-content:center;">
+          <span style="font-family:monospace; font-size:10px; color: oklch(45% 0.02 60);">planned</span>
+        </div>
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:15px;">Unlisted Short Film</div>
+        <div style="font-size:12px; color: oklch(45% 0.02 60);">Sometime, who's counting</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MICROCOPY -->
+  <section style="display: flex; flex-direction: column; gap: 24px;">
+    <div>
+      <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 6px;">Voice — soft &amp; playful, only in the margins</h2>
+      <p style="margin: 0; color: oklch(45% 0.02 60); max-width: 620px;">Personality shows up in empty states and confirmations. Titles, dates, and ratings stay plain — never cute where clarity matters.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+      <div style="padding:20px 24px; border-radius:16px; background: oklch(94% 0.014 70); display:flex; flex-direction:column; gap:4px;">
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;">All caught up. Suspiciously caught up.</div>
+        <div style="font-size:13px; color: oklch(45% 0.02 60); font-style:italic;">FR — Tout est vu. Ça sent le mensonge.</div>
+      </div>
+      <div style="padding:20px 24px; border-radius:16px; background: oklch(94% 0.014 70); display:flex; flex-direction:column; gap:4px;">
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;">47 titles rescued from oblivion</div>
+        <div style="font-size:13px; color: oklch(45% 0.02 60); font-style:italic;">FR — 47 titres sauvés de l'oubli</div>
+      </div>
+      <div style="padding:20px 24px; border-radius:16px; background: oklch(94% 0.014 70); display:flex; flex-direction:column; gap:4px;">
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;">Nothing planned yet — go feed it some ideas</div>
+        <div style="font-size:13px; color: oklch(45% 0.02 60); font-style:italic;">FR — Rien de prévu — va lui trouver des idées</div>
+      </div>
+      <div style="padding:20px 24px; border-radius:16px; background: oklch(94% 0.014 70); display:flex; flex-direction:column; gap:4px;">
+        <div style="font-family:'Quicksand', sans-serif; font-weight:700; font-size:16px;">Life's too short</div>
+        <div style="font-size:13px; color: oklch(45% 0.02 60); font-style:italic;">FR — Pas le temps</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+</body>
+</html>
