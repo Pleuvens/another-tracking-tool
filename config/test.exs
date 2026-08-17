@@ -1,4 +1,7 @@
 import Config
+
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
 config :another_tracking_tool, Oban, testing: :manual
 
 config :another_tracking_tool, AnotherTrackingTool.Tmdb,

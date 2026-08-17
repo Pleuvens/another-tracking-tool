@@ -97,15 +97,20 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   """
   attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
   attr :class, :any
-  attr :variant, :string, values: ~w(primary)
+  attr :variant, :string, values: ~w(primary outline ghost)
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
-    variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
+    variants = %{
+      "primary" => "btn-primary",
+      "outline" => "btn-outline",
+      "ghost" => "btn-ghost",
+      nil => "btn-primary"
+    }
 
     assigns =
       assign_new(assigns, :class, fn ->
-        ["btn", Map.fetch!(variants, assigns[:variant])]
+        ["btn rounded-full font-extrabold", Map.fetch!(variants, assigns[:variant])]
       end)
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
@@ -121,6 +126,115 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
       </button>
       """
     end
+  end
+
+  @doc "A watch-status chip, tinted with the status hue."
+  attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
+
+  def status_badge(assigns) do
+    ~H"""
+    <span class={[
+      "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold",
+      status_badge_class(@status)
+    ]}>
+      <span class="size-1.5 rounded-full bg-current opacity-70"></span>
+      {status_label(@status)}
+    </span>
+    """
+  end
+
+  defp status_badge_class(:watching), do: "bg-status-watching/30 text-[oklch(38%_0.06_85)]"
+  defp status_badge_class(:completed), do: "bg-status-completed/30 text-[oklch(32%_0.06_145)]"
+  defp status_badge_class(:dropped), do: "bg-status-dropped/30 text-[oklch(32%_0.07_25)]"
+  defp status_badge_class(:planned), do: "bg-status-planned/30 text-[oklch(32%_0.06_250)]"
+
+  defp status_label(:watching), do: gettext("Watching")
+  defp status_label(:completed), do: gettext("Completed")
+  defp status_label(:dropped), do: gettext("Dropped")
+  defp status_label(:planned), do: gettext("Planned")
+
+  @doc """
+  A 2/3 poster frame with a poster-driven ambient glow.
+
+  Pass `accent` (any CSS color) for the glow; missing `src` falls back to a quiet
+  neutral gradient rather than a broken image.
+  """
+  attr :src, :string, default: nil
+  attr :alt, :string, default: ""
+  attr :accent, :string, default: nil
+  attr :class, :any, default: nil
+
+  def poster(assigns) do
+    ~H"""
+    <div class={["group relative overflow-hidden rounded-2xl bg-paper-2 p-3", @class]}>
+      <div
+        :if={@accent}
+        class="pointer-events-none absolute inset-x-[-20%] top-[-20%] h-[70%] opacity-50 blur-2xl"
+        style={"background: #{@accent}"}
+      >
+      </div>
+      <div class="relative aspect-[2/3] overflow-hidden rounded-xl">
+        <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
+        <div
+          :if={!@src}
+          class="size-full bg-gradient-to-b from-line to-[oklch(78%_0.02_70)]"
+        >
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  @doc "A pill search field."
+  attr :rest, :global, include: ~w(name value placeholder autocomplete)
+
+  def search_input(assigns) do
+    ~H"""
+    <div class="flex items-center gap-2 rounded-full bg-paper-2 px-5 py-3">
+      <.icon name="hero-magnifying-glass" class="size-4 text-ink-soft" />
+      <input
+        type="search"
+        class="w-full bg-transparent text-sm text-ink placeholder:text-ink-soft focus:outline-none"
+        {@rest}
+      />
+    </div>
+    """
+  end
+
+  @doc "An overlapping stack of avatars for \"who's watched this\"."
+  attr :people, :list, required: true, doc: "list of %{initial:, color:}"
+  attr :extra, :integer, default: 0
+
+  def avatar_stack(assigns) do
+    ~H"""
+    <div class="flex">
+      <div
+        :for={person <- @people}
+        class="-ml-2.5 flex size-9 items-center justify-center rounded-full border-2 border-paper text-xs font-extrabold text-white first:ml-0"
+        style={"background: #{person.color}"}
+      >
+        {person.initial}
+      </div>
+      <div
+        :if={@extra > 0}
+        class="-ml-2.5 flex size-9 items-center justify-center rounded-full border-2 border-paper bg-line text-xs font-extrabold text-ink-soft"
+      >
+        +{@extra}
+      </div>
+    </div>
+    """
+  end
+
+  @doc "A 0–5 star rating."
+  attr :value, :integer, default: 0
+  attr :max, :integer, default: 5
+
+  def stars(assigns) do
+    ~H"""
+    <div class="text-lg tracking-[3px] text-ink">
+      <span :for={i <- 1..@max} class={if i > @value, do: "text-line"}>★</span>
+    </div>
+    """
   end
 
   @doc """

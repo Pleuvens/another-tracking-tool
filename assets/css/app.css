@@ -61,33 +61,33 @@
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: oklch(98% 0 0);
-  --color-base-200: oklch(96% 0.001 286.375);
-  --color-base-300: oklch(92% 0.004 286.32);
-  --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(70% 0.213 47.604);
-  --color-primary-content: oklch(98% 0.016 73.684);
-  --color-secondary: oklch(55% 0.027 264.364);
-  --color-secondary-content: oklch(98% 0.002 247.839);
-  --color-accent: oklch(0% 0 0);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(44% 0.017 285.786);
-  --color-neutral-content: oklch(98% 0 0);
-  --color-info: oklch(62% 0.214 259.815);
-  --color-info-content: oklch(97% 0.014 254.604);
-  --color-success: oklch(70% 0.14 182.503);
-  --color-success-content: oklch(98% 0.014 180.72);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(98% 0.022 95.277);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(96% 0.015 12.422);
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.21875rem;
-  --size-field: 0.21875rem;
+  --color-base-100: oklch(97% 0.012 75);
+  --color-base-200: oklch(94% 0.014 70);
+  --color-base-300: oklch(88% 0.012 70);
+  --color-base-content: oklch(22% 0.015 60);
+  --color-primary: oklch(22% 0.015 60);
+  --color-primary-content: oklch(98% 0.01 75);
+  --color-secondary: oklch(45% 0.02 60);
+  --color-secondary-content: oklch(98% 0.01 75);
+  --color-accent: oklch(22% 0.015 60);
+  --color-accent-content: oklch(98% 0.01 75);
+  --color-neutral: oklch(22% 0.015 60);
+  --color-neutral-content: oklch(98% 0.01 75);
+  --color-info: oklch(65% 0.06 250);
+  --color-info-content: oklch(98% 0.01 75);
+  --color-success: oklch(65% 0.08 145);
+  --color-success-content: oklch(98% 0.01 75);
+  --color-warning: oklch(70% 0.09 85);
+  --color-warning-content: oklch(25% 0.02 60);
+  --color-error: oklch(62% 0.09 25);
+  --color-error-content: oklch(98% 0.01 75);
+  --radius-selector: 2rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
   --border: 1.5px;
-  --depth: 1;
+  --depth: 0;
   --noise: 0;
 }
 
@@ -102,4 +102,25 @@
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
-/* This file is for your main application CSS */
+@theme {
+  --color-paper-0: oklch(98.5% 0.008 75);
+  --color-paper: oklch(97% 0.012 75);
+  --color-paper-2: oklch(94% 0.014 70);
+  --color-line: oklch(88% 0.012 70);
+  --color-ink-soft: oklch(45% 0.02 60);
+  --color-ink: oklch(22% 0.015 60);
+
+  --color-status-watching: oklch(70% 0.09 85);
+  --color-status-completed: oklch(65% 0.08 145);
+  --color-status-dropped: oklch(62% 0.09 25);
+  --color-status-planned: oklch(65% 0.06 250);
+
+  --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+}
