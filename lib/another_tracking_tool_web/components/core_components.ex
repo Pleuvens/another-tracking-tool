@@ -148,10 +148,10 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   defp status_badge_class(:dropped), do: "bg-status-dropped/30 text-[oklch(32%_0.07_25)]"
   defp status_badge_class(:planned), do: "bg-status-planned/30 text-[oklch(32%_0.06_250)]"
 
-  defp status_label(:watching), do: gettext("Watching")
-  defp status_label(:completed), do: gettext("Completed")
-  defp status_label(:dropped), do: gettext("Dropped")
-  defp status_label(:planned), do: gettext("Planned")
+  defp status_label(:watching), do: dgettext("catalog", "Watching")
+  defp status_label(:completed), do: dgettext("catalog", "Completed")
+  defp status_label(:dropped), do: dgettext("catalog", "Dropped")
+  defp status_label(:planned), do: dgettext("catalog", "Planned")
 
   @doc """
   A 2/3 poster frame with a poster-driven ambient glow.

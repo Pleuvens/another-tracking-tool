@@ -1,0 +1,32 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:55
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:48
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:52
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:45
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""

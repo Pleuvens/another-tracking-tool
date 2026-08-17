@@ -11,8 +11,8 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <div class="text-center">
         <.header>
-          Account Settings
-          <:subtitle>Manage your account email address and password settings</:subtitle>
+          {dgettext("accounts", "Account Settings")}
+          <:subtitle>{dgettext("accounts", "Manage your email, password, and language.")}</:subtitle>
         </.header>
       </div>
 
@@ -20,12 +20,14 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
         <.input
           field={@email_form[:email]}
           type="email"
-          label="Email"
+          label={dgettext("accounts", "Email")}
           autocomplete="username"
           spellcheck="false"
           required
         />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        <.button variant="primary" phx-disable-with={dgettext("accounts", "Changing...")}>
+          {dgettext("accounts", "Change Email")}
+        </.button>
       </.form>
 
       <div class="divider" />
@@ -49,7 +51,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
         <.input
           field={@password_form[:password]}
           type="password"
-          label="New password"
+          label={dgettext("accounts", "New password")}
           autocomplete="new-password"
           spellcheck="false"
           required
@@ -57,13 +59,24 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
         <.input
           field={@password_form[:password_confirmation]}
           type="password"
-          label="Confirm new password"
+          label={dgettext("accounts", "Confirm new password")}
           autocomplete="new-password"
           spellcheck="false"
         />
-        <.button variant="primary" phx-disable-with="Saving...">
-          Save Password
+        <.button variant="primary" phx-disable-with={dgettext("accounts", "Saving...")}>
+          {dgettext("accounts", "Save Password")}
         </.button>
+      </.form>
+
+      <div class="divider" />
+
+      <.form for={@locale_form} id="locale_form" phx-change="update_locale">
+        <.input
+          field={@locale_form[:locale]}
+          type="select"
+          label={dgettext("accounts", "Display language")}
+          options={locale_options()}
+        />
       </.form>
     </Layouts.app>
     """
@@ -93,6 +106,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:locale_form, to_form(Accounts.change_user_locale(user)))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -156,5 +170,25 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
       changeset ->
         {:noreply, assign(socket, password_form: to_form(changeset, action: :insert))}
     end
+  end
+
+  def handle_event("update_locale", %{"user" => %{"locale" => locale}}, socket) do
+    case Accounts.update_user_locale(socket.assigns.current_scope.user, %{locale: locale}) do
+      {:ok, user} ->
+        Gettext.put_locale(locale)
+
+        {:noreply,
+         socket
+         |> assign(:current_scope, %{socket.assigns.current_scope | user: user})
+         |> assign(:locale_form, to_form(Accounts.change_user_locale(user)))
+         |> put_flash(:info, dgettext("accounts", "Language updated."))}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :locale_form, to_form(changeset))}
+    end
+  end
+
+  defp locale_options do
+    Enum.map(AnotherTrackingTool.Locales.all(), &{AnotherTrackingTool.Locales.name(&1), &1})
   end
 end

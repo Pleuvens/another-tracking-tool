@@ -1,0 +1,67 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:14
+#, elixir-autogen, elixir-format
+msgid "Account Settings"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:29
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:28
+#, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:62
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:77
+#, elixir-autogen, elixir-format
+msgid "Display language"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:23
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:184
+#, elixir-autogen, elixir-format
+msgid "Language updated."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:15
+#, elixir-autogen, elixir-format
+msgid "Manage your email, password, and language."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:54
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:67
+#, elixir-autogen, elixir-format
+msgid "Save Password"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:66
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""

@@ -1,0 +1,67 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:14
+#, elixir-autogen, elixir-format
+msgid "Account Settings"
+msgstr "Paramètres du compte"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:29
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr "Changer l'e-mail"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:28
+#, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "Modification…"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:62
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr "Confirmer le nouveau mot de passe"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:77
+#, elixir-autogen, elixir-format
+msgid "Display language"
+msgstr "Langue d'affichage"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:23
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr "E-mail"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:184
+#, elixir-autogen, elixir-format
+msgid "Language updated."
+msgstr "Langue mise à jour."
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:15
+#, elixir-autogen, elixir-format
+msgid "Manage your email, password, and language."
+msgstr "Gérez votre e-mail, votre mot de passe et votre langue."
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:54
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:67
+#, elixir-autogen, elixir-format
+msgid "Save Password"
+msgstr "Enregistrer le mot de passe"
+
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:66
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr "Enregistrement…"

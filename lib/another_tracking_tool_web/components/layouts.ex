@@ -42,17 +42,17 @@ defmodule AnotherTrackingToolWeb.Layouts do
           <%= if @current_scope do %>
             <span class="hidden text-ink-soft sm:inline">{@current_scope.user.email}</span>
             <.link navigate={~p"/users/settings"} class="hover:text-ink">
-              {gettext("Settings")}
+              {dgettext("layouts", "Settings")}
             </.link>
             <.link href={~p"/users/log-out"} method="delete" class="hover:text-ink">
-              {gettext("Log out")}
+              {dgettext("layouts", "Log out")}
             </.link>
           <% else %>
             <.link navigate={~p"/users/register"} class="hover:text-ink">
-              {gettext("Register")}
+              {dgettext("layouts", "Register")}
             </.link>
             <.link navigate={~p"/users/log-in"} class="hover:text-ink">
-              {gettext("Log in")}
+              {dgettext("layouts", "Log in")}
             </.link>
           <% end %>
         </nav>
