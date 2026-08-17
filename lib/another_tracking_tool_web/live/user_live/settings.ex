@@ -174,14 +174,13 @@ defmodule AnotherTrackingToolWeb.UserLive.Settings do
 
   def handle_event("update_locale", %{"user" => %{"locale" => locale}}, socket) do
     case Accounts.update_user_locale(socket.assigns.current_scope.user, %{locale: locale}) do
-      {:ok, user} ->
+      {:ok, _user} ->
         Gettext.put_locale(locale)
 
         {:noreply,
          socket
-         |> assign(:current_scope, %{socket.assigns.current_scope | user: user})
-         |> assign(:locale_form, to_form(Accounts.change_user_locale(user)))
-         |> put_flash(:info, dgettext("accounts", "Language updated."))}
+         |> put_flash(:info, dgettext("accounts", "Language updated."))
+         |> push_navigate(to: ~p"/users/settings")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :locale_form, to_form(changeset))}

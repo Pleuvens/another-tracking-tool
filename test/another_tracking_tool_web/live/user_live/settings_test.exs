@@ -89,6 +89,25 @@ defmodule AnotherTrackingToolWeb.UserLive.SettingsTest do
     end
   end
 
+  describe "update language" do
+    setup %{conn: conn} do
+      %{conn: log_in_user(conn, user_fixture())}
+    end
+
+    test "switching language re-renders the page in the new locale", %{conn: conn} do
+      {:ok, lv, html} = live(conn, ~p"/users/settings")
+      assert html =~ "Account Settings"
+
+      {:ok, _lv, html} =
+        lv
+        |> form("#locale_form", user: %{locale: "fr"})
+        |> render_change()
+        |> follow_redirect(conn, ~p"/users/settings")
+
+      assert html =~ "Paramètres du compte"
+    end
+  end
+
   describe "update password form" do
     setup %{conn: conn} do
       user = user_fixture()
