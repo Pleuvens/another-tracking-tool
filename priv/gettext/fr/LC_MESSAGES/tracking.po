@@ -1,0 +1,41 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "My rating"
+msgstr "Ma note"
+
+msgid "My status"
+msgstr "Mon statut"
+
+msgid "No one yet — be the first."
+msgstr "Personne pour l'instant — soyez le premier."
+
+msgid "Not found."
+msgstr "Introuvable."
+
+msgid "Post"
+msgstr "Publier"
+
+msgid "Say something…"
+msgstr "Dites quelque chose…"
+
+msgid "Search movies…"
+msgstr "Rechercher des films…"
+
+msgid "Sometime, who's counting"
+msgstr "Un jour, dans le passé"
+
+msgid "Watched on"
+msgstr "Vu le"
+
+msgid "Your circle"
+msgstr "Votre cercle"

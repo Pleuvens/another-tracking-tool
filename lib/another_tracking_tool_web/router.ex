@@ -58,6 +58,8 @@ defmodule AnotherTrackingToolWeb.Router do
       ] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+      live "/search", SearchLive, :index
+      live "/media/:id", MediaLive.Show, :show
     end
 
     post "/users/update-password", UserSessionController, :update_password

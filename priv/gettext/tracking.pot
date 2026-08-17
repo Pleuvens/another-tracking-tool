@@ -1,0 +1,67 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:185
+#, elixir-autogen, elixir-format
+msgid "Comments"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:135
+#, elixir-autogen, elixir-format
+msgid "My rating"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:113
+#, elixir-autogen, elixir-format
+msgid "My status"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:178
+#, elixir-autogen, elixir-format
+msgid "No one yet — be the first."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:24
+#, elixir-autogen, elixir-format
+msgid "Not found."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:196
+#, elixir-autogen, elixir-format
+msgid "Post"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:193
+#, elixir-autogen, elixir-format
+msgid "Say something…"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Search movies…"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:161
+#, elixir-autogen, elixir-format
+msgid "Sometime, who's counting"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:151
+#, elixir-autogen, elixir-format
+msgid "Watched on"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:170
+#, elixir-autogen, elixir-format
+msgid "Your circle"
+msgstr ""

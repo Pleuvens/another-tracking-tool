@@ -25,3 +25,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Track what your household watches, without fighting a form."
 msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:13
+#, elixir-autogen, elixir-format
+msgid "Find a movie"
+msgstr ""

@@ -25,3 +25,8 @@ msgstr "Suivi de films & séries"
 #, elixir-autogen, elixir-format
 msgid "Track what your household watches, without fighting a form."
 msgstr "Suivez ce que votre foyer regarde, sans vous battre avec un formulaire."
+
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:13
+#, elixir-autogen, elixir-format
+msgid "Find a movie"
+msgstr "Trouver un film"

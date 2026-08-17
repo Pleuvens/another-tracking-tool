@@ -237,6 +237,11 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
+  @doc "TMDB image URL for a stored path, or nil."
+  def tmdb_image(path, size \\ "w342")
+  def tmdb_image(nil, _size), do: nil
+  def tmdb_image(path, size), do: "https://image.tmdb.org/t/p/#{size}#{path}"
+
   @doc """
   Renders an input with label and error messages.
 

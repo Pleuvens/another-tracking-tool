@@ -9,5 +9,8 @@
     <p class="mx-auto max-w-md text-ink-soft">
       {dgettext("home", "Track what your household watches, without fighting a form.")}
     </p>
+    <div :if={@current_scope}>
+      <.button navigate={~p"/search"} variant="primary">{dgettext("home", "Find a movie")}</.button>
+    </div>
   </div>
 </Layouts.app>

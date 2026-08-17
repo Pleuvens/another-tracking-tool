@@ -47,4 +47,12 @@ defmodule AnotherTrackingTool.Catalog.MediaItem do
     |> validate_required([:kind])
     |> unique_constraint([:kind, :tmdb_id])
   end
+
+  def display_title(%__MODULE__{} = item),
+    do: item.title_fr || item.title_en || item.original_title
+
+  def display_overview(%__MODULE__{} = item), do: item.overview_fr || item.overview_en
+
+  def year(%__MODULE__{released_on: %Date{year: year}}), do: year
+  def year(%__MODULE__{}), do: nil
 end

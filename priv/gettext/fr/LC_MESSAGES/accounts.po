@@ -41,7 +41,7 @@ msgstr "Langue d'affichage"
 msgid "Email"
 msgstr "E-mail"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:184
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:182
 #, elixir-autogen, elixir-format
 msgid "Language updated."
 msgstr "Langue mise à jour."

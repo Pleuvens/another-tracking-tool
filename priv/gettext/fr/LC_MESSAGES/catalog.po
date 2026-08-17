@@ -12,21 +12,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
 #: lib/another_tracking_tool_web/components/core_components.ex:152
+#: lib/another_tracking_tool_web/live/media_live/show.ex:209
 #, elixir-autogen, elixir-format
 msgid "Completed"
 msgstr "Vu"
 
 #: lib/another_tracking_tool_web/components/core_components.ex:153
+#: lib/another_tracking_tool_web/live/media_live/show.ex:210
 #, elixir-autogen, elixir-format
 msgid "Dropped"
 msgstr "Abandonné"
 
 #: lib/another_tracking_tool_web/components/core_components.ex:154
+#: lib/another_tracking_tool_web/live/media_live/show.ex:211
 #, elixir-autogen, elixir-format
 msgid "Planned"
 msgstr "Prévu"
 
 #: lib/another_tracking_tool_web/components/core_components.ex:151
+#: lib/another_tracking_tool_web/live/media_live/show.ex:208
 #, elixir-autogen, elixir-format
 msgid "Watching"
 msgstr "En cours"
