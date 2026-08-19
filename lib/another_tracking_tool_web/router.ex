@@ -60,6 +60,7 @@ defmodule AnotherTrackingToolWeb.Router do
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
       live "/feed", FeedLive, :index
       live "/watchlist", WatchlistLive, :index
+      live "/import", ImportLive, :index
       live "/search", SearchLive, :index
       live "/media/:id", MediaLive.Show, :show
     end

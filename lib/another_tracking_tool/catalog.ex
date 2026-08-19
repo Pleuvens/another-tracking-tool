@@ -1,6 +1,8 @@
 defmodule AnotherTrackingTool.Catalog do
   @moduledoc "The local media catalog: read-through search and provider-neutral persistence."
 
+  import Ecto.Query
+
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.Catalog.EnrichMediaItemWorker
   alias AnotherTrackingTool.Providers
@@ -64,6 +66,14 @@ defmodule AnotherTrackingTool.Catalog do
     Repo.get_by(MediaItem, [{@id_columns[source], source_id}] ++ Keyword.take(opts, [:kind]))
   end
 
+  def enriched_by_tmdb(tmdb_ids, kind) do
+    from(m in MediaItem,
+      where: m.kind == ^kind and m.tmdb_id in ^tmdb_ids and not is_nil(m.details_synced_at)
+    )
+    |> Repo.all()
+    |> Map.new(&{&1.tmdb_id, &1})
+  end
+
   def ensure_details(%MediaItem{details_synced_at: nil} = media_item) do
     with {:ok, _job} <-
            %{media_item_id: media_item.id} |> EnrichMediaItemWorker.new() |> Oban.insert() do
@@ -72,6 +82,24 @@ defmodule AnotherTrackingTool.Catalog do
   end
 
   def ensure_details(%MediaItem{} = media_item), do: {:ok, media_item}
+
+  def fetch_and_enrich(source, source_id, kind, fallback_attrs \\ %{}) do
+    case get_by_external(source, source_id, kind: kind) do
+      %MediaItem{details_synced_at: synced} = media_item when not is_nil(synced) ->
+        {:ok, media_item}
+
+      _ ->
+        upsert_and_enrich(source, source_id, kind, fallback_attrs)
+    end
+  end
+
+  defp upsert_and_enrich(source, source_id, kind, fallback_attrs) do
+    attrs = Map.merge(fallback_attrs, %{source: source, source_id: source_id, kind: kind})
+
+    with {:ok, media_item} <- upsert_media_item(attrs) do
+      provider_for(kind).enrich(media_item)
+    end
+  end
 
   defp search_providers, do: [Providers.Tmdb]
 

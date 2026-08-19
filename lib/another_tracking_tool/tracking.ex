@@ -15,6 +15,40 @@ defmodule AnotherTrackingTool.Tracking do
 
   def subscribe_activity, do: Phoenix.PubSub.subscribe(@pubsub, @activity_topic)
 
+  @insert_chunk 1_000
+
+  def import_entries(%User{id: user_id}, entries) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    entries
+    |> Enum.uniq_by(& &1.media_item_id)
+    |> Enum.map(&entry_row(&1, user_id, now))
+    |> Enum.chunk_every(@insert_chunk)
+    |> Enum.reduce(0, fn chunk, total ->
+      {count, _} =
+        Repo.insert_all(WatchEntry, chunk,
+          on_conflict: {:replace, [:status, :rating, :watched_on, :source, :updated_at]},
+          conflict_target: [:user_id, :media_item_id]
+        )
+
+      total + count
+    end)
+  end
+
+  defp entry_row(entry, user_id, now) do
+    %{
+      id: Ecto.UUID.generate(),
+      user_id: user_id,
+      media_item_id: entry.media_item_id,
+      status: entry.status,
+      rating: entry.rating,
+      watched_on: entry.watched_on,
+      source: :import,
+      inserted_at: now,
+      updated_at: now
+    }
+  end
+
   def watchlist(%User{id: user_id}) do
     Repo.all(
       from e in WatchEntry,

@@ -1,0 +1,58 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:82
+#, elixir-autogen, elixir-format
+msgid "%{count} skipped"
+msgstr "%{count} ignorés"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:80
+#, elixir-autogen, elixir-format
+msgid "%{count} titles rescued from oblivion"
+msgstr "%{count} titres sauvés de l'oubli"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:100
+#, elixir-autogen, elixir-format
+msgid "%{done} of %{total}"
+msgstr "%{done} sur %{total}"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:53
+#, elixir-autogen, elixir-format
+msgid "Bring your history over from another tracker."
+msgstr "Récupérez votre historique depuis un autre outil."
+
+#: lib/another_tracking_tool_web/live/import_live.ex:92
+#, elixir-autogen, elixir-format
+msgid "Coming soon"
+msgstr "Bientôt disponible"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Could not read that file."
+msgstr "Impossible de lire ce fichier."
+
+#: lib/another_tracking_tool_web/live/import_live.ex:51
+#: lib/another_tracking_tool_web/live/import_live.ex:64
+#, elixir-autogen, elixir-format
+msgid "Import"
+msgstr "Importer"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:102
+#, elixir-autogen, elixir-format
+msgid "Starting…"
+msgstr "Démarrage…"
+
+#: lib/another_tracking_tool_web/live/import_live.ex:59
+#, elixir-autogen, elixir-format
+msgid "Upload your CSV export."
+msgstr "Téléversez votre export CSV."

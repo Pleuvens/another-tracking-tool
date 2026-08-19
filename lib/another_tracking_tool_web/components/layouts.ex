@@ -75,9 +75,9 @@ defmodule AnotherTrackingToolWeb.Layouts do
             <.sidebar_link navigate={~p"/watchlist"} active={@active == :watchlist}>
               {dgettext("layouts", "Watchlist")}
             </.sidebar_link>
-            <span class="cursor-not-allowed rounded-xl px-3 py-2 text-sm font-bold text-line">
+            <.sidebar_link navigate={~p"/import"} active={@active == :import}>
               {dgettext("layouts", "Import")}
-            </span>
+            </.sidebar_link>
             <.sidebar_link navigate={~p"/users/settings"} active={@active == :profile}>
               {dgettext("layouts", "Profile")}
             </.sidebar_link>

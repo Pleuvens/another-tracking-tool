@@ -1,0 +1,58 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:82
+#, elixir-autogen, elixir-format
+msgid "%{count} skipped"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:80
+#, elixir-autogen, elixir-format
+msgid "%{count} titles rescued from oblivion"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:100
+#, elixir-autogen, elixir-format
+msgid "%{done} of %{total}"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:53
+#, elixir-autogen, elixir-format
+msgid "Bring your history over from another tracker."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:92
+#, elixir-autogen, elixir-format
+msgid "Coming soon"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Could not read that file."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:51
+#: lib/another_tracking_tool_web/live/import_live.ex:64
+#, elixir-autogen, elixir-format
+msgid "Import"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:102
+#, elixir-autogen, elixir-format
+msgid "Starting…"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/import_live.ex:59
+#, elixir-autogen, elixir-format
+msgid "Upload your CSV export."
+msgstr ""

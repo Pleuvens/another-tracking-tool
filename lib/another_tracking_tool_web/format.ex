@@ -15,6 +15,9 @@ defmodule AnotherTrackingToolWeb.Format do
 
   def time(datetime), do: Calendar.strftime(datetime, "%H:%M")
 
+  def percent(_done, total) when total in [nil, 0], do: 0
+  def percent(done, total), do: round(done / total * 100)
+
   def watch_verb(:completed), do: dgettext("feed", "finished")
   def watch_verb(:watching), do: dgettext("feed", "started")
   def watch_verb(:dropped), do: dgettext("feed", "dropped")
