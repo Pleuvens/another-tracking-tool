@@ -15,6 +15,15 @@ defmodule AnotherTrackingTool.Tracking do
 
   def subscribe_activity, do: Phoenix.PubSub.subscribe(@pubsub, @activity_topic)
 
+  def watchlist(%User{id: user_id}) do
+    Repo.all(
+      from e in WatchEntry,
+        where: e.user_id == ^user_id and e.status == :planned,
+        order_by: [desc: e.updated_at],
+        preload: [:media_item]
+    )
+  end
+
   def recent_activity(limit \\ 50) do
     Repo.all(
       from e in WatchEntry,

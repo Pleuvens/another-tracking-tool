@@ -72,9 +72,9 @@ defmodule AnotherTrackingToolWeb.Layouts do
             <.sidebar_link navigate={~p"/search"} active={@active == :search}>
               {dgettext("layouts", "Search")}
             </.sidebar_link>
-            <span class="cursor-not-allowed rounded-xl px-3 py-2 text-sm font-bold text-line">
+            <.sidebar_link navigate={~p"/watchlist"} active={@active == :watchlist}>
               {dgettext("layouts", "Watchlist")}
-            </span>
+            </.sidebar_link>
             <span class="cursor-not-allowed rounded-xl px-3 py-2 text-sm font-bold text-line">
               {dgettext("layouts", "Import")}
             </span>

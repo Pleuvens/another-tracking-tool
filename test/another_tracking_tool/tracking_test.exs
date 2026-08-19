@@ -123,4 +123,20 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert length(Tracking.recent_activity(0)) == 0
     end
   end
+
+  describe "watchlist" do
+    test "returns only the user's planned entries with media preloaded", ctx do
+      %{user: user, movie: movie} = ctx
+      other_movie = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.set_status(user, movie, :planned)
+      {:ok, _} = Tracking.set_status(user, other_movie, :completed)
+
+      {:ok, _} =
+        Tracking.set_status(user_fixture(), media_item_fixture(%{kind: :movie}), :planned)
+
+      assert [entry] = Tracking.watchlist(user)
+      assert entry.media_item_id == movie.id
+      assert %AnotherTrackingTool.Catalog.MediaItem{} = entry.media_item
+    end
+  end
 end
