@@ -38,3 +38,6 @@ npm-debug.log
 # Local dev secrets.
 /config/dev.secrets.exs
 
+
+# macOS
+.DS_Store
