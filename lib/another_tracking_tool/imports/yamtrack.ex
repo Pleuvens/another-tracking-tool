@@ -47,7 +47,7 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
         kind: :movie,
         status: status,
         rating: rating(row["score"]),
-        watched_on: Coerce.date(Coerce.presence(row["end_date"]) || row["start_date"]),
+        watched_on: date(row["end_date"]) || date(row["start_date"]),
         title: Coerce.presence(row["title"])
       }
     else
@@ -62,6 +62,13 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
     case Float.parse(score || "") do
       {value, _} when value > 0 -> value |> Kernel./(2) |> round() |> min(5) |> max(0)
       _ -> nil
+    end
+  end
+
+  defp date(value) do
+    case Coerce.presence(value) do
+      nil -> nil
+      str -> str |> String.slice(0, 10) |> Coerce.date()
     end
   end
 end

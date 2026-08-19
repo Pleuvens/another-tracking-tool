@@ -4,14 +4,14 @@ defmodule AnotherTrackingTool.Imports.YamtrackTest do
   alias AnotherTrackingTool.Imports.Yamtrack
 
   @csv """
-  media_id,source,media_type,title,image,season_number,episode_number,score,status,notes,start_date,end_date,progress
-  603,tmdb,movie,The Matrix,,,,8,Completed,,,2024-01-15,
-  27205,tmdb,movie,Inception,,,,,Planning,,,,
-  1399,tmdb,tv,Game of Thrones,,,,9,Completed,,,,
-  5114,mal,anime,Fullmetal Alchemist,,,,10,Completed,,,,
+  "media_id","source","media_type","title","image","season_number","episode_number","score","status","notes","start_date","end_date","progress","created_at","progressed_at"
+  "603","tmdb","movie","The Matrix","https://img/m.jpg","","","8","Completed","","","2024-01-15 22:00:00+00:00","0","2026-07-13 00:49:07+00:00","2024-01-15 22:00:00+00:00"
+  "27205","tmdb","movie","Inception","https://img/i.jpg","","","","Planning","","","","0","2026-07-13 00:49:07+00:00",""
+  "1399","tmdb","tv","Game of Thrones","https://img/g.jpg","","","9","Completed","","","2023-05-21 22:00:00+00:00","73","2026-07-13 00:49:07+00:00","2023-05-21 22:00:00+00:00"
+  "5114","mal","anime","Fullmetal Alchemist","https://img/f.jpg","","","10","Completed","","","","0","2026-07-13 00:49:07+00:00",""
   """
 
-  test "keeps only tmdb movie rows and normalizes them" do
+  test "keeps only tmdb movie rows and normalizes them, parsing datetime dates" do
     assert {:ok, rows} = Yamtrack.parse(@csv)
     assert [matrix, inception] = rows
 
