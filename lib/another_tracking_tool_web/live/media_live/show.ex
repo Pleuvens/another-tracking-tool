@@ -18,6 +18,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
          socket
          |> assign(:media_item, media_item)
          |> assign(:comment_form, to_form(%{"body" => ""}, as: :comment))
+         |> assign(:editing_date, false)
          |> load_tracking()}
 
       {:error, :not_found} ->
@@ -43,10 +44,14 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     {:noreply, socket}
   end
 
+  def handle_event("edit_date", _params, socket) do
+    {:noreply, assign(socket, :editing_date, true)}
+  end
+
   def handle_event("set_date", %{"watched_on" => date}, socket) do
     attrs = %{status: :completed, watched_on: date}
     Tracking.upsert_entry(me(socket), socket.assigns.media_item, attrs)
-    {:noreply, socket}
+    {:noreply, assign(socket, :editing_date, false)}
   end
 
   def handle_event("comment", %{"comment" => %{"body" => body}}, socket) do
@@ -82,6 +87,16 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   defp my_rating(%{rating: nil}), do: 0
   defp my_rating(%{rating: rating}), do: rating
 
+  defp watched_on(%{watched_on: %Date{} = date}), do: date
+  defp watched_on(_), do: nil
+
+  defp watched_label(entry) do
+    case watched_on(entry) do
+      %Date{} = date -> Calendar.strftime(date, "%d/%m/%Y")
+      nil -> dgettext("tracking", "Sometime, who's counting")
+    end
+  end
+
   defp circle_avatars(entries),
     do: entries |> Enum.map(& &1.user) |> Enum.take(5) |> Avatars.for_users()
 
@@ -89,7 +104,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="grid gap-8 sm:grid-cols-[220px_1fr]">
+      <div class="grid items-start gap-8 sm:grid-cols-[220px_1fr]">
         <.poster
           src={tmdb_image(@media_item.poster_path, "w500")}
           alt={MediaItem.display_title(@media_item)}
@@ -160,19 +175,23 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
             <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
               {dgettext("tracking", "Watched on")}
             </p>
-            <form phx-change="set_date">
+            <div :if={!@editing_date} class="flex items-center gap-3">
+              <span class={
+                if watched_on(@my_entry), do: "text-ink", else: "text-sm italic text-ink-soft"
+              }>
+                {watched_label(@my_entry)}
+              </span>
+              <button phx-click="edit_date" class="text-xs font-bold text-ink-soft hover:text-ink">
+                {dgettext("tracking", "Edit")}
+              </button>
+            </div>
+            <form :if={@editing_date} phx-change="set_date">
               <input
                 type="date"
                 name="watched_on"
-                value={@my_entry && @my_entry.watched_on}
+                value={watched_on(@my_entry)}
                 class="rounded-xl bg-paper-2 px-3 py-2 text-sm text-ink"
               />
-              <span
-                :if={!(@my_entry && @my_entry.watched_on)}
-                class="ml-2 text-sm italic text-ink-soft"
-              >
-                {dgettext("tracking", "Sometime, who's counting")}
-              </span>
             </form>
           </div>
         </div>
@@ -202,7 +221,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
           <input
             type="text"
             name="comment[body]"
-            value=""
+            value={@comment_form[:body].value}
             placeholder={dgettext("tracking", "Say something…")}
             class="flex-1 rounded-full bg-paper-2 px-5 py-3 text-sm text-ink placeholder:text-ink-soft focus:outline-none"
           />

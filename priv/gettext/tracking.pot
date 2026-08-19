@@ -11,37 +11,37 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:185
+#: lib/another_tracking_tool_web/live/media_live/show.ex:215
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:135
+#: lib/another_tracking_tool_web/live/media_live/show.ex:160
 #, elixir-autogen, elixir-format
 msgid "My rating"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:113
+#: lib/another_tracking_tool_web/live/media_live/show.ex:138
 #, elixir-autogen, elixir-format
 msgid "My status"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:178
+#: lib/another_tracking_tool_web/live/media_live/show.ex:208
 #, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:24
+#: lib/another_tracking_tool_web/live/media_live/show.ex:27
 #, elixir-autogen, elixir-format
 msgid "Not found."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:196
+#: lib/another_tracking_tool_web/live/media_live/show.ex:226
 #, elixir-autogen, elixir-format
 msgid "Post"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:193
+#: lib/another_tracking_tool_web/live/media_live/show.ex:223
 #, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr ""
@@ -51,17 +51,22 @@ msgstr ""
 msgid "Search movies…"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:161
+#: lib/another_tracking_tool_web/live/media_live/show.ex:96
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:151
+#: lib/another_tracking_tool_web/live/media_live/show.ex:176
 #, elixir-autogen, elixir-format
 msgid "Watched on"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:170
+#: lib/another_tracking_tool_web/live/media_live/show.ex:200
 #, elixir-autogen, elixir-format
 msgid "Your circle"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:183
+#, elixir-autogen, elixir-format
+msgid "Edit"
 msgstr ""

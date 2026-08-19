@@ -7,35 +7,62 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:215
+#, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr "Commentaires"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:160
+#, elixir-autogen, elixir-format
 msgid "My rating"
 msgstr "Ma note"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:138
+#, elixir-autogen, elixir-format
 msgid "My status"
 msgstr "Mon statut"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:208
+#, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr "Personne pour l'instant — soyez le premier."
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:27
+#, elixir-autogen, elixir-format
 msgid "Not found."
 msgstr "Introuvable."
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:226
+#, elixir-autogen, elixir-format
 msgid "Post"
 msgstr "Publier"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:223
+#, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr "Dites quelque chose…"
 
+#: lib/another_tracking_tool_web/live/search_live.ex:34
+#, elixir-autogen, elixir-format
 msgid "Search movies…"
 msgstr "Rechercher des films…"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:96
+#, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr "Un jour, dans le passé"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:176
+#, elixir-autogen, elixir-format
 msgid "Watched on"
 msgstr "Vu le"
 
+#: lib/another_tracking_tool_web/live/media_live/show.ex:200
+#, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr "Votre cercle"
+
+#: lib/another_tracking_tool_web/live/media_live/show.ex:183
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr "Modifier"
