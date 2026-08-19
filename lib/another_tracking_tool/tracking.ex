@@ -9,8 +9,20 @@ defmodule AnotherTrackingTool.Tracking do
   alias AnotherTrackingTool.Repo
 
   @pubsub AnotherTrackingTool.PubSub
+  @activity_topic "activity"
 
   def subscribe(%MediaItem{id: id}), do: Phoenix.PubSub.subscribe(@pubsub, topic(id))
+
+  def subscribe_activity, do: Phoenix.PubSub.subscribe(@pubsub, @activity_topic)
+
+  def recent_activity(limit \\ 50) do
+    Repo.all(
+      from e in WatchEntry,
+        order_by: [desc: e.updated_at],
+        limit: ^limit,
+        preload: [:user, :media_item]
+    )
+  end
 
   def get_entry(%User{id: user_id}, %MediaItem{id: media_item_id}),
     do: Repo.get_by(WatchEntry, user_id: user_id, media_item_id: media_item_id)
@@ -22,6 +34,7 @@ defmodule AnotherTrackingTool.Tracking do
 
     with {:ok, entry} <- entry |> WatchEntry.changeset(attrs) |> Repo.insert_or_update() do
       broadcast(media_item.id, {:entry_upserted, entry})
+      Phoenix.PubSub.broadcast(@pubsub, @activity_topic, {:activity, entry})
       {:ok, entry}
     end
   end

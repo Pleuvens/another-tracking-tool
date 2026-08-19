@@ -20,10 +20,9 @@ defmodule AnotherTrackingToolWeb.UserSessionControllerTest do
       assert get_session(conn, :user_token)
       assert redirected_to(conn) == ~p"/"
 
-      # Now do a logged in request and assert on the menu
-      conn = get(conn, ~p"/")
+      # Now do a logged in request and assert on the sidebar
+      conn = get(conn, ~p"/feed")
       response = html_response(conn, 200)
-      assert response =~ user.email
       assert response =~ ~p"/users/settings"
       assert response =~ ~p"/users/log-out"
     end
@@ -84,10 +83,9 @@ defmodule AnotherTrackingToolWeb.UserSessionControllerTest do
       assert get_session(conn, :user_token)
       assert redirected_to(conn) == ~p"/"
 
-      # Now do a logged in request and assert on the menu
-      conn = get(conn, ~p"/")
+      # Now do a logged in request and assert on the sidebar
+      conn = get(conn, ~p"/feed")
       response = html_response(conn, 200)
-      assert response =~ user.email
       assert response =~ ~p"/users/settings"
       assert response =~ ~p"/users/log-out"
     end
@@ -108,10 +106,9 @@ defmodule AnotherTrackingToolWeb.UserSessionControllerTest do
 
       assert Accounts.get_user!(user.id).confirmed_at
 
-      # Now do a logged in request and assert on the menu
-      conn = get(conn, ~p"/")
+      # Now do a logged in request and assert on the sidebar
+      conn = get(conn, ~p"/feed")
       response = html_response(conn, 200)
-      assert response =~ user.email
       assert response =~ ~p"/users/settings"
       assert response =~ ~p"/users/log-out"
     end

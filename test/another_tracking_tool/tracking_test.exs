@@ -91,5 +91,36 @@ defmodule AnotherTrackingTool.TrackingTest do
       {:ok, _} = Tracking.create_comment(user, movie, "hi")
       assert_receive {:comment_created, _}
     end
+
+    test "entries broadcast on the activity topic", %{user: user, movie: movie} do
+      Tracking.subscribe_activity()
+      {:ok, _} = Tracking.set_status(user, movie, :watching)
+      assert_receive {:activity, _}
+    end
+  end
+
+  describe "recent_activity" do
+    test "returns entries newest-first with user and media preloaded", ctx do
+      %{movie: movie} = ctx
+      other = media_item_fixture(%{kind: :movie})
+      {:ok, old} = Tracking.set_status(ctx.user, movie, :planned)
+
+      Repo.update_all(from(e in WatchEntry, where: e.id == ^old.id),
+        set: [updated_at: ~U[2020-01-01 00:00:00Z]]
+      )
+
+      {:ok, _} = Tracking.set_status(ctx.user, other, :completed)
+
+      assert [a, b] = Tracking.recent_activity()
+      assert a.media_item_id == other.id
+      assert b.media_item_id == movie.id
+      assert a.user.id == ctx.user.id
+      assert %AnotherTrackingTool.Catalog.MediaItem{} = a.media_item
+    end
+
+    test "respects the limit", %{user: user, movie: movie} do
+      {:ok, _} = Tracking.set_status(user, movie, :completed)
+      assert length(Tracking.recent_activity(0)) == 0
+    end
   end
 end

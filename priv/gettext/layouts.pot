@@ -11,22 +11,42 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:55
+#: lib/another_tracking_tool_web/components/layouts.ex:48
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:48
+#: lib/another_tracking_tool_web/components/layouts.ex:90
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:52
+#: lib/another_tracking_tool_web/components/layouts.ex:45
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:45
+#: lib/another_tracking_tool_web/components/layouts.ex:70
 #, elixir-autogen, elixir-format
-msgid "Settings"
+msgid "Home"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:79
+#, elixir-autogen, elixir-format
+msgid "Import"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:82
+#, elixir-autogen, elixir-format
+msgid "Profile"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:73
+#, elixir-autogen, elixir-format
+msgid "Search"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:76
+#, elixir-autogen, elixir-format
+msgid "Watchlist"
 msgstr ""

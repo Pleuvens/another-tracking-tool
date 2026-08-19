@@ -1,0 +1,42 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: lib/another_tracking_tool_web/live/feed_live.ex:29
+#, elixir-autogen, elixir-format
+msgid "Activity"
+msgstr "Activité"
+
+#: lib/another_tracking_tool_web/live/feed_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Go watch something."
+msgstr "Rien pour l'instant. Va regarder quelque chose."
+
+#: lib/another_tracking_tool_web/format.ex:21
+#, elixir-autogen, elixir-format
+msgid "added to their list"
+msgstr "a ajouté à sa liste"
+
+#: lib/another_tracking_tool_web/format.ex:20
+#, elixir-autogen, elixir-format
+msgid "dropped"
+msgstr "a abandonné"
+
+#: lib/another_tracking_tool_web/format.ex:18
+#, elixir-autogen, elixir-format
+msgid "finished"
+msgstr "a terminé"
+
+#: lib/another_tracking_tool_web/format.ex:19
+#, elixir-autogen, elixir-format
+msgid "started"
+msgstr "a commencé"

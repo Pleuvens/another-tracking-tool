@@ -26,8 +26,8 @@ defmodule AnotherTrackingToolWeb.SearchLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <form phx-change="search" phx-submit="search">
+    <Layouts.app flash={@flash} current_scope={@current_scope} active={:search}>
+      <form id="search_form" phx-change="search" phx-submit="search">
         <.search_input
           name="q"
           value={@query}

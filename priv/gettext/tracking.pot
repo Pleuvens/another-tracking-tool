@@ -11,22 +11,22 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:215
+#: lib/another_tracking_tool_web/live/media_live/show.ex:227
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:160
+#: lib/another_tracking_tool_web/live/media_live/show.ex:170
 #, elixir-autogen, elixir-format
 msgid "My rating"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:138
+#: lib/another_tracking_tool_web/live/media_live/show.ex:148
 #, elixir-autogen, elixir-format
 msgid "My status"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:208
+#: lib/another_tracking_tool_web/live/media_live/show.ex:220
 #, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr ""
@@ -36,12 +36,12 @@ msgstr ""
 msgid "Not found."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:226
+#: lib/another_tracking_tool_web/live/media_live/show.ex:244
 #, elixir-autogen, elixir-format
 msgid "Post"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:223
+#: lib/another_tracking_tool_web/live/media_live/show.ex:241
 #, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr ""
@@ -51,22 +51,22 @@ msgstr ""
 msgid "Search movies…"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:96
+#: lib/another_tracking_tool_web/live/media_live/show.ex:106
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:176
+#: lib/another_tracking_tool_web/live/media_live/show.ex:186
 #, elixir-autogen, elixir-format
 msgid "Watched on"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:200
+#: lib/another_tracking_tool_web/live/media_live/show.ex:212
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:183
+#: lib/another_tracking_tool_web/live/media_live/show.ex:195
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""

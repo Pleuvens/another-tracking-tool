@@ -7,22 +7,22 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:215
+#: lib/another_tracking_tool_web/live/media_live/show.ex:227
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr "Commentaires"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:160
+#: lib/another_tracking_tool_web/live/media_live/show.ex:170
 #, elixir-autogen, elixir-format
 msgid "My rating"
 msgstr "Ma note"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:138
+#: lib/another_tracking_tool_web/live/media_live/show.ex:148
 #, elixir-autogen, elixir-format
 msgid "My status"
 msgstr "Mon statut"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:208
+#: lib/another_tracking_tool_web/live/media_live/show.ex:220
 #, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr "Personne pour l'instant — soyez le premier."
@@ -32,12 +32,12 @@ msgstr "Personne pour l'instant — soyez le premier."
 msgid "Not found."
 msgstr "Introuvable."
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:226
+#: lib/another_tracking_tool_web/live/media_live/show.ex:244
 #, elixir-autogen, elixir-format
 msgid "Post"
 msgstr "Publier"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:223
+#: lib/another_tracking_tool_web/live/media_live/show.ex:241
 #, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr "Dites quelque chose…"
@@ -47,22 +47,22 @@ msgstr "Dites quelque chose…"
 msgid "Search movies…"
 msgstr "Rechercher des films…"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:96
+#: lib/another_tracking_tool_web/live/media_live/show.ex:106
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr "Un jour, dans le passé"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:176
+#: lib/another_tracking_tool_web/live/media_live/show.ex:186
 #, elixir-autogen, elixir-format
 msgid "Watched on"
 msgstr "Vu le"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:200
+#: lib/another_tracking_tool_web/live/media_live/show.ex:212
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr "Votre cercle"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:183
+#: lib/another_tracking_tool_web/live/media_live/show.ex:195
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifier"

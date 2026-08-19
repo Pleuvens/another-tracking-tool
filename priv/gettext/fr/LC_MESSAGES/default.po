@@ -16,18 +16,18 @@ msgstr ""
 msgid "Actions"
 msgstr "Actions"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:97
-#: lib/another_tracking_tool_web/components/layouts.ex:112
+#: lib/another_tracking_tool_web/components/layouts.ex:149
+#: lib/another_tracking_tool_web/components/layouts.ex:164
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Reconnexion en cours"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:104
+#: lib/another_tracking_tool_web/components/layouts.ex:156
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Un problème est survenu !"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:89
+#: lib/another_tracking_tool_web/components/layouts.ex:141
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "Internet joue à cache-cache"
@@ -36,3 +36,13 @@ msgstr "Internet joue à cache-cache"
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "fermer"
+
+#: lib/another_tracking_tool_web/format.ex:10
+#, elixir-autogen, elixir-format
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: lib/another_tracking_tool_web/format.ex:11
+#, elixir-autogen, elixir-format
+msgid "Yesterday"
+msgstr "Hier"

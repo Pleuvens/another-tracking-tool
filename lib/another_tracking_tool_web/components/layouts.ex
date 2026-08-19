@@ -31,30 +31,22 @@ defmodule AnotherTrackingToolWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :active, :atom, default: nil, doc: "the active sidebar nav item"
+
   slot :inner_block, required: true
 
-  def app(assigns) do
+  def app(%{current_scope: nil} = assigns) do
     ~H"""
     <header class="border-b border-line">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-        <a href="/" class="font-display text-lg font-bold text-ink">another tracking tool</a>
+        <a href="/" class="font-display text-lg font-bold text-ink">cercle</a>
         <nav class="flex items-center gap-5 text-sm font-bold text-ink-soft">
-          <%= if @current_scope do %>
-            <span class="hidden text-ink-soft sm:inline">{@current_scope.user.email}</span>
-            <.link navigate={~p"/users/settings"} class="hover:text-ink">
-              {dgettext("layouts", "Settings")}
-            </.link>
-            <.link href={~p"/users/log-out"} method="delete" class="hover:text-ink">
-              {dgettext("layouts", "Log out")}
-            </.link>
-          <% else %>
-            <.link navigate={~p"/users/register"} class="hover:text-ink">
-              {dgettext("layouts", "Register")}
-            </.link>
-            <.link navigate={~p"/users/log-in"} class="hover:text-ink">
-              {dgettext("layouts", "Log in")}
-            </.link>
-          <% end %>
+          <.link navigate={~p"/users/register"} class="hover:text-ink">
+            {dgettext("layouts", "Register")}
+          </.link>
+          <.link navigate={~p"/users/log-in"} class="hover:text-ink">
+            {dgettext("layouts", "Log in")}
+          </.link>
         </nav>
       </div>
     </header>
@@ -64,6 +56,66 @@ defmodule AnotherTrackingToolWeb.Layouts do
     </main>
 
     <.flash_group flash={@flash} />
+    """
+  end
+
+  def app(assigns) do
+    ~H"""
+    <div class="md:flex md:min-h-screen">
+      <aside class="border-b border-line md:w-56 md:shrink-0 md:border-r md:border-b-0">
+        <div class="flex flex-wrap items-center gap-2 p-4 md:h-full md:flex-col md:items-stretch md:gap-8">
+          <div class="font-display text-lg font-bold text-ink">cercle</div>
+          <nav class="flex flex-1 flex-wrap gap-1 md:flex-col md:flex-none">
+            <.sidebar_link navigate={~p"/feed"} active={@active == :feed}>
+              {dgettext("layouts", "Home")}
+            </.sidebar_link>
+            <.sidebar_link navigate={~p"/search"} active={@active == :search}>
+              {dgettext("layouts", "Search")}
+            </.sidebar_link>
+            <span class="cursor-not-allowed rounded-xl px-3 py-2 text-sm font-bold text-line">
+              {dgettext("layouts", "Watchlist")}
+            </span>
+            <span class="cursor-not-allowed rounded-xl px-3 py-2 text-sm font-bold text-line">
+              {dgettext("layouts", "Import")}
+            </span>
+            <.sidebar_link navigate={~p"/users/settings"} active={@active == :profile}>
+              {dgettext("layouts", "Profile")}
+            </.sidebar_link>
+          </nav>
+          <.link
+            href={~p"/users/log-out"}
+            method="delete"
+            class="rounded-xl px-3 py-2 text-sm font-bold text-ink-soft hover:text-ink md:mt-auto"
+          >
+            {dgettext("layouts", "Log out")}
+          </.link>
+        </div>
+      </aside>
+
+      <main class="flex-1 px-4 py-8 sm:px-8">
+        {render_slot(@inner_block)}
+      </main>
+    </div>
+
+    <.flash_group flash={@flash} />
+    """
+  end
+
+  attr :navigate, :string, required: true
+  attr :active, :boolean, default: false
+  slot :inner_block, required: true
+
+  defp sidebar_link(assigns) do
+    ~H"""
+    <.link
+      navigate={@navigate}
+      class={[
+        "rounded-xl px-3 py-2 text-sm font-bold",
+        if(@active, do: "bg-paper-2 text-ink", else: "text-ink-soft hover:text-ink")
+      ]}
+    >
+      {render_slot(@inner_block)}
+    </.link>
     """
   end
 
