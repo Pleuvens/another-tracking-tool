@@ -11,57 +11,57 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:14
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:12
 #, elixir-autogen, elixir-format
 msgid "Account Settings"
 msgstr "Paramètres du compte"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:29
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:27
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr "Changer l'e-mail"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:28
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:26
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr "Modification…"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:62
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:60
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:77
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:75
 #, elixir-autogen, elixir-format
 msgid "Display language"
 msgstr "Langue d'affichage"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:23
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:21
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr "E-mail"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:182
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:178
 #, elixir-autogen, elixir-format
 msgid "Language updated."
 msgstr "Langue mise à jour."
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:15
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:13
 #, elixir-autogen, elixir-format
 msgid "Manage your email, password, and language."
 msgstr "Gérez votre e-mail, votre mot de passe et votre langue."
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:54
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:52
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:67
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:65
 #, elixir-autogen, elixir-format
 msgid "Save Password"
 msgstr "Enregistrer le mot de passe"
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:66
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:64
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Enregistrement…"

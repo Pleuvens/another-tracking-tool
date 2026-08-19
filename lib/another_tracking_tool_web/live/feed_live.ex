@@ -18,9 +18,12 @@ defmodule AnotherTrackingToolWeb.FeedLive do
 
   defp groups(activity) do
     activity
-    |> Enum.group_by(&DateTime.to_date(&1.updated_at))
+    |> Enum.group_by(&activity_date/1)
     |> Enum.sort_by(fn {date, _} -> date end, {:desc, Date})
   end
+
+  defp activity_date(%{watched_on: %Date{} = date}), do: date
+  defp activity_date(%{updated_at: updated_at}), do: DateTime.to_date(updated_at)
 
   @impl true
   def render(assigns) do
@@ -71,7 +74,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
                   </div>
                   <div class="flex items-center gap-2 text-xs text-ink-soft">
                     <.stars :if={entry.rating} value={entry.rating} />
-                    <span>{Format.time(entry.updated_at)}</span>
+                    <span :if={is_nil(entry.watched_on)}>{Format.time(entry.updated_at)}</span>
                   </div>
                 </div>
               </div>

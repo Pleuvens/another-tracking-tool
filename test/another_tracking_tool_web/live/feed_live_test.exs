@@ -27,6 +27,19 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     assert html =~ "Nothing here yet"
   end
 
+  test "groups an entry under its watched date", %{conn: conn} do
+    author = AccountsFixtures.user_fixture()
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Old Movie"})
+
+    {:ok, _} =
+      AnotherTrackingTool.Tracking.mark_watched(author, movie, %{watched_on: ~D[2020-05-05]})
+
+    {:ok, _lv, html} = live(conn, ~p"/feed")
+
+    assert html =~ "05/05/2020"
+    assert html =~ "Old Movie"
+  end
+
   test "new activity from another session appears live", %{conn: conn} do
     {:ok, lv, _html} = live(conn, ~p"/feed")
 

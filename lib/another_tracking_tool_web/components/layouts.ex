@@ -70,7 +70,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
               {dgettext("layouts", "Home")}
             </.sidebar_link>
             <.sidebar_link navigate={~p"/search"} active={@active == :search}>
-              {dgettext("layouts", "Search")}
+              {dgettext("layouts", "Discover")}
             </.sidebar_link>
             <.sidebar_link navigate={~p"/watchlist"} active={@active == :watchlist}>
               {dgettext("layouts", "Watchlist")}

@@ -122,6 +122,29 @@ defmodule AnotherTrackingTool.TrackingTest do
       {:ok, _} = Tracking.set_status(user, movie, :completed)
       assert length(Tracking.recent_activity(0)) == 0
     end
+
+    test "orders by watched_on when present, else updated_at", ctx do
+      %{user: user, movie: recent} = ctx
+      old = media_item_fixture(%{kind: :movie})
+
+      {:ok, _} = Tracking.mark_watched(user, old, %{watched_on: ~D[2000-01-01]})
+      {:ok, _} = Tracking.set_status(user, recent, :watching)
+
+      assert [a, b] = Tracking.recent_activity()
+      assert a.media_item_id == recent.id
+      assert b.media_item_id == old.id
+    end
+
+    test "orders completed entries by their watched date", %{user: user} do
+      jan = media_item_fixture(%{kind: :movie})
+      jun = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.mark_watched(user, jan, %{watched_on: ~D[2024-01-01]})
+      {:ok, _} = Tracking.mark_watched(user, jun, %{watched_on: ~D[2024-06-01]})
+
+      assert [first, second] = Tracking.recent_activity()
+      assert first.media_item_id == jun.id
+      assert second.media_item_id == jan.id
+    end
   end
 
   describe "watchlist" do

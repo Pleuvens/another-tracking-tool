@@ -11,57 +11,57 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:14
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:12
 #, elixir-autogen, elixir-format
 msgid "Account Settings"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:29
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:27
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:28
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:26
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:62
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:60
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:77
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:75
 #, elixir-autogen, elixir-format
 msgid "Display language"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:23
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:21
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:182
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:178
 #, elixir-autogen, elixir-format
 msgid "Language updated."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:15
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:13
 #, elixir-autogen, elixir-format
 msgid "Manage your email, password, and language."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:54
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:52
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:67
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:65
 #, elixir-autogen, elixir-format
 msgid "Save Password"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/settings.ex:66
+#: lib/another_tracking_tool_web/live/user_live/settings.ex:64
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""

@@ -11,12 +11,12 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:29
+#: lib/another_tracking_tool_web/live/feed_live.ex:32
 #, elixir-autogen, elixir-format
 msgid "Activity"
 msgstr "Activité"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:32
+#: lib/another_tracking_tool_web/live/feed_live.ex:35
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet. Go watch something."
 msgstr "Rien pour l'instant. Va regarder quelque chose."

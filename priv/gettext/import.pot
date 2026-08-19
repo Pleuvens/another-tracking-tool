@@ -11,48 +11,48 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:82
+#: lib/another_tracking_tool_web/live/import_live.ex:84
 #, elixir-autogen, elixir-format
 msgid "%{count} skipped"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:80
+#: lib/another_tracking_tool_web/live/import_live.ex:82
 #, elixir-autogen, elixir-format
 msgid "%{count} titles rescued from oblivion"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:100
+#: lib/another_tracking_tool_web/live/import_live.ex:102
 #, elixir-autogen, elixir-format
 msgid "%{done} of %{total}"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:53
+#: lib/another_tracking_tool_web/live/import_live.ex:55
 #, elixir-autogen, elixir-format
 msgid "Bring your history over from another tracker."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:92
+#: lib/another_tracking_tool_web/live/import_live.ex:94
 #, elixir-autogen, elixir-format
 msgid "Coming soon"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:34
+#: lib/another_tracking_tool_web/live/import_live.ex:36
 #, elixir-autogen, elixir-format
 msgid "Could not read that file."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:51
-#: lib/another_tracking_tool_web/live/import_live.ex:64
+#: lib/another_tracking_tool_web/live/import_live.ex:53
+#: lib/another_tracking_tool_web/live/import_live.ex:66
 #, elixir-autogen, elixir-format
 msgid "Import"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:102
+#: lib/another_tracking_tool_web/live/import_live.ex:104
 #, elixir-autogen, elixir-format
 msgid "Starting…"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/import_live.ex:59
+#: lib/another_tracking_tool_web/live/import_live.ex:61
 #, elixir-autogen, elixir-format
 msgid "Upload your CSV export."
 msgstr ""

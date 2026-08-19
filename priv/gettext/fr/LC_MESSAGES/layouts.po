@@ -41,12 +41,12 @@ msgstr "Importer"
 msgid "Profile"
 msgstr "Profil"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:73
-#, elixir-autogen, elixir-format
-msgid "Search"
-msgstr "Rechercher"
-
 #: lib/another_tracking_tool_web/components/layouts.ex:76
 #, elixir-autogen, elixir-format
 msgid "Watchlist"
 msgstr "À voir"
+
+#: lib/another_tracking_tool_web/components/layouts.ex:73
+#, elixir-autogen, elixir-format
+msgid "Discover"
+msgstr "Découvrir"

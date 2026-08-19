@@ -61,7 +61,10 @@ defmodule AnotherTrackingTool.Tracking do
   def recent_activity(limit \\ 50) do
     Repo.all(
       from e in WatchEntry,
-        order_by: [desc: e.updated_at],
+        order_by: [
+          desc: coalesce(e.watched_on, fragment("(?)::date", e.updated_at)),
+          desc: e.updated_at
+        ],
         limit: ^limit,
         preload: [:user, :media_item]
     )
