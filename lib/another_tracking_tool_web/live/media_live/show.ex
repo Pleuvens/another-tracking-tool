@@ -32,16 +32,18 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   @impl true
   def handle_event("set_status", %{"status" => status}, socket) do
     case WatchStatuses.from_string(status) do
-      nil -> {:noreply, socket}
-      status -> Tracking.set_status(me(socket), socket.assigns.media_item, status)
-    end
+      nil ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      status ->
+        Tracking.set_status(me(socket), socket.assigns.media_item, status)
+        {:noreply, load_tracking(socket)}
+    end
   end
 
   def handle_event("rate", %{"rating" => rating}, socket) do
     Tracking.rate(me(socket), socket.assigns.media_item, String.to_integer(rating))
-    {:noreply, socket}
+    {:noreply, load_tracking(socket)}
   end
 
   def handle_event("edit_date", _params, socket) do
@@ -51,7 +53,11 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   def handle_event("set_date", %{"watched_on" => date}, socket) do
     attrs = %{status: :completed, watched_on: date}
     Tracking.upsert_entry(me(socket), socket.assigns.media_item, attrs)
-    {:noreply, assign(socket, :editing_date, false)}
+    {:noreply, socket |> assign(:editing_date, false) |> load_tracking()}
+  end
+
+  def handle_event("change_comment", %{"comment" => %{"body" => body}}, socket) do
+    {:noreply, assign(socket, :comment_form, to_form(%{"body" => body}, as: :comment))}
   end
 
   def handle_event("comment", %{"comment" => %{"body" => body}}, socket) do
@@ -61,7 +67,11 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
 
       body ->
         Tracking.create_comment(me(socket), socket.assigns.media_item, body)
-        {:noreply, assign(socket, :comment_form, to_form(%{"body" => ""}, as: :comment))}
+
+        {:noreply,
+         socket
+         |> assign(:comment_form, to_form(%{"body" => ""}, as: :comment))
+         |> load_tracking()}
     end
   end
 
@@ -217,7 +227,13 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
           {dgettext("tracking", "Comments")}
         </p>
 
-        <.form for={@comment_form} phx-submit="comment" class="flex gap-2">
+        <.form
+          for={@comment_form}
+          id="comment_form"
+          phx-change="change_comment"
+          phx-submit="comment"
+          class="flex gap-2"
+        >
           <input
             type="text"
             name="comment[body]"
