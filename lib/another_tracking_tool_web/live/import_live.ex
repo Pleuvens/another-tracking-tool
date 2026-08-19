@@ -61,7 +61,10 @@ defmodule AnotherTrackingToolWeb.ImportLive do
           <p class="mt-1 text-sm text-ink-soft">{dgettext("import", "Upload your CSV export.")}</p>
 
           <form id="yamtrack-form" phx-change="validate" phx-submit="import" class="mt-4 space-y-3">
-            <.live_file_input upload={@uploads.file} class="text-sm text-ink-soft" />
+            <.live_file_input
+              upload={@uploads.file}
+              class="text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:font-extrabold file:text-paper-0 hover:file:opacity-90"
+            />
             <.button variant="primary" disabled={@uploads.file.entries == []}>
               {dgettext("import", "Import")}
             </.button>
