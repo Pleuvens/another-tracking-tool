@@ -6,12 +6,12 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"user_id" => user_id, "rows" => rows}}) do
     user = Accounts.get_user!(user_id)
-    media_items = fetch_media_items(user_id, rows)
+    {movie_rows, episode_rows} = Enum.split_with(rows, &(&1["kind"] == "movie"))
 
-    entries =
-      for row <- rows, media_item = media_items[row["tmdb_id"]], do: entry(media_item, row)
+    resolved = fetch_media(user_id, movie_rows, episode_rows)
 
-    imported = Tracking.import_entries(user, entries)
+    imported =
+      import_movies(user, movie_rows, resolved) + import_episodes(user, episode_rows, resolved)
 
     Imports.broadcast(
       user_id,
@@ -21,27 +21,76 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
     :ok
   end
 
-  defp fetch_media_items(user_id, rows) do
-    ids = rows |> Enum.map(& &1["tmdb_id"]) |> Enum.uniq()
-    known = Catalog.enriched_by_tmdb(ids, :movie)
-    to_fetch = Enum.reject(unique_rows(rows), &Map.has_key?(known, &1["tmdb_id"]))
-    total = length(to_fetch)
+  defp fetch_media(user_id, movie_rows, episode_rows) do
+    known = Catalog.enriched_by_tmdb(unique_ids(movie_rows), :movie)
 
-    to_fetch
-    |> Enum.with_index(1)
-    |> Enum.reduce(known, fn {row, done}, acc ->
-      acc =
-        case Catalog.fetch_and_enrich(:tmdb, row["tmdb_id"], :movie, %{title_fr: row["title"]}) do
-          {:ok, media_item} -> Map.put(acc, row["tmdb_id"], media_item)
-          _ -> acc
-        end
+    movie_fetches =
+      movie_rows |> unique_by_id() |> Enum.reject(&Map.has_key?(known, &1["tmdb_id"]))
 
-      Imports.broadcast(user_id, {:import_progress, %{done: done, total: total}})
-      acc
-    end)
+    show_fetches = unique_by_id(episode_rows)
+    total = length(movie_fetches) + length(show_fetches)
+
+    {resolved, done} =
+      Enum.reduce(movie_fetches, {known, 0}, fn row, {acc, done} ->
+        acc = put_movie(acc, row)
+        progress(user_id, done + 1, total)
+        {acc, done + 1}
+      end)
+
+    {resolved, _} =
+      Enum.reduce(show_fetches, {resolved, done}, fn row, {acc, done} ->
+        acc = put_show(acc, row)
+        progress(user_id, done + 1, total)
+        {acc, done + 1}
+      end)
+
+    resolved
   end
 
-  defp unique_rows(rows), do: Enum.uniq_by(rows, & &1["tmdb_id"])
+  defp put_movie(acc, row) do
+    case Catalog.fetch_and_enrich(:tmdb, row["tmdb_id"], :movie, %{title_fr: row["title"]}) do
+      {:ok, media_item} -> Map.put(acc, row["tmdb_id"], media_item)
+      _ -> acc
+    end
+  end
+
+  defp put_show(acc, row) do
+    case Catalog.fetch_tv_with_episodes(row["tmdb_id"], %{title_fr: row["title"]}) do
+      {:ok, show} -> Map.put(acc, {:show, row["tmdb_id"]}, show)
+      _ -> acc
+    end
+  end
+
+  defp import_movies(user, movie_rows, resolved) do
+    entries = for row <- movie_rows, mi = resolved[row["tmdb_id"]], do: entry(mi, row)
+    Tracking.import_entries(user, entries)
+  end
+
+  defp import_episodes(user, episode_rows, resolved) do
+    watches =
+      episode_rows
+      |> Enum.group_by(& &1["tmdb_id"])
+      |> Enum.flat_map(fn {tmdb_id, rows} ->
+        case resolved[{:show, tmdb_id}] do
+          nil -> []
+          show -> episode_watches(show, rows)
+        end
+      end)
+
+    Tracking.import_episode_watches(user, watches)
+  end
+
+  defp episode_watches(show, rows) do
+    index = Catalog.episode_index(show)
+
+    for row <- rows, episode_id = index[{row["season_number"], row["episode_number"]}] do
+      %{
+        episode_id: episode_id,
+        media_item_id: show.id,
+        watched_on: Coerce.date(row["watched_on"])
+      }
+    end
+  end
 
   defp entry(media_item, row) do
     %{
@@ -51,4 +100,10 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
       watched_on: Coerce.date(row["watched_on"])
     }
   end
+
+  defp unique_ids(rows), do: rows |> Enum.map(& &1["tmdb_id"]) |> Enum.uniq()
+  defp unique_by_id(rows), do: Enum.uniq_by(rows, & &1["tmdb_id"])
+
+  defp progress(user_id, done, total),
+    do: Imports.broadcast(user_id, {:import_progress, %{done: done, total: total}})
 end

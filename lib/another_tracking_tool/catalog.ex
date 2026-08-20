@@ -77,6 +77,44 @@ defmodule AnotherTrackingTool.Catalog do
     Repo.get_by(MediaItem, [{@id_columns[source], source_id}] ++ Keyword.take(opts, [:kind]))
   end
 
+  def fetch_tv_with_episodes(tmdb_id, fallback_attrs \\ %{}) do
+    with {:ok, show} <- fetch_and_enrich(:tmdb, tmdb_id, :tv, fallback_attrs) do
+      provider = provider_for(:tv)
+
+      for season_number <- season_numbers(show.id) do
+        if episode_count(show.id, season_number) == 0,
+          do: provider.sync_season(show, season_number)
+      end
+
+      {:ok, show}
+    end
+  end
+
+  def episode_index(%MediaItem{id: id}) do
+    from(e in Episode,
+      where: e.media_item_id == ^id,
+      select: {e.season_number, e.episode_number, e.id}
+    )
+    |> Repo.all()
+    |> Map.new(fn {s, e, id} -> {{s, e}, id} end)
+  end
+
+  defp season_numbers(media_item_id) do
+    Repo.all(
+      from s in Season,
+        where: s.media_item_id == ^media_item_id and s.season_number >= 1,
+        select: s.season_number
+    )
+  end
+
+  defp episode_count(media_item_id, season_number) do
+    Repo.one(
+      from e in Episode,
+        where: e.media_item_id == ^media_item_id and e.season_number == ^season_number,
+        select: count(e.id)
+    )
+  end
+
   def seasons_with_episodes(%MediaItem{id: id}) do
     episodes = from(e in Episode, order_by: e.episode_number)
 

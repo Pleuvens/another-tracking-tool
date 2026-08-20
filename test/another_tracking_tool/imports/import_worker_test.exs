@@ -15,6 +15,7 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
   defp rows do
     [
       %{
+        "kind" => "movie",
         "tmdb_id" => 603,
         "title" => "The Matrix",
         "status" => "completed",
@@ -22,6 +23,7 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
         "watched_on" => "2024-01-15"
       },
       %{
+        "kind" => "movie",
         "tmdb_id" => 999,
         "title" => "Ghost",
         "status" => "planned",
@@ -51,6 +53,40 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
     assert Repo.aggregate(Tracking.WatchEntry, :count) == 1
     assert_receive {:import_progress, %{done: _, total: 2}}
     assert_receive {:import_done, %{imported: 1, skipped: 1, total: 2}}
+  end
+
+  test "imports TV episode rows as episode watches and derives status", %{user: user} do
+    TmdbStub.stub([
+      {"/3/tv/1399",
+       %{
+         "id" => 1399,
+         "name" => "GoT",
+         "seasons" => [%{"season_number" => 1, "episode_count" => 1}]
+       }},
+      {"/3/tv/1399/season/1",
+       %{
+         "episodes" => [
+           %{"season_number" => 1, "episode_number" => 1, "air_date" => "2011-04-17"}
+         ]
+       }}
+    ])
+
+    rows = [
+      %{
+        "kind" => "episode",
+        "tmdb_id" => 1399,
+        "season_number" => 1,
+        "episode_number" => 1,
+        "title" => "GoT",
+        "watched_on" => "2023-05-21"
+      }
+    ]
+
+    assert :ok = perform_job(ImportWorker, %{"user_id" => user.id, "rows" => rows})
+
+    show = Catalog.get_by_external(:tmdb, 1399, kind: :tv)
+    assert Tracking.episode_progress(user, show) == %{watched: 1, total: 1}
+    assert Tracking.get_entry(user, show).status == :completed
   end
 
   test "re-running is idempotent", %{user: user} do

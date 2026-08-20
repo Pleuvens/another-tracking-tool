@@ -195,6 +195,42 @@ defmodule AnotherTrackingTool.Tracking do
 
   def delete_comment(%Comment{}, %User{}), do: {:error, :unauthorized}
 
+  def import_episode_watches(%User{id: user_id} = user, watches) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    count =
+      watches
+      |> Enum.uniq_by(& &1.episode_id)
+      |> Enum.map(fn w ->
+        %{
+          id: Ecto.UUID.generate(),
+          user_id: user_id,
+          episode_id: w.episode_id,
+          media_item_id: w.media_item_id,
+          watched_on: w.watched_on,
+          inserted_at: now,
+          updated_at: now
+        }
+      end)
+      |> Enum.chunk_every(@insert_chunk)
+      |> Enum.reduce(0, fn chunk, total ->
+        {n, _} =
+          Repo.insert_all(EpisodeWatch, chunk,
+            on_conflict: :nothing,
+            conflict_target: [:user_id, :episode_id]
+          )
+
+        total + n
+      end)
+
+    watches
+    |> Enum.map(& &1.media_item_id)
+    |> Enum.uniq()
+    |> Enum.each(&derive_show_status(user, &1))
+
+    count
+  end
+
   def watched_episode_ids(%User{id: user_id}, %MediaItem{id: media_item_id}) do
     from(w in EpisodeWatch,
       where: w.user_id == ^user_id and w.media_item_id == ^media_item_id,

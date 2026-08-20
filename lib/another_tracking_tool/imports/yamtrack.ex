@@ -38,9 +38,15 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
   defp parse_row(keys, values) do
     row = keys |> Enum.zip(values) |> Map.new()
 
-    with "tmdb" <- row["source"],
-         "movie" <- row["media_type"],
-         {tmdb_id, ""} <- Integer.parse(row["media_id"] || "") |> normalize(),
+    case {row["source"], row["media_type"]} do
+      {"tmdb", "movie"} -> movie_row(row)
+      {"tmdb", "episode"} -> episode_row(row)
+      _ -> nil
+    end
+  end
+
+  defp movie_row(row) do
+    with tmdb_id when is_integer(tmdb_id) <- Coerce.integer(row["media_id"]),
          status when not is_nil(status) <- @statuses[row["status"]] do
       %{
         tmdb_id: tmdb_id,
@@ -55,8 +61,22 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
     end
   end
 
-  defp normalize(:error), do: {nil, nil}
-  defp normalize({int, rest}), do: {int, rest}
+  defp episode_row(row) do
+    with tmdb_id when is_integer(tmdb_id) <- Coerce.integer(row["media_id"]),
+         season when is_integer(season) <- Coerce.integer(row["season_number"]),
+         number when is_integer(number) <- Coerce.integer(row["episode_number"]) do
+      %{
+        tmdb_id: tmdb_id,
+        kind: :episode,
+        season_number: season,
+        episode_number: number,
+        watched_on: date(row["end_date"]) || date(row["progressed_at"]),
+        title: Coerce.presence(row["title"])
+      }
+    else
+      _ -> nil
+    end
+  end
 
   defp rating(score) do
     case Float.parse(score || "") do

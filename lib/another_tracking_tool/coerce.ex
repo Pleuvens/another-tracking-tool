@@ -12,4 +12,11 @@ defmodule AnotherTrackingTool.Coerce do
       _ -> nil
     end
   end
+
+  def integer(value) do
+    case Integer.parse(value || "") do
+      {int, ""} -> int
+      _ -> nil
+    end
+  end
 end
