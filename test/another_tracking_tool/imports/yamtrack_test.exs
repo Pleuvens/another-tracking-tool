@@ -30,6 +30,30 @@ defmodule AnotherTrackingTool.Imports.YamtrackTest do
     assert inception.watched_on == nil
   end
 
+  @tv_csv """
+  "media_id","source","media_type","title","image","season_number","episode_number","score","status","notes","start_date","end_date","progress","created_at","progressed_at"
+  "125988","tmdb","season","Silo","https://img/s.jpg","3","","","In progress","","","2026-08-15 14:57:00+00:00","7","2026-08-12 10:51:27+00:00","2026-08-15 14:57:00+00:00"
+  "125988","tmdb","episode","Silo","https://img/e.jpg","3","7","","","","","2026-08-15 14:57:00+00:00","1","2026-08-15 14:57:10+00:00","2026-08-15 14:57:10+00:00"
+  """
+
+  test "expands season progress into a season row and keeps explicit episode rows" do
+    assert {:ok, [season, episode]} = Yamtrack.parse(@tv_csv)
+
+    assert season == %{
+             tmdb_id: 125_988,
+             kind: :season,
+             season_number: 3,
+             progress: 7,
+             watched_on: ~D[2026-08-15],
+             title: "Silo"
+           }
+
+    assert episode.kind == :episode
+    assert episode.season_number == 3
+    assert episode.episode_number == 7
+    assert episode.watched_on == ~D[2026-08-15]
+  end
+
   test "implements the Source behaviour" do
     assert Yamtrack.slug() == :yamtrack
     assert Yamtrack.name() == "Yamtrack"

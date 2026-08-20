@@ -89,6 +89,38 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
     assert Tracking.get_entry(user, show).status == :completed
   end
 
+  test "expands a season row into episode watches for 1..progress", %{user: user} do
+    TmdbStub.stub([
+      {"/3/tv/1399",
+       %{
+         "id" => 1399,
+         "name" => "GoT",
+         "seasons" => [%{"season_number" => 1, "episode_count" => 3}]
+       }},
+      {"/3/tv/1399/season/1",
+       %{
+         "episodes" =>
+           for(n <- 1..3, do: %{"season_number" => 1, "episode_number" => n, "air_date" => nil})
+       }}
+    ])
+
+    rows = [
+      %{
+        "kind" => "season",
+        "tmdb_id" => 1399,
+        "season_number" => 1,
+        "progress" => 2,
+        "title" => "GoT",
+        "watched_on" => "2023-05-21"
+      }
+    ]
+
+    assert :ok = perform_job(ImportWorker, %{"user_id" => user.id, "rows" => rows})
+
+    show = Catalog.get_by_external(:tmdb, 1399, kind: :tv)
+    assert Tracking.episode_progress(user, show) == %{watched: 2, total: 3}
+  end
+
   test "re-running is idempotent", %{user: user} do
     TmdbStub.stub([{"/3/movie/603", %{"id" => 603, "title" => "The Matrix"}}])
 

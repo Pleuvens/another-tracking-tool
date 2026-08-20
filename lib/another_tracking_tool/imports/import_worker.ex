@@ -82,14 +82,25 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
 
   defp episode_watches(show, rows) do
     index = Catalog.episode_index(show)
+    {season_rows, episode_rows} = Enum.split_with(rows, &(&1["kind"] == "season"))
 
-    for row <- rows, episode_id = index[{row["season_number"], row["episode_number"]}] do
-      %{
-        episode_id: episode_id,
-        media_item_id: show.id,
-        watched_on: Coerce.date(row["watched_on"])
-      }
-    end
+    explicit =
+      for row <- episode_rows, episode_id = index[{row["season_number"], row["episode_number"]}] do
+        watch(show, episode_id, row["watched_on"])
+      end
+
+    filled =
+      for row <- season_rows,
+          number <- 1..row["progress"]//1,
+          episode_id = index[{row["season_number"], number}] do
+        watch(show, episode_id, row["watched_on"])
+      end
+
+    explicit ++ filled
+  end
+
+  defp watch(show, episode_id, watched_on) do
+    %{episode_id: episode_id, media_item_id: show.id, watched_on: Coerce.date(watched_on)}
   end
 
   defp entry(media_item, row) do

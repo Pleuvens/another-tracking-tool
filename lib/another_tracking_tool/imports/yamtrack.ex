@@ -40,6 +40,7 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
 
     case {row["source"], row["media_type"]} do
       {"tmdb", "movie"} -> movie_row(row)
+      {"tmdb", "season"} -> season_row(row)
       {"tmdb", "episode"} -> episode_row(row)
       _ -> nil
     end
@@ -54,6 +55,23 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
         status: status,
         rating: rating(row["score"]),
         watched_on: date(row["end_date"]) || date(row["start_date"]),
+        title: Coerce.presence(row["title"])
+      }
+    else
+      _ -> nil
+    end
+  end
+
+  defp season_row(row) do
+    with tmdb_id when is_integer(tmdb_id) <- Coerce.integer(row["media_id"]),
+         season when is_integer(season) <- Coerce.integer(row["season_number"]),
+         progress when is_integer(progress) and progress > 0 <- Coerce.integer(row["progress"]) do
+      %{
+        tmdb_id: tmdb_id,
+        kind: :season,
+        season_number: season,
+        progress: progress,
+        watched_on: date(row["end_date"]) || date(row["progressed_at"]),
         title: Coerce.presence(row["title"])
       }
     else
