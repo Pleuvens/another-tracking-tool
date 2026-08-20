@@ -72,7 +72,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
                   </div>
                   <div class="flex items-center gap-2 text-xs text-ink-soft">
                     <.stars :if={item[:rating]} value={item.rating} />
-                    <span>{Format.time(item.at)}</span>
+                    <span :if={is_nil(item.watched_on)}>{Format.time(item.at)}</span>
                   </div>
                 </div>
               </div>

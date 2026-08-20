@@ -76,7 +76,7 @@ defmodule AnotherTrackingTool.Tracking do
     |> Enum.map(fn e ->
       %{
         type: :movie,
-        at: entry_at(e),
+        at: activity_at(e.watched_on, e.updated_at),
         user: e.user,
         media_item: e.media_item,
         status: e.status,
@@ -86,12 +86,15 @@ defmodule AnotherTrackingTool.Tracking do
     end)
   end
 
-  defp entry_at(%{watched_on: %Date{} = date}), do: DateTime.new!(date, ~T[00:00:00])
-  defp entry_at(%{updated_at: updated_at}), do: updated_at
+  defp activity_at(%Date{} = date, _fallback), do: DateTime.new!(date, ~T[00:00:00])
+  defp activity_at(nil, fallback), do: fallback
 
   defp episode_activity(limit) do
     from(w in EpisodeWatch,
-      order_by: [desc: w.inserted_at],
+      order_by: [
+        desc: coalesce(w.watched_on, fragment("(?)::date", w.inserted_at)),
+        desc: w.inserted_at
+      ],
       limit: ^limit,
       preload: [:user, :media_item, :episode]
     )
@@ -99,10 +102,11 @@ defmodule AnotherTrackingTool.Tracking do
     |> Enum.map(fn w ->
       %{
         type: :episode,
-        at: w.inserted_at,
+        at: activity_at(w.watched_on, w.inserted_at),
         user: w.user,
         media_item: w.media_item,
-        episode: w.episode
+        episode: w.episode,
+        watched_on: w.watched_on
       }
     end)
   end

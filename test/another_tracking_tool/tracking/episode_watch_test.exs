@@ -4,7 +4,8 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
   import AnotherTrackingTool.AccountsFixtures
   import AnotherTrackingTool.CatalogFixtures
 
-  alias AnotherTrackingTool.Tracking
+  alias AnotherTrackingTool.{Repo, Tracking}
+  alias AnotherTrackingTool.Tracking.EpisodeWatch
 
   setup do
     user = user_fixture()
@@ -82,5 +83,17 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
     assert [%{type: :episode, episode: episode, media_item: mi}] = Tracking.recent_activity()
     assert episode.id == e1.id
     assert mi.id == show.id
+  end
+
+  test "recent_activity uses episode watched_on for its date", ctx do
+    %{user: user, show: show, season: season} = ctx
+    e1 = episode_fixture(show, season, %{episode_number: 1})
+    Tracking.mark_episode(user, e1)
+
+    watch = Repo.get_by!(EpisodeWatch, episode_id: e1.id)
+    Repo.update!(Ecto.Changeset.change(watch, watched_on: ~D[2019-03-03]))
+
+    assert [%{type: :episode, at: at, watched_on: ~D[2019-03-03]}] = Tracking.recent_activity()
+    assert DateTime.to_date(at) == ~D[2019-03-03]
   end
 end
