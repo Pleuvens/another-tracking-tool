@@ -4,14 +4,19 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   alias AnotherTrackingTool.Catalog
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.{Repo, Tracking, WatchStatuses}
-  alias AnotherTrackingToolWeb.Avatars
+  alias AnotherTrackingToolWeb.{Avatars, Format}
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     case Catalog.fetch_media_item(id) do
       {:ok, media_item} ->
         media_item = Repo.preload(media_item, :tmdb_genres)
-        if connected?(socket), do: Tracking.subscribe(media_item)
+
+        if connected?(socket) do
+          Tracking.subscribe(media_item)
+          Catalog.subscribe(media_item)
+        end
+
         Catalog.ensure_details(media_item)
 
         {:ok,
@@ -19,7 +24,8 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
          |> assign(:media_item, media_item)
          |> assign(:comment_form, to_form(%{"body" => ""}, as: :comment))
          |> assign(:editing_date, false)
-         |> load_tracking()}
+         |> load_tracking()
+         |> load_episodes()}
 
       {:error, :not_found} ->
         {:ok,
@@ -75,10 +81,32 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     end
   end
 
+  def handle_event("toggle_episode", %{"id" => id, "watched" => watched}, socket) do
+    episode = Enum.find(all_episodes(socket), &(&1.id == id))
+
+    if episode do
+      if watched == "true",
+        do: Tracking.unmark_episode(me(socket), episode),
+        else: Tracking.mark_episode(me(socket), episode)
+    end
+
+    {:noreply, socket |> load_tracking() |> load_episodes()}
+  end
+
+  def handle_event("mark_season", %{"season" => season_number}, socket) do
+    Tracking.mark_season(me(socket), socket.assigns.media_item, String.to_integer(season_number))
+    {:noreply, socket |> load_tracking() |> load_episodes()}
+  end
+
   @impl true
   def handle_info({event, _payload}, socket)
       when event in [:entry_upserted, :entry_deleted, :comment_created, :comment_deleted] do
     {:noreply, load_tracking(socket)}
+  end
+
+  def handle_info({event, _payload}, socket)
+      when event in [:episode_watched, :episode_unwatched, :episodes_changed, :catalog_updated] do
+    {:noreply, socket |> load_tracking() |> load_episodes()}
   end
 
   defp load_tracking(socket) do
@@ -90,6 +118,18 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     |> assign(:circle_rating, Tracking.circle_rating(media_item))
     |> assign(:comments, Tracking.list_comments(media_item))
   end
+
+  defp load_episodes(%{assigns: %{media_item: %{kind: :tv} = media_item}} = socket) do
+    socket
+    |> assign(:seasons, Catalog.seasons_with_episodes(media_item))
+    |> assign(:watched_ids, Tracking.watched_episode_ids(me(socket), media_item))
+    |> assign(:progress, Tracking.episode_progress(me(socket), media_item))
+  end
+
+  defp load_episodes(socket),
+    do: assign(socket, seasons: [], watched_ids: MapSet.new(), progress: %{watched: 0, total: 0})
+
+  defp all_episodes(socket), do: Enum.flat_map(socket.assigns.seasons, & &1.episodes)
 
   defp me(socket), do: socket.assigns.current_scope.user
 
@@ -204,6 +244,64 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
               />
             </form>
           </div>
+        </div>
+      </div>
+
+      <div :if={@media_item.kind == :tv} class="mt-10 space-y-4">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+            {dgettext("tracking", "Episodes")}
+          </p>
+          <span class="text-xs text-ink-soft">{@progress.watched}/{@progress.total}</span>
+        </div>
+        <div class="h-2 overflow-hidden rounded-full bg-paper-2">
+          <div
+            class="h-full bg-ink transition-all"
+            style={"width: #{Format.percent(@progress.watched, @progress.total)}%"}
+          >
+          </div>
+        </div>
+
+        <p :if={@seasons == []} class="text-sm text-ink-soft">
+          {dgettext("tracking", "Episodes are still loading…")}
+        </p>
+
+        <div :for={season <- @seasons} class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display font-bold text-ink">
+              {season.name || dgettext("tracking", "Season %{n}", n: season.season_number)}
+            </h3>
+            <button
+              phx-click="mark_season"
+              phx-value-season={season.season_number}
+              class="text-xs font-bold text-ink-soft hover:text-ink"
+            >
+              {dgettext("tracking", "Mark season watched")}
+            </button>
+          </div>
+          <button
+            :for={episode <- season.episodes}
+            phx-click="toggle_episode"
+            phx-value-id={episode.id}
+            phx-value-watched={to_string(MapSet.member?(@watched_ids, episode.id))}
+            class={[
+              "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm",
+              if(MapSet.member?(@watched_ids, episode.id),
+                do: "bg-status-completed/25 text-ink",
+                else: "bg-paper-2 text-ink-soft hover:text-ink"
+              )
+            ]}
+          >
+            <span class="w-8 shrink-0 font-bold tabular-nums">
+              {episode.season_number}×{episode.episode_number}
+            </span>
+            <span class="flex-1 truncate">{episode.name}</span>
+            <.icon
+              :if={MapSet.member?(@watched_ids, episode.id)}
+              name="hero-check-circle-solid"
+              class="size-5 text-status-completed"
+            />
+          </button>
         </div>
       </div>
 

@@ -112,8 +112,8 @@ defmodule AnotherTrackingTool.TrackingTest do
       {:ok, _} = Tracking.set_status(ctx.user, other, :completed)
 
       assert [a, b] = Tracking.recent_activity()
-      assert a.media_item_id == other.id
-      assert b.media_item_id == movie.id
+      assert a.media_item.id == other.id
+      assert b.media_item.id == movie.id
       assert a.user.id == ctx.user.id
       assert %AnotherTrackingTool.Catalog.MediaItem{} = a.media_item
     end
@@ -131,8 +131,8 @@ defmodule AnotherTrackingTool.TrackingTest do
       {:ok, _} = Tracking.set_status(user, recent, :watching)
 
       assert [a, b] = Tracking.recent_activity()
-      assert a.media_item_id == recent.id
-      assert b.media_item_id == old.id
+      assert a.media_item.id == recent.id
+      assert b.media_item.id == old.id
     end
 
     test "orders completed entries by their watched date", %{user: user} do
@@ -142,8 +142,8 @@ defmodule AnotherTrackingTool.TrackingTest do
       {:ok, _} = Tracking.mark_watched(user, jun, %{watched_on: ~D[2024-06-01]})
 
       assert [first, second] = Tracking.recent_activity()
-      assert first.media_item_id == jun.id
-      assert second.media_item_id == jan.id
+      assert first.media_item.id == jun.id
+      assert second.media_item.id == jan.id
     end
   end
 

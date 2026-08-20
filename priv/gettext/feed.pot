@@ -40,3 +40,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "started"
 msgstr ""
+
+#: lib/another_tracking_tool_web/format.ex:27
+#, elixir-autogen, elixir-format
+msgid "watched S%{s}E%{e}"
+msgstr ""

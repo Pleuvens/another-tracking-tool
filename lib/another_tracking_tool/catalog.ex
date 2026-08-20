@@ -3,7 +3,7 @@ defmodule AnotherTrackingTool.Catalog do
 
   import Ecto.Query
 
-  alias AnotherTrackingTool.Catalog.MediaItem
+  alias AnotherTrackingTool.Catalog.{Episode, MediaItem, Season}
   alias AnotherTrackingTool.Catalog.EnrichMediaItemWorker
   alias AnotherTrackingTool.Providers
   alias AnotherTrackingTool.Repo
@@ -22,6 +22,17 @@ defmodule AnotherTrackingTool.Catalog do
     original_language tmdb_popularity tmdb_vote_average tmdb_vote_count updated_at)a
 
   def provider_for(kind) when kind in @cinema_kinds, do: Providers.Tmdb
+
+  def subscribe(%MediaItem{id: id}),
+    do: Phoenix.PubSub.subscribe(AnotherTrackingTool.PubSub, "catalog:#{id}")
+
+  def broadcast_updated(media_item_id),
+    do:
+      Phoenix.PubSub.broadcast(
+        AnotherTrackingTool.PubSub,
+        "catalog:#{media_item_id}",
+        {:catalog_updated, media_item_id}
+      )
 
   def search(query, opts \\ []) do
     result =
@@ -64,6 +75,17 @@ defmodule AnotherTrackingTool.Catalog do
 
   def get_by_external(source, source_id, opts \\ []) do
     Repo.get_by(MediaItem, [{@id_columns[source], source_id}] ++ Keyword.take(opts, [:kind]))
+  end
+
+  def seasons_with_episodes(%MediaItem{id: id}) do
+    episodes = from(e in Episode, order_by: e.episode_number)
+
+    from(s in Season,
+      where: s.media_item_id == ^id and s.season_number >= 1,
+      order_by: s.season_number,
+      preload: [episodes: ^episodes]
+    )
+    |> Repo.all()
   end
 
   def enriched_by_tmdb(tmdb_ids, kind) do

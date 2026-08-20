@@ -22,4 +22,11 @@ defmodule AnotherTrackingToolWeb.Format do
   def watch_verb(:watching), do: dgettext("feed", "started")
   def watch_verb(:dropped), do: dgettext("feed", "dropped")
   def watch_verb(:planned), do: dgettext("feed", "added to their list")
+
+  def episode_verb(episode) do
+    dgettext("feed", "watched S%{s}E%{e}",
+      s: episode.season_number,
+      e: episode.episode_number
+    )
+  end
 end

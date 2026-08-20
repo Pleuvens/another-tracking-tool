@@ -24,4 +24,19 @@ defmodule AnotherTrackingTool.CatalogFixtures do
 
     season
   end
+
+  def episode_fixture(_media_item, season, attrs \\ %{}) do
+    {:ok, episode} =
+      Series.upsert_episode(
+        season,
+        Enum.into(attrs, %{
+          season_number: season.season_number,
+          episode_number: System.unique_integer([:positive]),
+          name: "Un épisode",
+          air_date: ~D[2020-01-01]
+        })
+      )
+
+    episode
+  end
 end
