@@ -89,6 +89,49 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
     assert Tracking.get_entry(user, show).status == :completed
   end
 
+  test "imports a show rating from a tv row while deriving status from episodes", %{user: user} do
+    TmdbStub.stub([
+      {"/3/tv/1399",
+       %{
+         "id" => 1399,
+         "name" => "GoT",
+         "seasons" => [%{"season_number" => 1, "episode_count" => 2}]
+       }},
+      {"/3/tv/1399/season/1",
+       %{
+         "episodes" =>
+           for(n <- 1..2,
+               do: %{"season_number" => 1, "episode_number" => n, "air_date" => "2011-04-17"})
+       }}
+    ])
+
+    rows = [
+      %{
+        "kind" => "show",
+        "tmdb_id" => 1399,
+        "status" => "watching",
+        "rating" => 5,
+        "watched_on" => "2023-05-21",
+        "title" => "GoT"
+      },
+      %{
+        "kind" => "season",
+        "tmdb_id" => 1399,
+        "season_number" => 1,
+        "progress" => 2,
+        "title" => "GoT",
+        "watched_on" => "2023-05-21"
+      }
+    ]
+
+    assert :ok = perform_job(ImportWorker, %{"user_id" => user.id, "rows" => rows})
+
+    show = Catalog.get_by_external(:tmdb, 1399, kind: :tv)
+    entry = Tracking.get_entry(user, show)
+    assert entry.rating == 5
+    assert entry.status == :completed
+  end
+
   test "expands a season row into episode watches for 1..progress", %{user: user} do
     TmdbStub.stub([
       {"/3/tv/1399",

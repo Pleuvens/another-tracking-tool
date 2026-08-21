@@ -39,19 +39,20 @@ defmodule AnotherTrackingTool.Imports.Yamtrack do
     row = keys |> Enum.zip(values) |> Map.new()
 
     case {row["source"], row["media_type"]} do
-      {"tmdb", "movie"} -> movie_row(row)
+      {"tmdb", "movie"} -> watch_row(row, :movie)
+      {"tmdb", "tv"} -> watch_row(row, :show)
       {"tmdb", "season"} -> season_row(row)
       {"tmdb", "episode"} -> episode_row(row)
       _ -> nil
     end
   end
 
-  defp movie_row(row) do
+  defp watch_row(row, kind) do
     with tmdb_id when is_integer(tmdb_id) <- Coerce.integer(row["media_id"]),
          status when not is_nil(status) <- @statuses[row["status"]] do
       %{
         tmdb_id: tmdb_id,
-        kind: :movie,
+        kind: kind,
         status: status,
         rating: rating(row["score"]),
         watched_on: date(row["end_date"]) || date(row["start_date"]),

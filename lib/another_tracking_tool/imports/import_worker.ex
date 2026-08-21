@@ -6,12 +6,17 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"user_id" => user_id, "rows" => rows}}) do
     user = Accounts.get_user!(user_id)
-    {movie_rows, episode_rows} = Enum.split_with(rows, &(&1["kind"] == "movie"))
+    grouped = Enum.group_by(rows, & &1["kind"])
+    movie_rows = Map.get(grouped, "movie", [])
+    show_rows = Map.get(grouped, "show", [])
+    episode_rows = Map.get(grouped, "episode", []) ++ Map.get(grouped, "season", [])
 
-    resolved = fetch_media(user_id, movie_rows, episode_rows)
+    resolved = fetch_media(user_id, movie_rows, show_rows, episode_rows)
 
     imported =
-      import_movies(user, movie_rows, resolved) + import_episodes(user, episode_rows, resolved)
+      import_movies(user, movie_rows, resolved) +
+        import_shows(user, show_rows, resolved) +
+        import_episodes(user, episode_rows, resolved)
 
     Imports.broadcast(
       user_id,
@@ -21,13 +26,13 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
     :ok
   end
 
-  defp fetch_media(user_id, movie_rows, episode_rows) do
+  defp fetch_media(user_id, movie_rows, show_rows, episode_rows) do
     known = Catalog.enriched_by_tmdb(unique_ids(movie_rows), :movie)
 
     movie_fetches =
       movie_rows |> unique_by_id() |> Enum.reject(&Map.has_key?(known, &1["tmdb_id"]))
 
-    show_fetches = unique_by_id(episode_rows)
+    show_fetches = unique_by_id(show_rows ++ episode_rows)
     total = length(movie_fetches) + length(show_fetches)
 
     {resolved, done} =
@@ -63,6 +68,13 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
 
   defp import_movies(user, movie_rows, resolved) do
     entries = for row <- movie_rows, mi = resolved[row["tmdb_id"]], do: entry(mi, row)
+    Tracking.import_entries(user, entries)
+  end
+
+  defp import_shows(user, show_rows, resolved) do
+    entries =
+      for row <- show_rows, show = resolved[{:show, row["tmdb_id"]}], do: entry(show, row)
+
     Tracking.import_entries(user, entries)
   end
 

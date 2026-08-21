@@ -11,9 +11,9 @@ defmodule AnotherTrackingTool.Imports.YamtrackTest do
   "5114","mal","anime","Fullmetal Alchemist","https://img/f.jpg","","","10","Completed","","","","0","2026-07-13 00:49:07+00:00",""
   """
 
-  test "keeps only tmdb movie rows and normalizes them, parsing datetime dates" do
+  test "normalizes tmdb movie and tv rows, ignores other sources, parsing datetime dates" do
     assert {:ok, rows} = Yamtrack.parse(@csv)
-    assert [matrix, inception] = rows
+    assert [matrix, inception, got] = rows
 
     assert matrix == %{
              tmdb_id: 603,
@@ -28,6 +28,15 @@ defmodule AnotherTrackingTool.Imports.YamtrackTest do
     assert inception.status == :planned
     assert inception.rating == nil
     assert inception.watched_on == nil
+
+    assert got == %{
+             tmdb_id: 1399,
+             kind: :show,
+             status: :completed,
+             rating: 5,
+             watched_on: ~D[2023-05-21],
+             title: "Game of Thrones"
+           }
   end
 
   @tv_csv """
