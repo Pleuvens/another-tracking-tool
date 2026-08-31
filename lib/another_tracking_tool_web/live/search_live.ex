@@ -14,14 +14,14 @@ defmodule AnotherTrackingToolWeb.SearchLive do
     results =
       case String.trim(q) do
         "" -> []
-        query -> query |> Catalog.search() |> movies()
+        query -> query |> Catalog.search() |> to_results()
       end
 
     {:noreply, assign(socket, query: q, results: results)}
   end
 
-  defp movies({:ok, items}), do: Enum.filter(items, &(&1.kind == :movie))
-  defp movies(_), do: []
+  defp to_results({:ok, items}), do: items
+  defp to_results(_), do: []
 
   @impl true
   def render(assigns) do
@@ -37,13 +37,13 @@ defmodule AnotherTrackingToolWeb.SearchLive do
       </form>
 
       <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        <.link :for={movie <- @results} navigate={~p"/media/#{movie.id}"}>
-          <.poster src={tmdb_image(movie.poster_path)} alt={MediaItem.display_title(movie)} />
+        <.link :for={item <- @results} navigate={~p"/media/#{item.id}"}>
+          <.poster src={tmdb_image(item.poster_path)} alt={MediaItem.display_title(item)} />
           <div class="mt-2 font-display text-sm font-bold text-ink">
-            {MediaItem.display_title(movie)}
+            {MediaItem.display_title(item)}
           </div>
-          <div :if={MediaItem.year(movie)} class="text-xs text-ink-soft">
-            {MediaItem.year(movie)}
+          <div :if={MediaItem.year(item)} class="text-xs text-ink-soft">
+            {MediaItem.year(item)}
           </div>
         </.link>
       </div>
