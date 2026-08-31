@@ -90,6 +90,14 @@ defmodule AnotherTrackingTool.Catalog do
     end
   end
 
+  def get_episode(%MediaItem{id: media_item_id}, season_number, episode_number) do
+    Repo.get_by(Episode,
+      media_item_id: media_item_id,
+      season_number: season_number,
+      episode_number: episode_number
+    )
+  end
+
   def episode_index(%MediaItem{id: id}) do
     from(e in Episode,
       where: e.media_item_id == ^id,
