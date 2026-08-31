@@ -36,6 +36,8 @@ msgstr "Confirmer le nouveau mot de passe"
 msgid "Display language"
 msgstr "Langue d'affichage"
 
+#: lib/another_tracking_tool_web/live/user_live/login.ex:54
+#: lib/another_tracking_tool_web/live/user_live/login.ex:79
 #: lib/another_tracking_tool_web/live/user_live/registration.ex:39
 #: lib/another_tracking_tool_web/live/user_live/settings.ex:21
 #, elixir-autogen, elixir-format
@@ -112,6 +114,7 @@ msgstr "Créer un compte"
 msgid "Creating account…"
 msgstr "Création du compte…"
 
+#: lib/another_tracking_tool_web/live/user_live/login.ex:13
 #: lib/another_tracking_tool_web/live/user_live/registration.ex:18
 #, elixir-autogen, elixir-format
 msgid "Log in"
@@ -121,3 +124,53 @@ msgstr "Connexion"
 #, elixir-autogen, elixir-format
 msgid "to your account now."
 msgstr "à votre compte."
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:19
+#, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr "Pas encore de compte ?"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:128
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions for logging in shortly."
+msgstr "Si votre e-mail est dans notre système, vous recevrez les instructions de connexion sous peu."
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:92
+#, elixir-autogen, elixir-format
+msgid "Log in and stay logged in"
+msgstr "Se connecter et rester connecté"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:95
+#, elixir-autogen, elixir-format
+msgid "Log in only this time"
+msgstr "Se connecter juste cette fois"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:61
+#, elixir-autogen, elixir-format
+msgid "Log in with email"
+msgstr "Se connecter par e-mail"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:87
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr "Mot de passe"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:23
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr "Inscrivez-vous"
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:16
+#, elixir-autogen, elixir-format
+msgid "You need to reauthenticate to perform sensitive actions on your account."
+msgstr "Vous devez vous ré-authentifier pour effectuer des actions sensibles sur votre compte."
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:23
+#, elixir-autogen, elixir-format
+msgid "for an account now."
+msgstr "dès maintenant."
+
+#: lib/another_tracking_tool_web/live/user_live/login.ex:65
+#, elixir-autogen, elixir-format
+msgid "or"
+msgstr "ou"

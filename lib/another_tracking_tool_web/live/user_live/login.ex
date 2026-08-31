@@ -10,17 +10,23 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
       <div class="mx-auto max-w-sm space-y-4">
         <div class="text-center">
           <.header>
-            <p>Log in</p>
+            <p>{dgettext("accounts", "Log in")}</p>
             <:subtitle>
               <%= if @current_scope do %>
-                You need to reauthenticate to perform sensitive actions on your account.
+                {dgettext(
+                  "accounts",
+                  "You need to reauthenticate to perform sensitive actions on your account."
+                )}
               <% else %>
                 <span :if={@first_user?}>
-                  Don't have an account? <.link
+                  {dgettext("accounts", "Don't have an account?")} <.link
                     navigate={~p"/users/register"}
                     class="font-semibold text-brand hover:underline"
                     phx-no-format
-                  >Sign up</.link> for an account now.
+                  >{dgettext("accounts", "Sign up")}</.link> {dgettext(
+                    "accounts",
+                    "for an account now."
+                  )}
                 </span>
               <% end %>
             </:subtitle>
@@ -48,18 +54,18 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
-            label="Email"
+            label={dgettext("accounts", "Email")}
             autocomplete="username"
             spellcheck="false"
             required
             phx-mounted={JS.focus()}
           />
           <.button class="btn btn-primary w-full">
-            Log in with email <span aria-hidden="true">→</span>
+            {dgettext("accounts", "Log in with email")} <span aria-hidden="true">→</span>
           </.button>
         </.form>
 
-        <div class="divider">or</div>
+        <div class="divider">{dgettext("accounts", "or")}</div>
 
         <.form
           :let={f}
@@ -73,7 +79,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
-            label="Email"
+            label={dgettext("accounts", "Email")}
             autocomplete="username"
             spellcheck="false"
             required
@@ -81,15 +87,15 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
           <.input
             field={@form[:password]}
             type="password"
-            label="Password"
+            label={dgettext("accounts", "Password")}
             autocomplete="current-password"
             spellcheck="false"
           />
           <.button class="btn btn-primary w-full" name={@form[:remember_me].name} value="true">
-            Log in and stay logged in <span aria-hidden="true">→</span>
+            {dgettext("accounts", "Log in and stay logged in")} <span aria-hidden="true">→</span>
           </.button>
           <.button class="btn btn-primary btn-soft w-full mt-2">
-            Log in only this time
+            {dgettext("accounts", "Log in only this time")}
           </.button>
         </.form>
       </div>
@@ -122,7 +128,10 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
     end
 
     info =
-      "If your email is in our system, you will receive instructions for logging in shortly."
+      dgettext(
+        "accounts",
+        "If your email is in our system, you will receive instructions for logging in shortly."
+      )
 
     {:noreply,
      socket
