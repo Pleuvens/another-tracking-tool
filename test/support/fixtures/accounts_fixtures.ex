@@ -40,6 +40,21 @@ defmodule AnotherTrackingTool.AccountsFixtures do
     confirm_via_magic_link(user)
   end
 
+  def invite_fixture(inviter \\ nil) do
+    inviter = inviter || admin_user_fixture()
+    {:ok, invite} = Accounts.create_invite(inviter)
+    invite
+  end
+
+  def expire_invite(invite) do
+    {:ok, invite} =
+      invite
+      |> Ecto.Changeset.change(expires_at: DateTime.add(DateTime.utc_now(:second), -86_400))
+      |> AnotherTrackingTool.Repo.update()
+
+    invite
+  end
+
   defp confirm_via_magic_link(user) do
     token =
       extract_user_token(fn url ->

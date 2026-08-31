@@ -6,7 +6,7 @@ defmodule AnotherTrackingTool.Accounts do
   import Ecto.Query, warn: false
   alias AnotherTrackingTool.Repo
 
-  alias AnotherTrackingTool.Accounts.{User, UserToken, UserNotifier}
+  alias AnotherTrackingTool.Accounts.{Invite, User, UserToken, UserNotifier}
 
   ## Database getters
 
@@ -90,6 +90,62 @@ defmodule AnotherTrackingTool.Accounts do
   end
 
   def admin?(%User{admin: admin}), do: admin
+
+  ## Invites
+
+  @invite_validity_seconds 7 * 24 * 60 * 60
+
+  def create_invite(%User{} = inviter) do
+    attrs = %{
+      code: generate_invite_code(),
+      expires_at: DateTime.add(DateTime.utc_now(:second), @invite_validity_seconds),
+      invited_by_id: inviter.id
+    }
+
+    %Invite{} |> Invite.changeset(attrs) |> Repo.insert()
+  end
+
+  def list_invites do
+    Repo.all(from i in Invite, order_by: [desc: i.inserted_at], preload: [:used_by])
+  end
+
+  def get_redeemable_invite(code) when is_binary(code) do
+    Repo.one(redeemable_invite_query(code))
+  end
+
+  def register_user_with_invite(code, attrs) do
+    Repo.transact(fn ->
+      with %Invite{} = invite <- lock_redeemable_invite(code),
+           {:ok, user} <- register_user(attrs),
+           {:ok, _invite} <- consume_invite(invite, user) do
+        {:ok, user}
+      else
+        nil -> {:error, :invalid_invite}
+        {:error, _} = error -> error
+      end
+    end)
+  end
+
+  defp lock_redeemable_invite(code) do
+    code |> redeemable_invite_query() |> lock("FOR UPDATE") |> Repo.one()
+  end
+
+  defp redeemable_invite_query(code) do
+    now = DateTime.utc_now(:second)
+
+    from i in Invite,
+      where: i.code == ^code and is_nil(i.used_at) and i.expires_at > ^now
+  end
+
+  defp consume_invite(invite, user) do
+    invite
+    |> Ecto.Changeset.change(used_by_id: user.id, used_at: DateTime.utc_now(:second))
+    |> Repo.update()
+  end
+
+  defp generate_invite_code do
+    16 |> :crypto.strong_rand_bytes() |> Base.url_encode64(padding: false)
+  end
 
   ## Settings
 

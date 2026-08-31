@@ -4,7 +4,7 @@ defmodule AnotherTrackingTool.AccountsTest do
   alias AnotherTrackingTool.Accounts
 
   import AnotherTrackingTool.AccountsFixtures
-  alias AnotherTrackingTool.Accounts.{User, UserToken}
+  alias AnotherTrackingTool.Accounts.{Invite, User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -109,6 +109,96 @@ defmodule AnotherTrackingTool.AccountsTest do
       {:ok, user} = Accounts.register_user(valid_user_attributes())
       refute user.admin
       refute Accounts.admin?(user)
+    end
+  end
+
+  describe "create_invite/1" do
+    test "creates an unused, unexpired invite owned by the inviter" do
+      admin = admin_user_fixture()
+      {:ok, invite} = Accounts.create_invite(admin)
+
+      assert invite.code
+      assert invite.invited_by_id == admin.id
+      assert is_nil(invite.used_at)
+      assert DateTime.after?(invite.expires_at, DateTime.utc_now())
+    end
+  end
+
+  describe "get_redeemable_invite/1" do
+    test "returns an unused, unexpired invite" do
+      invite = invite_fixture()
+      assert %Invite{id: id} = Accounts.get_redeemable_invite(invite.code)
+      assert id == invite.id
+    end
+
+    test "returns nil for an unknown code" do
+      refute Accounts.get_redeemable_invite("nope")
+    end
+
+    test "returns nil for an expired invite" do
+      invite = invite_fixture() |> expire_invite()
+      refute Accounts.get_redeemable_invite(invite.code)
+    end
+
+    test "returns nil for an already-used invite" do
+      invite = invite_fixture()
+      {:ok, _user} = Accounts.register_user_with_invite(invite.code, valid_user_attributes())
+      refute Accounts.get_redeemable_invite(invite.code)
+    end
+  end
+
+  describe "register_user_with_invite/2" do
+    test "registers a non-admin user and consumes the invite" do
+      invite = invite_fixture()
+      email = unique_user_email()
+
+      {:ok, user} =
+        Accounts.register_user_with_invite(invite.code, valid_user_attributes(email: email))
+
+      assert user.email == email
+      refute user.admin
+
+      invite = Repo.reload!(invite)
+      assert invite.used_by_id == user.id
+      assert invite.used_at
+    end
+
+    test "fails for an unknown code" do
+      assert {:error, :invalid_invite} =
+               Accounts.register_user_with_invite("nope", valid_user_attributes())
+    end
+
+    test "fails for an expired invite" do
+      invite = invite_fixture() |> expire_invite()
+
+      assert {:error, :invalid_invite} =
+               Accounts.register_user_with_invite(invite.code, valid_user_attributes())
+    end
+
+    test "fails for an already-used invite" do
+      invite = invite_fixture()
+      {:ok, _user} = Accounts.register_user_with_invite(invite.code, valid_user_attributes())
+
+      assert {:error, :invalid_invite} =
+               Accounts.register_user_with_invite(invite.code, valid_user_attributes())
+    end
+
+    test "rolls back and keeps the invite redeemable on invalid attrs" do
+      invite = invite_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.register_user_with_invite(invite.code, %{email: "bad"})
+
+      assert Accounts.get_redeemable_invite(invite.code)
+    end
+  end
+
+  describe "list_invites/0" do
+    test "lists invites with used_by preloaded" do
+      invite = invite_fixture()
+      assert [listed] = Accounts.list_invites()
+      assert listed.id == invite.id
+      assert Ecto.assoc_loaded?(listed.used_by)
     end
   end
 
