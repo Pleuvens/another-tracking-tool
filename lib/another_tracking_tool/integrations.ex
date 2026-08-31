@@ -1,6 +1,8 @@
 defmodule AnotherTrackingTool.Integrations do
   @moduledoc "Live sync from external playback sources (Plex today, others later)."
 
+  require Logger
+
   import Ecto.Query
 
   alias AnotherTrackingTool.Accounts
@@ -71,13 +73,18 @@ defmodule AnotherTrackingTool.Integrations do
     record_account(source, account.id, account.name)
 
     case mapped_user_id(source, account.id) do
-      nil -> :skipped
-      user_id -> apply_event(source, Accounts.get_user!(user_id), event)
+      nil ->
+        Logger.info("#{source}: event skipped, account not mapped")
+        :skipped
+
+      user_id ->
+        apply_event(source, Accounts.get_user!(user_id), event)
     end
   end
 
   defp apply_event(source, user, %Event{action: :watched, media: %{type: :movie} = media} = event) do
     with {:ok, movie} <- Catalog.fetch_and_enrich(:tmdb, media.tmdb_id, :movie) do
+      Logger.info("#{source}: recorded movie watch tmdb=#{media.tmdb_id}")
       Tracking.mark_watched(user, movie, %{source: source, watched_on: watched_on(event)})
     end
   end
@@ -89,10 +96,21 @@ defmodule AnotherTrackingTool.Integrations do
        ) do
     with {:ok, show} <- Catalog.fetch_tv_with_episodes(media.tmdb_id),
          %Episode{} = episode <- Catalog.get_episode(show, media.season, media.episode) do
+      Logger.info(
+        "#{source}: recorded episode watch tmdb=#{media.tmdb_id} s#{media.season}e#{media.episode}"
+      )
+
       Tracking.mark_episode(user, episode, %{source: source, watched_on: watched_on(event)})
     else
-      nil -> {:error, :episode_not_found}
-      error -> error
+      nil ->
+        Logger.info(
+          "#{source}: episode not found tmdb=#{media.tmdb_id} s#{media.season}e#{media.episode}"
+        )
+
+        {:error, :episode_not_found}
+
+      error ->
+        error
     end
   end
 
