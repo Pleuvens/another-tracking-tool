@@ -92,10 +92,26 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert_receive {:comment_created, _}
     end
 
-    test "entries broadcast on the activity topic", %{user: user, movie: movie} do
+    test "entries broadcast a user-tagged envelope on the activity topic", %{
+      user: user,
+      movie: movie
+    } do
+      user_id = user.id
       Tracking.subscribe_activity()
       {:ok, _} = Tracking.set_status(user, movie, :watching)
-      assert_receive {:activity, _}
+      assert_receive {:activity, %{user_id: ^user_id, subject: %WatchEntry{}}}
+    end
+
+    test "episode watches broadcast the same envelope with the acting user", %{user: user} do
+      user_id = user.id
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      episode = episode_fixture(show, season)
+
+      Tracking.subscribe_activity()
+      Tracking.mark_episode(user, episode)
+
+      assert_receive {:activity, %{user_id: ^user_id, subject: {:episode_watched, _}}}
     end
   end
 

@@ -49,4 +49,16 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     {:ok, _} = Tracking.set_status(user, mine, :planned)
     assert render(lv) =~ "Mine"
   end
+
+  test "survives an episode-watched activity broadcast", %{conn: conn, user: user} do
+    show = media_item_fixture(%{kind: :tv})
+    season = season_fixture(show)
+    episode = episode_fixture(show, season)
+
+    {:ok, lv, _html} = live(conn, ~p"/watchlist")
+
+    Tracking.mark_episode(user, episode)
+
+    assert render(lv) =~ "My list"
+  end
 end

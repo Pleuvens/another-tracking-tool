@@ -12,7 +12,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   end
 
   @impl true
-  def handle_info({:activity, _entry}, socket) do
+  def handle_info({:activity, _activity}, socket) do
     {:noreply, assign(socket, :activity, Tracking.recent_activity())}
   end
 

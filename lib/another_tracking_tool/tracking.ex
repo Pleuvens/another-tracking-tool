@@ -121,7 +121,7 @@ defmodule AnotherTrackingTool.Tracking do
 
     with {:ok, entry} <- entry |> WatchEntry.changeset(attrs) |> Repo.insert_or_update() do
       broadcast(media_item.id, {:entry_upserted, entry})
-      Phoenix.PubSub.broadcast(@pubsub, @activity_topic, {:activity, entry})
+      broadcast_activity(user.id, entry)
       {:ok, entry}
     end
   end
@@ -327,7 +327,7 @@ defmodule AnotherTrackingTool.Tracking do
   defp after_episode_change(user, media_item_id, media_message) do
     derive_show_status(user, media_item_id)
     broadcast(media_item_id, media_message)
-    Phoenix.PubSub.broadcast(@pubsub, @activity_topic, {:activity, media_message})
+    broadcast_activity(user.id, media_message)
     :ok
   end
 
@@ -374,6 +374,14 @@ defmodule AnotherTrackingTool.Tracking do
 
   defp broadcast(media_item_id, message),
     do: Phoenix.PubSub.broadcast(@pubsub, topic(media_item_id), message)
+
+  defp broadcast_activity(user_id, subject),
+    do:
+      Phoenix.PubSub.broadcast(
+        @pubsub,
+        @activity_topic,
+        {:activity, %{user_id: user_id, subject: subject}}
+      )
 
   defp topic(media_item_id), do: "media:#{media_item_id}"
 end
