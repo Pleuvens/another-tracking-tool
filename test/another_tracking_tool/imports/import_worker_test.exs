@@ -100,8 +100,10 @@ defmodule AnotherTrackingTool.Imports.ImportWorkerTest do
       {"/3/tv/1399/season/1",
        %{
          "episodes" =>
-           for(n <- 1..2,
-               do: %{"season_number" => 1, "episode_number" => n, "air_date" => "2011-04-17"})
+           for(
+             n <- 1..2,
+             do: %{"season_number" => 1, "episode_number" => n, "air_date" => "2011-04-17"}
+           )
        }}
     ])
 

@@ -97,7 +97,8 @@ defmodule AnotherTrackingTool.Imports.ImportWorker do
     {season_rows, episode_rows} = Enum.split_with(rows, &(&1["kind"] == "season"))
 
     explicit =
-      for row <- episode_rows, episode_id = index[{row["season_number"], row["episode_number"]}] do
+      for row <- episode_rows,
+          episode_id = index[{row["season_number"], row["episode_number"]}] do
         watch(show, episode_id, row["watched_on"])
       end
 
