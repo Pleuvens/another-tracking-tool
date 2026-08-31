@@ -132,4 +132,8 @@ defmodule AnotherTrackingTool.Integrations do
 
   def map_account(%Account{} = account, %User{} = user),
     do: account |> Account.changeset(%{user_id: user.id}) |> Repo.update()
+
+  def assign_account(account_id, user_id) do
+    map_account(Repo.get!(Account, account_id), Accounts.get_user!(user_id))
+  end
 end

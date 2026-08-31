@@ -60,6 +60,8 @@ defmodule AnotherTrackingTool.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def list_users, do: Repo.all(from u in User, order_by: u.email)
+
   ## User registration
 
   @doc """

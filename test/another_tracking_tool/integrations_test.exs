@@ -60,6 +60,17 @@ defmodule AnotherTrackingTool.IntegrationsTest do
     end
   end
 
+  describe "assign_account/2" do
+    test "maps an account to a user by their ids" do
+      user = user_fixture()
+      {:ok, account} = Integrations.record_account(:plex, "42", "Alice")
+
+      {:ok, _} = Integrations.assign_account(account.id, user.id)
+
+      assert Integrations.mapped_user_id(:plex, "42") == user.id
+    end
+  end
+
   describe "ensure_settings/1 and valid_secret?/2" do
     test "creates a settings row with a secret, idempotently" do
       settings = Integrations.ensure_settings(:plex)
