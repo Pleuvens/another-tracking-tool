@@ -36,6 +36,7 @@ msgstr "Confirmer le nouveau mot de passe"
 msgid "Display language"
 msgstr "Langue d'affichage"
 
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:39
 #: lib/another_tracking_tool_web/live/user_live/settings.ex:21
 #, elixir-autogen, elixir-format
 msgid "Email"
@@ -66,17 +67,17 @@ msgstr "Enregistrer le mot de passe"
 msgid "Saving..."
 msgstr "Enregistrement…"
 
-#: lib/another_tracking_tool_web/live/user_live/registration.ex:118
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:125
 #, elixir-autogen, elixir-format
 msgid "Create the first account"
 msgstr "Créer le premier compte"
 
-#: lib/another_tracking_tool_web/live/user_live/registration.ex:120
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:127
 #, elixir-autogen, elixir-format
 msgid "Invitation required"
 msgstr "Invitation requise"
 
-#: lib/another_tracking_tool_web/live/user_live/registration.ex:90
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:97
 #, elixir-autogen, elixir-format
 msgid "That invitation is no longer valid."
 msgstr "Cette invitation n'est plus valide."
@@ -86,7 +87,37 @@ msgstr "Cette invitation n'est plus valide."
 msgid "You need an invitation to join. Ask an admin for an invite link."
 msgstr "Il vous faut une invitation pour nous rejoindre. Demandez un lien à un administrateur."
 
-#: lib/another_tracking_tool_web/live/user_live/registration.ex:119
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:126
 #, elixir-autogen, elixir-format
 msgid "You've been invited"
 msgstr "Vous êtes invité"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:16
+#, elixir-autogen, elixir-format
+msgid "Already registered?"
+msgstr "Déjà un compte ?"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:83
+#, elixir-autogen, elixir-format
+msgid "An email was sent to %{email}, please access it to confirm your account."
+msgstr "Un e-mail a été envoyé à %{email}, ouvrez-le pour confirmer votre compte."
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:50
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr "Créer un compte"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:47
+#, elixir-autogen, elixir-format
+msgid "Creating account…"
+msgstr "Création du compte…"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:18
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr "Connexion"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:20
+#, elixir-autogen, elixir-format
+msgid "to your account now."
+msgstr "à votre compte."

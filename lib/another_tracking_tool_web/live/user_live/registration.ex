@@ -13,11 +13,11 @@ defmodule AnotherTrackingToolWeb.UserLive.Registration do
           <.header>
             {heading(@mode)}
             <:subtitle>
-              Already registered?
+              {dgettext("accounts", "Already registered?")}
               <.link navigate={~p"/users/log-in"} class="font-semibold text-brand hover:underline">
-                Log in
+                {dgettext("accounts", "Log in")}
               </.link>
-              to your account now.
+              {dgettext("accounts", "to your account now.")}
             </:subtitle>
           </.header>
         </div>
@@ -36,15 +36,18 @@ defmodule AnotherTrackingToolWeb.UserLive.Registration do
           <.input
             field={@form[:email]}
             type="email"
-            label="Email"
+            label={dgettext("accounts", "Email")}
             autocomplete="username"
             spellcheck="false"
             required
             phx-mounted={JS.focus()}
           />
 
-          <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
-            Create an account
+          <.button
+            phx-disable-with={dgettext("accounts", "Creating account…")}
+            class="btn btn-primary w-full"
+          >
+            {dgettext("accounts", "Create an account")}
           </.button>
         </.form>
       </div>
@@ -77,7 +80,11 @@ defmodule AnotherTrackingToolWeb.UserLive.Registration do
          socket
          |> put_flash(
            :info,
-           "An email was sent to #{user.email}, please access it to confirm your account."
+           dgettext(
+             "accounts",
+             "An email was sent to %{email}, please access it to confirm your account.",
+             email: user.email
+           )
          )
          |> push_navigate(to: ~p"/users/log-in")}
 
