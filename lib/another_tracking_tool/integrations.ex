@@ -8,13 +8,31 @@ defmodule AnotherTrackingTool.Integrations do
   alias AnotherTrackingTool.Catalog
   alias AnotherTrackingTool.Catalog.Episode
   alias AnotherTrackingTool.IntegrationSources
-  alias AnotherTrackingTool.Integrations.{Account, Event, Settings}
+  alias AnotherTrackingTool.Integrations.{Account, Event, IngestWorker, Plex, Settings}
   alias AnotherTrackingTool.Repo
   alias AnotherTrackingTool.Tracking
 
   @sources IntegrationSources.all()
+  @connectors %{plex: Plex}
 
   def sources, do: @sources
+
+  def connector(source) when source in @sources, do: Map.fetch!(@connectors, source)
+
+  @doc "Hands a raw provider request to a background worker so the webhook returns fast."
+  def enqueue_ingest(source, raw) when source in @sources do
+    %{"source" => Atom.to_string(source), "raw" => raw}
+    |> IngestWorker.new()
+    |> Oban.insert()
+  end
+
+  def ingest_raw(source, raw) when source in @sources do
+    case connector(source).parse(raw) do
+      {:ok, events} -> ingest(source, events)
+      :ignore -> :ok
+      {:error, _reason} -> :ok
+    end
+  end
 
   def ensure_settings(source) when source in @sources do
     Repo.get_by(Settings, source: source) || create_settings(source)

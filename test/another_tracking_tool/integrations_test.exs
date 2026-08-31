@@ -4,8 +4,9 @@ defmodule AnotherTrackingTool.IntegrationsTest do
   import AnotherTrackingTool.AccountsFixtures
   import AnotherTrackingTool.CatalogFixtures
 
+  alias AnotherTrackingTool.IntegrationSources
   alias AnotherTrackingTool.Integrations
-  alias AnotherTrackingTool.Integrations.{Account, Event}
+  alias AnotherTrackingTool.Integrations.{Account, Event, Plex}
   alias AnotherTrackingTool.Tracking
   alias AnotherTrackingTool.Tracking.{EpisodeWatch, WatchEntry}
 
@@ -115,6 +116,39 @@ defmodule AnotherTrackingTool.IntegrationsTest do
       assert watch.watched_on == ~D[2024-03-03]
     end
   end
+
+  describe "connectors and raw ingest" do
+    test "connector/1 returns the module for a source" do
+      assert Integrations.connector(:plex) == Plex
+    end
+
+    test "from_string resolves known sources and rejects others" do
+      assert IntegrationSources.from_string("plex") == :plex
+      assert IntegrationSources.from_string("nope") == nil
+    end
+
+    test "ingest_raw parses a Plex webhook and records the watch for a mapped user" do
+      user = mapped_user("1")
+      movie = media_item_fixture(%{kind: :movie, source_id: 438_631, details_synced_at: synced()})
+
+      raw =
+        plex_webhook(%{
+          "event" => "media.scrobble",
+          "Account" => %{"id" => 1, "title" => "Alice"},
+          "Metadata" => %{"type" => "movie", "Guid" => [%{"id" => "tmdb://438631"}]}
+        })
+
+      Integrations.ingest_raw(:plex, raw)
+
+      assert Tracking.get_entry(user, movie).source == :plex
+    end
+
+    test "ingest_raw ignores a request without a payload" do
+      assert Integrations.ingest_raw(:plex, %{"nope" => "x"}) == :ok
+    end
+  end
+
+  defp plex_webhook(payload), do: %{"payload" => Jason.encode!(payload)}
 
   defp mapped_user(external_id) do
     user = user_fixture()
