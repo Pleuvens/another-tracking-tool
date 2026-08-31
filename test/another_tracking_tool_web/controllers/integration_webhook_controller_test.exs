@@ -31,6 +31,23 @@ defmodule AnotherTrackingToolWeb.IntegrationWebhookControllerTest do
     )
   end
 
+  test "reads the payload when Plex sends it as a multipart upload", %{conn: conn} do
+    secret = Integrations.ensure_settings(:plex).secret
+    json = movie_payload()
+    path = Path.join(System.tmp_dir!(), "plex-#{System.unique_integer([:positive])}.json")
+    File.write!(path, json)
+    upload = %Plug.Upload{path: path, content_type: "application/json", filename: "payload.json"}
+
+    conn = post(conn, ~p"/integrations/plex/webhook/#{secret}", %{"payload" => upload})
+
+    assert response(conn, 200)
+
+    assert_enqueued(
+      worker: IngestWorker,
+      args: %{"source" => "plex", "raw" => %{"payload" => json}}
+    )
+  end
+
   test "rejects a bad secret", %{conn: conn} do
     Integrations.ensure_settings(:plex)
 
