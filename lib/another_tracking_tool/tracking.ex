@@ -244,14 +244,16 @@ defmodule AnotherTrackingTool.Tracking do
     |> MapSet.new()
   end
 
-  def mark_episode(%User{} = user, %Episode{} = episode) do
-    %EpisodeWatch{}
-    |> EpisodeWatch.changeset(%{
+  def mark_episode(%User{} = user, %Episode{} = episode, attrs \\ %{}) do
+    defaults = %{
       user_id: user.id,
       episode_id: episode.id,
       media_item_id: episode.media_item_id,
       watched_on: Date.utc_today()
-    })
+    }
+
+    %EpisodeWatch{}
+    |> EpisodeWatch.changeset(Map.merge(defaults, attrs))
     |> Repo.insert(on_conflict: :nothing, conflict_target: [:user_id, :episode_id])
 
     after_episode_change(user, episode.media_item_id, {:episode_watched, episode})

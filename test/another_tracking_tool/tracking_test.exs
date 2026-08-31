@@ -6,10 +6,16 @@ defmodule AnotherTrackingTool.TrackingTest do
   import AnotherTrackingTool.TrackingFixtures
 
   alias AnotherTrackingTool.Tracking
-  alias AnotherTrackingTool.Tracking.WatchEntry
+  alias AnotherTrackingTool.Tracking.{EpisodeWatch, WatchEntry}
 
   setup do
     %{user: user_fixture(), movie: media_item_fixture(%{kind: :movie})}
+  end
+
+  defp tv_episode do
+    show = media_item_fixture(%{kind: :tv})
+    season = season_fixture(show)
+    episode_fixture(show, season)
   end
 
   describe "entries" do
@@ -47,6 +53,26 @@ defmodule AnotherTrackingTool.TrackingTest do
       watch_entry_fixture(user, movie)
       assert {:ok, _} = Tracking.delete_entry(user, movie)
       assert Tracking.get_entry(user, movie) == nil
+    end
+  end
+
+  describe "episode watches" do
+    test "mark_episode defaults to a manual watch today", %{user: user} do
+      episode = tv_episode()
+      Tracking.mark_episode(user, episode)
+
+      watch = Repo.get_by!(EpisodeWatch, user_id: user.id, episode_id: episode.id)
+      assert watch.source == :manual
+      assert watch.watched_on == Date.utc_today()
+    end
+
+    test "mark_episode records the given source and date", %{user: user} do
+      episode = tv_episode()
+      Tracking.mark_episode(user, episode, %{source: :plex, watched_on: ~D[2024-02-02]})
+
+      watch = Repo.get_by!(EpisodeWatch, user_id: user.id, episode_id: episode.id)
+      assert watch.source == :plex
+      assert watch.watched_on == ~D[2024-02-02]
     end
   end
 
