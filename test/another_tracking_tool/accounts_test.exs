@@ -87,6 +87,31 @@ defmodule AnotherTrackingTool.AccountsTest do
     end
   end
 
+  describe "first_user?/0" do
+    test "is true when no users exist" do
+      assert Accounts.first_user?()
+    end
+
+    test "is false once a user exists" do
+      user_fixture()
+      refute Accounts.first_user?()
+    end
+  end
+
+  describe "register_first_admin/1" do
+    test "registers an admin user" do
+      {:ok, user} = Accounts.register_first_admin(valid_user_attributes())
+      assert user.admin
+      assert Accounts.admin?(user)
+    end
+
+    test "regular registration is not admin" do
+      {:ok, user} = Accounts.register_user(valid_user_attributes())
+      refute user.admin
+      refute Accounts.admin?(user)
+    end
+  end
+
   describe "sudo_mode?/2" do
     test "validates the authenticated_at time" do
       now = DateTime.utc_now()

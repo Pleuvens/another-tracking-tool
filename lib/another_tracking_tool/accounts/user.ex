@@ -10,6 +10,7 @@ defmodule AnotherTrackingTool.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    field :admin, :boolean, default: false
 
     field :locale, Ecto.Enum,
       values: AnotherTrackingTool.Locales.all(),

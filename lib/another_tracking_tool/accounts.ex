@@ -80,6 +80,17 @@ defmodule AnotherTrackingTool.Accounts do
     |> Repo.insert()
   end
 
+  def first_user?, do: Repo.aggregate(User, :count) == 0
+
+  def register_first_admin(attrs) do
+    %User{}
+    |> User.email_changeset(attrs)
+    |> Ecto.Changeset.put_change(:admin, true)
+    |> Repo.insert()
+  end
+
+  def admin?(%User{admin: admin}), do: admin
+
   ## Settings
 
   @doc """

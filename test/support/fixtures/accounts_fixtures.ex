@@ -28,8 +28,19 @@ defmodule AnotherTrackingTool.AccountsFixtures do
   end
 
   def user_fixture(attrs \\ %{}) do
-    user = unconfirmed_user_fixture(attrs)
+    attrs |> unconfirmed_user_fixture() |> confirm_via_magic_link()
+  end
 
+  def admin_user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> valid_user_attributes()
+      |> Accounts.register_first_admin()
+
+    confirm_via_magic_link(user)
+  end
+
+  defp confirm_via_magic_link(user) do
     token =
       extract_user_token(fn url ->
         Accounts.deliver_login_instructions(user, url)
