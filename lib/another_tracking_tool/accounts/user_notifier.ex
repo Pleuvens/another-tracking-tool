@@ -1,5 +1,6 @@
 defmodule AnotherTrackingTool.Accounts.UserNotifier do
   import Swoosh.Email
+  use Gettext, backend: AnotherTrackingToolWeb.Gettext
 
   alias AnotherTrackingTool.Mailer
   alias AnotherTrackingTool.Accounts.User
@@ -22,20 +23,13 @@ defmodule AnotherTrackingTool.Accounts.UserNotifier do
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    deliver(user.email, "Update email instructions", """
-
-    ==============================
-
-    Hi #{user.email},
-
-    You can change your email by visiting the URL below:
-
-    #{url}
-
-    If you didn't request this change, please ignore this.
-
-    ==============================
-    """)
+    deliver_instructions(
+      user,
+      url,
+      dgettext("accounts", "Update email instructions"),
+      dgettext("accounts", "You can change your email by visiting the URL below:"),
+      dgettext("accounts", "If you didn't request this change, please ignore this.")
+    )
   end
 
   @doc """
@@ -49,36 +43,44 @@ defmodule AnotherTrackingTool.Accounts.UserNotifier do
   end
 
   defp deliver_magic_link_instructions(user, url) do
-    deliver(user.email, "Log in instructions", """
-
-    ==============================
-
-    Hi #{user.email},
-
-    You can log into your account by visiting the URL below:
-
-    #{url}
-
-    If you didn't request this email, please ignore this.
-
-    ==============================
-    """)
+    deliver_instructions(
+      user,
+      url,
+      dgettext("accounts", "Log in instructions"),
+      dgettext("accounts", "You can log into your account by visiting the URL below:"),
+      dgettext("accounts", "If you didn't request this email, please ignore this.")
+    )
   end
 
   defp deliver_confirmation_instructions(user, url) do
-    deliver(user.email, "Confirmation instructions", """
+    deliver_instructions(
+      user,
+      url,
+      dgettext("accounts", "Confirmation instructions"),
+      dgettext("accounts", "You can confirm your account by visiting the URL below:"),
+      dgettext("accounts", "If you didn't create an account with us, please ignore this.")
+    )
+  end
 
-    ==============================
+  # Emails render in the recipient's locale, not the caller's request locale.
+  defp deliver_instructions(%User{} = user, url, subject, action_line, disclaimer) do
+    Gettext.with_locale(AnotherTrackingToolWeb.Gettext, to_string(user.locale), fn ->
+      body = """
 
-    Hi #{user.email},
+      ==============================
 
-    You can confirm your account by visiting the URL below:
+      #{dgettext("accounts", "Hi %{email},", email: user.email)}
 
-    #{url}
+      #{action_line}
 
-    If you didn't create an account with us, please ignore this.
+      #{url}
 
-    ==============================
-    """)
+      #{disclaimer}
+
+      ==============================
+      """
+
+      deliver(user.email, subject, body)
+    end)
   end
 end

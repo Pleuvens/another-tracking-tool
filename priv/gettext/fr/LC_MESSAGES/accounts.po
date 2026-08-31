@@ -254,18 +254,68 @@ msgstr "Compte confirmé avec succès."
 msgid "Welcome back!"
 msgstr "Content de vous revoir !"
 
-#: lib/another_tracking_tool_web/user_auth.ex:245
+#: lib/another_tracking_tool_web/user_auth.ex:248
 #, elixir-autogen, elixir-format
 msgid "You do not have access to this page."
 msgstr "Vous n'avez pas accès à cette page."
 
-#: lib/another_tracking_tool_web/user_auth.ex:227
-#: lib/another_tracking_tool_web/user_auth.ex:298
+#: lib/another_tracking_tool_web/user_auth.ex:229
+#: lib/another_tracking_tool_web/user_auth.ex:301
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Vous devez vous connecter pour accéder à cette page."
 
-#: lib/another_tracking_tool_web/user_auth.ex:263
+#: lib/another_tracking_tool_web/user_auth.ex:266
 #, elixir-autogen, elixir-format
 msgid "You must re-authenticate to access this page."
 msgstr "Vous devez vous ré-authentifier pour accéder à cette page."
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:59
+#, elixir-autogen, elixir-format
+msgid "Confirmation instructions"
+msgstr "Instructions de confirmation"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:72
+#, elixir-autogen, elixir-format
+msgid "Hi %{email},"
+msgstr "Bonjour %{email},"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:61
+#, elixir-autogen, elixir-format
+msgid "If you didn't create an account with us, please ignore this."
+msgstr "Si vous n'avez pas créé de compte chez nous, ignorez ce message."
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:31
+#, elixir-autogen, elixir-format
+msgid "If you didn't request this change, please ignore this."
+msgstr "Si vous n'avez pas demandé ce changement, ignorez ce message."
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:51
+#, elixir-autogen, elixir-format
+msgid "If you didn't request this email, please ignore this."
+msgstr "Si vous n'avez pas demandé cet e-mail, ignorez ce message."
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:49
+#, elixir-autogen, elixir-format
+msgid "Log in instructions"
+msgstr "Instructions de connexion"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:29
+#, elixir-autogen, elixir-format
+msgid "Update email instructions"
+msgstr "Instructions de changement d'e-mail"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:30
+#, elixir-autogen, elixir-format
+msgid "You can change your email by visiting the URL below:"
+msgstr "Vous pouvez changer votre e-mail via l'URL ci-dessous :"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:60
+#, elixir-autogen, elixir-format
+msgid "You can confirm your account by visiting the URL below:"
+msgstr "Vous pouvez confirmer votre compte via l'URL ci-dessous :"
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:50
+#, elixir-autogen, elixir-format
+msgid "You can log into your account by visiting the URL below:"
+msgstr "Vous pouvez vous connecter à votre compte via l'URL ci-dessous :"

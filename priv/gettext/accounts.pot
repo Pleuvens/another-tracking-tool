@@ -254,18 +254,68 @@ msgstr ""
 msgid "Welcome back!"
 msgstr ""
 
-#: lib/another_tracking_tool_web/user_auth.ex:245
+#: lib/another_tracking_tool_web/user_auth.ex:248
 #, elixir-autogen, elixir-format
 msgid "You do not have access to this page."
 msgstr ""
 
-#: lib/another_tracking_tool_web/user_auth.ex:227
-#: lib/another_tracking_tool_web/user_auth.ex:298
+#: lib/another_tracking_tool_web/user_auth.ex:229
+#: lib/another_tracking_tool_web/user_auth.ex:301
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/another_tracking_tool_web/user_auth.ex:263
+#: lib/another_tracking_tool_web/user_auth.ex:266
 #, elixir-autogen, elixir-format
 msgid "You must re-authenticate to access this page."
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:59
+#, elixir-autogen, elixir-format
+msgid "Confirmation instructions"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:72
+#, elixir-autogen, elixir-format
+msgid "Hi %{email},"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:61
+#, elixir-autogen, elixir-format
+msgid "If you didn't create an account with us, please ignore this."
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:31
+#, elixir-autogen, elixir-format
+msgid "If you didn't request this change, please ignore this."
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:51
+#, elixir-autogen, elixir-format
+msgid "If you didn't request this email, please ignore this."
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:49
+#, elixir-autogen, elixir-format
+msgid "Log in instructions"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:29
+#, elixir-autogen, elixir-format
+msgid "Update email instructions"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:30
+#, elixir-autogen, elixir-format
+msgid "You can change your email by visiting the URL below:"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:60
+#, elixir-autogen, elixir-format
+msgid "You can confirm your account by visiting the URL below:"
+msgstr ""
+
+#: lib/another_tracking_tool/accounts/user_notifier.ex:50
+#, elixir-autogen, elixir-format
+msgid "You can log into your account by visiting the URL below:"
 msgstr ""
