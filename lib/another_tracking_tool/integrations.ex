@@ -8,13 +8,37 @@ defmodule AnotherTrackingTool.Integrations do
   alias AnotherTrackingTool.Catalog
   alias AnotherTrackingTool.Catalog.Episode
   alias AnotherTrackingTool.IntegrationSources
-  alias AnotherTrackingTool.Integrations.{Account, Event}
+  alias AnotherTrackingTool.Integrations.{Account, Event, Settings}
   alias AnotherTrackingTool.Repo
   alias AnotherTrackingTool.Tracking
 
   @sources IntegrationSources.all()
 
   def sources, do: @sources
+
+  def ensure_settings(source) when source in @sources do
+    Repo.get_by(Settings, source: source) || create_settings(source)
+  end
+
+  def valid_secret?(source, presented) when source in @sources and is_binary(presented) do
+    case Repo.get_by(Settings, source: source) do
+      %Settings{secret: secret} -> Plug.Crypto.secure_compare(secret, presented)
+      nil -> false
+    end
+  end
+
+  def valid_secret?(_source, _presented), do: false
+
+  defp create_settings(source) do
+    {:ok, settings} =
+      %Settings{}
+      |> Settings.changeset(%{source: source, secret: generate_secret()})
+      |> Repo.insert()
+
+    settings
+  end
+
+  defp generate_secret, do: 24 |> :crypto.strong_rand_bytes() |> Base.url_encode64(padding: false)
 
   @doc """
   Applies normalized events from a source: records each provider account,

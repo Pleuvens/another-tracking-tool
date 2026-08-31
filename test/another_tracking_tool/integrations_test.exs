@@ -59,6 +59,26 @@ defmodule AnotherTrackingTool.IntegrationsTest do
     end
   end
 
+  describe "ensure_settings/1 and valid_secret?/2" do
+    test "creates a settings row with a secret, idempotently" do
+      settings = Integrations.ensure_settings(:plex)
+      assert settings.secret
+
+      assert Integrations.ensure_settings(:plex).id == settings.id
+    end
+
+    test "valid_secret? accepts the stored secret and rejects others" do
+      settings = Integrations.ensure_settings(:plex)
+
+      assert Integrations.valid_secret?(:plex, settings.secret)
+      refute Integrations.valid_secret?(:plex, "wrong")
+    end
+
+    test "valid_secret? is false when no settings exist" do
+      refute Integrations.valid_secret?(:plex, "anything")
+    end
+  end
+
   describe "ingest/2" do
     test "queues the account and writes nothing for an unmapped account" do
       media_item_fixture(%{kind: :movie, source_id: 603, details_synced_at: synced()})
