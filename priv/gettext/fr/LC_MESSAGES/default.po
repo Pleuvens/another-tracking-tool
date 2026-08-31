@@ -16,18 +16,18 @@ msgstr ""
 msgid "Actions"
 msgstr "Actions"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:158
-#: lib/another_tracking_tool_web/components/layouts.ex:173
+#: lib/another_tracking_tool_web/components/layouts.ex:165
+#: lib/another_tracking_tool_web/components/layouts.ex:180
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Reconnexion en cours"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:165
+#: lib/another_tracking_tool_web/components/layouts.ex:172
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Un problème est survenu !"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:150
+#: lib/another_tracking_tool_web/components/layouts.ex:157
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "Internet joue à cache-cache"

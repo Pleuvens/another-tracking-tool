@@ -16,7 +16,7 @@ msgstr ""
 msgid "Log in"
 msgstr "Connexion"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:99
+#: lib/another_tracking_tool_web/components/layouts.ex:106
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr "Déconnexion"
@@ -55,3 +55,8 @@ msgstr "Découvrir"
 #, elixir-autogen, elixir-format
 msgid "Invites"
 msgstr "Invitations"
+
+#: lib/another_tracking_tool_web/components/layouts.ex:98
+#, elixir-autogen, elixir-format
+msgid "Integrations"
+msgstr "Intégrations"

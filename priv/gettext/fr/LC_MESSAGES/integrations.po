@@ -1,0 +1,42 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:63
+#, elixir-autogen, elixir-format
+msgid "No Plex accounts yet. Play something in Plex and it will show up here to map."
+msgstr "Aucun compte Plex pour l'instant. Lancez une lecture dans Plex et il apparaîtra ici à associer."
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:44
+#, elixir-autogen, elixir-format
+msgid "Paste this into Plex → Settings → Account → Webhooks. Requires Plex Pass."
+msgstr "Collez ceci dans Plex → Paramètres → Compte → Webhooks. Nécessite un Plex Pass."
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Plex"
+msgstr "Plex"
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:59
+#, elixir-autogen, elixir-format
+msgid "Plex accounts"
+msgstr "Comptes Plex"
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:82
+#, elixir-autogen, elixir-format
+msgid "Unassigned"
+msgstr "Non associé"
+
+#: lib/another_tracking_tool_web/live/integrations_live.ex:41
+#, elixir-autogen, elixir-format
+msgid "Webhook URL"
+msgstr "URL du webhook"
