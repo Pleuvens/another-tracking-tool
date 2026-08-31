@@ -12,6 +12,15 @@ defmodule AnotherTrackingToolWeb.UserLive.LoginTest do
       assert html =~ "Sign up"
       assert html =~ "Log in with email"
     end
+
+    test "hides signup once the instance has users", %{conn: conn} do
+      user_fixture()
+
+      {:ok, _lv, html} = live(conn, ~p"/users/log-in")
+
+      refute html =~ "Sign up"
+      refute html =~ "Register"
+    end
   end
 
   describe "user login - magic link" do

@@ -15,11 +15,13 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
               <%= if @current_scope do %>
                 You need to reauthenticate to perform sensitive actions on your account.
               <% else %>
-                Don't have an account? <.link
-                  navigate={~p"/users/register"}
-                  class="font-semibold text-brand hover:underline"
-                  phx-no-format
-                >Sign up</.link> for an account now.
+                <span :if={@first_user?}>
+                  Don't have an account? <.link
+                    navigate={~p"/users/register"}
+                    class="font-semibold text-brand hover:underline"
+                    phx-no-format
+                  >Sign up</.link> for an account now.
+                </span>
               <% end %>
             </:subtitle>
           </.header>
@@ -103,7 +105,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Login do
 
     form = to_form(%{"email" => email}, as: "user")
 
-    {:ok, assign(socket, form: form, trigger_submit: false)}
+    {:ok, assign(socket, form: form, trigger_submit: false, first_user?: Accounts.first_user?())}
   end
 
   @impl true

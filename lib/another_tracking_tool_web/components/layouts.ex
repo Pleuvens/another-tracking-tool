@@ -5,6 +5,8 @@ defmodule AnotherTrackingToolWeb.Layouts do
   """
   use AnotherTrackingToolWeb, :html
 
+  alias AnotherTrackingTool.Accounts
+
   # Embed all files in layouts/* within this module.
   # The default root.html.heex file contains the HTML
   # skeleton of your application, namely HTML headers
@@ -41,7 +43,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
       <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
         <a href="/" class="font-display text-lg font-bold text-ink">cercle</a>
         <nav class="flex items-center gap-5 text-sm font-bold text-ink-soft">
-          <.link navigate={~p"/users/register"} class="hover:text-ink">
+          <.link :if={Accounts.first_user?()} navigate={~p"/users/register"} class="hover:text-ink">
             {dgettext("layouts", "Register")}
           </.link>
           <.link navigate={~p"/users/log-in"} class="hover:text-ink">
