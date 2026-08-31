@@ -82,6 +82,7 @@ defmodule AnotherTrackingToolWeb.Router do
         AnotherTrackingToolWeb.Locale
       ] do
       live "/invites", InviteLive, :index
+      live "/integrations", IntegrationsLive, :index
     end
 
     post "/users/update-password", UserSessionController, :update_password
