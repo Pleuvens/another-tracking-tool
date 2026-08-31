@@ -114,7 +114,7 @@ msgstr ""
 msgid "Creating account…"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:50
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:56
 #: lib/another_tracking_tool_web/live/user_live/login.ex:13
 #: lib/another_tracking_tool_web/live/user_live/registration.ex:18
 #, elixir-autogen, elixir-format
@@ -176,7 +176,7 @@ msgstr ""
 msgid "or"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:34
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:37
 #, elixir-autogen, elixir-format
 msgid "Confirm and log in only this time"
 msgstr ""
@@ -187,34 +187,34 @@ msgid "Confirm and stay logged in"
 msgstr ""
 
 #: lib/another_tracking_tool_web/live/user_live/confirmation.ex:28
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:33
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:34
 #, elixir-autogen, elixir-format
 msgid "Confirming..."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:59
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:65
 #, elixir-autogen, elixir-format
 msgid "Keep me logged in on this device"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:62
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:71
 #, elixir-autogen, elixir-format
 msgid "Log me in only this time"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:49
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:56
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:61
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:53
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:62
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:68
 #, elixir-autogen, elixir-format
 msgid "Logging in..."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:85
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:97
 #, elixir-autogen, elixir-format
 msgid "Magic link is invalid or it has expired."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:68
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:77
 #, elixir-autogen, elixir-format
 msgid "Tip: If you prefer passwords, you can enable them in the user settings."
 msgstr ""
@@ -222,4 +222,50 @@ msgstr ""
 #: lib/another_tracking_tool_web/live/user_live/confirmation.ex:12
 #, elixir-autogen, elixir-format
 msgid "Welcome %{email}"
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:43
+#, elixir-autogen, elixir-format
+msgid "Invalid email or password"
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:64
+#, elixir-autogen, elixir-format
+msgid "Logged out successfully."
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:59
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully!"
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:27
+#, elixir-autogen, elixir-format
+msgid "The link is invalid or it has expired."
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:8
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr ""
+
+#: lib/another_tracking_tool_web/controllers/user_session_controller.ex:12
+#, elixir-autogen, elixir-format
+msgid "Welcome back!"
+msgstr ""
+
+#: lib/another_tracking_tool_web/user_auth.ex:245
+#, elixir-autogen, elixir-format
+msgid "You do not have access to this page."
+msgstr ""
+
+#: lib/another_tracking_tool_web/user_auth.ex:227
+#: lib/another_tracking_tool_web/user_auth.ex:298
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr ""
+
+#: lib/another_tracking_tool_web/user_auth.ex:263
+#, elixir-autogen, elixir-format
+msgid "You must re-authenticate to access this page."
 msgstr ""
