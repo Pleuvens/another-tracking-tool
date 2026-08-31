@@ -11,38 +11,37 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:494
+#: lib/another_tracking_tool_web/live/invite_live.ex:27
 #, elixir-autogen, elixir-format
-msgid "Actions"
+msgid "Create invite link"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:158
-#: lib/another_tracking_tool_web/components/layouts.ex:173
+#: lib/another_tracking_tool_web/live/invite_live.ex:73
 #, elixir-autogen, elixir-format
-msgid "Attempting to reconnect"
+msgid "Expired"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:165
+#: lib/another_tracking_tool_web/live/invite_live.ex:61
 #, elixir-autogen, elixir-format
-msgid "Something went wrong!"
+msgid "Expires %{date}"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:150
+#: lib/another_tracking_tool_web/live/invite_live.ex:24
 #, elixir-autogen, elixir-format
-msgid "We can't find the internet"
+msgid "Invites"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:81
+#: lib/another_tracking_tool_web/live/invite_live.ex:32
 #, elixir-autogen, elixir-format
-msgid "close"
+msgid "No invites yet. Create one to bring someone in."
 msgstr ""
 
-#: lib/another_tracking_tool_web/format.ex:10
+#: lib/another_tracking_tool_web/live/invite_live.ex:71
 #, elixir-autogen, elixir-format
-msgid "Today"
+msgid "Pending"
 msgstr ""
 
-#: lib/another_tracking_tool_web/format.ex:11
+#: lib/another_tracking_tool_web/live/invite_live.ex:72
 #, elixir-autogen, elixir-format
-msgid "Yesterday"
+msgid "Used"
 msgstr ""

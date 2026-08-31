@@ -65,3 +65,28 @@ msgstr "Enregistrer le mot de passe"
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Enregistrement…"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:118
+#, elixir-autogen, elixir-format
+msgid "Create the first account"
+msgstr "Créer le premier compte"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:120
+#, elixir-autogen, elixir-format
+msgid "Invitation required"
+msgstr "Invitation requise"
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:90
+#, elixir-autogen, elixir-format
+msgid "That invitation is no longer valid."
+msgstr "Cette invitation n'est plus valide."
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:26
+#, elixir-autogen, elixir-format
+msgid "You need an invitation to join. Ask an admin for an invite link."
+msgstr "Il vous faut une invitation pour nous rejoindre. Demandez un lien à un administrateur."
+
+#: lib/another_tracking_tool_web/live/user_live/registration.ex:119
+#, elixir-autogen, elixir-format
+msgid "You've been invited"
+msgstr "Vous êtes invité"

@@ -11,42 +11,47 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:48
+#: lib/another_tracking_tool_web/components/layouts.ex:50
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr "Connexion"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:90
+#: lib/another_tracking_tool_web/components/layouts.ex:99
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:45
+#: lib/another_tracking_tool_web/components/layouts.ex:47
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Inscription"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:70
+#: lib/another_tracking_tool_web/components/layouts.ex:72
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr "Accueil"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:79
+#: lib/another_tracking_tool_web/components/layouts.ex:81
 #, elixir-autogen, elixir-format
 msgid "Import"
 msgstr "Importer"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:82
+#: lib/another_tracking_tool_web/components/layouts.ex:84
 #, elixir-autogen, elixir-format
 msgid "Profile"
 msgstr "Profil"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:76
+#: lib/another_tracking_tool_web/components/layouts.ex:78
 #, elixir-autogen, elixir-format
 msgid "Watchlist"
 msgstr "À voir"
 
-#: lib/another_tracking_tool_web/components/layouts.ex:73
+#: lib/another_tracking_tool_web/components/layouts.ex:75
 #, elixir-autogen, elixir-format
 msgid "Discover"
 msgstr "Découvrir"
+
+#: lib/another_tracking_tool_web/components/layouts.ex:91
+#, elixir-autogen, elixir-format
+msgid "Invites"
+msgstr "Invitations"

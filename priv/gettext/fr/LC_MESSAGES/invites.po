@@ -1,0 +1,47 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:27
+#, elixir-autogen, elixir-format
+msgid "Create invite link"
+msgstr "Créer un lien d'invitation"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:73
+#, elixir-autogen, elixir-format
+msgid "Expired"
+msgstr "Expirée"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:61
+#, elixir-autogen, elixir-format
+msgid "Expires %{date}"
+msgstr "Expire le %{date}"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:24
+#, elixir-autogen, elixir-format
+msgid "Invites"
+msgstr "Invitations"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "No invites yet. Create one to bring someone in."
+msgstr "Aucune invitation pour l'instant. Créez-en une pour faire entrer quelqu'un."
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:71
+#, elixir-autogen, elixir-format
+msgid "Pending"
+msgstr "En attente"
+
+#: lib/another_tracking_tool_web/live/invite_live.ex:72
+#, elixir-autogen, elixir-format
+msgid "Used"
+msgstr "Utilisée"
