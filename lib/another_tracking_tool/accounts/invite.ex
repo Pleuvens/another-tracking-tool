@@ -22,4 +22,10 @@ defmodule AnotherTrackingTool.Accounts.Invite do
     |> validate_required([:code, :expires_at, :invited_by_id])
     |> unique_constraint(:code)
   end
+
+  def status(%__MODULE__{used_at: used_at}) when not is_nil(used_at), do: :used
+
+  def status(%__MODULE__{expires_at: expires_at}) do
+    if DateTime.after?(expires_at, DateTime.utc_now()), do: :pending, else: :expired
+  end
 end

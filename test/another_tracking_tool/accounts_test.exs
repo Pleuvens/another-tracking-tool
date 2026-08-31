@@ -193,6 +193,22 @@ defmodule AnotherTrackingTool.AccountsTest do
     end
   end
 
+  describe "Invite.status/1" do
+    test "is pending for a fresh invite" do
+      assert Invite.status(invite_fixture()) == :pending
+    end
+
+    test "is used once redeemed" do
+      invite = invite_fixture()
+      {:ok, _user} = Accounts.register_user_with_invite(invite.code, valid_user_attributes())
+      assert Invite.status(Repo.reload!(invite)) == :used
+    end
+
+    test "is expired past its expiry" do
+      assert Invite.status(invite_fixture() |> expire_invite()) == :expired
+    end
+  end
+
   describe "list_invites/0" do
     test "lists invites with used_by preloaded" do
       invite = invite_fixture()

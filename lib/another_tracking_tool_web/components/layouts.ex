@@ -83,6 +83,13 @@ defmodule AnotherTrackingToolWeb.Layouts do
             <.sidebar_link navigate={~p"/users/settings"} active={@active == :profile}>
               {dgettext("layouts", "Profile")}
             </.sidebar_link>
+            <.sidebar_link
+              :if={@current_scope.user.admin}
+              navigate={~p"/invites"}
+              active={@active == :invites}
+            >
+              {dgettext("layouts", "Invites")}
+            </.sidebar_link>
           </nav>
           <.link
             href={~p"/users/log-out"}

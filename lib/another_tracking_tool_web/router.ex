@@ -65,6 +65,15 @@ defmodule AnotherTrackingToolWeb.Router do
       live "/media/:id", MediaLive.Show, :show
     end
 
+    live_session :require_admin,
+      on_mount: [
+        {AnotherTrackingToolWeb.UserAuth, :require_authenticated},
+        {AnotherTrackingToolWeb.UserAuth, :require_admin},
+        AnotherTrackingToolWeb.Locale
+      ] do
+      live "/invites", InviteLive, :index
+    end
+
     post "/users/update-password", UserSessionController, :update_password
   end
 
