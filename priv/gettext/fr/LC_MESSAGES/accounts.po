@@ -36,8 +36,8 @@ msgstr "Confirmer le nouveau mot de passe"
 msgid "Display language"
 msgstr "Langue d'affichage"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:54
-#: lib/another_tracking_tool_web/live/user_live/login.ex:79
+#: lib/another_tracking_tool_web/live/user_live/login.ex:57
+#: lib/another_tracking_tool_web/live/user_live/login.ex:82
 #: lib/another_tracking_tool_web/live/user_live/registration.ex:39
 #: lib/another_tracking_tool_web/live/user_live/settings.ex:21
 #, elixir-autogen, elixir-format
@@ -114,6 +114,7 @@ msgstr "Créer un compte"
 msgid "Creating account…"
 msgstr "Création du compte…"
 
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:50
 #: lib/another_tracking_tool_web/live/user_live/login.ex:13
 #: lib/another_tracking_tool_web/live/user_live/registration.ex:18
 #, elixir-autogen, elixir-format
@@ -125,37 +126,37 @@ msgstr "Connexion"
 msgid "to your account now."
 msgstr "à votre compte."
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:19
+#: lib/another_tracking_tool_web/live/user_live/login.ex:22
 #, elixir-autogen, elixir-format
 msgid "Don't have an account?"
 msgstr "Pas encore de compte ?"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:128
+#: lib/another_tracking_tool_web/live/user_live/login.ex:131
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions for logging in shortly."
 msgstr "Si votre e-mail est dans notre système, vous recevrez les instructions de connexion sous peu."
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:92
+#: lib/another_tracking_tool_web/live/user_live/login.ex:95
 #, elixir-autogen, elixir-format
 msgid "Log in and stay logged in"
 msgstr "Se connecter et rester connecté"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:95
+#: lib/another_tracking_tool_web/live/user_live/login.ex:98
 #, elixir-autogen, elixir-format
 msgid "Log in only this time"
 msgstr "Se connecter juste cette fois"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:61
+#: lib/another_tracking_tool_web/live/user_live/login.ex:64
 #, elixir-autogen, elixir-format
 msgid "Log in with email"
 msgstr "Se connecter par e-mail"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:87
+#: lib/another_tracking_tool_web/live/user_live/login.ex:90
 #, elixir-autogen, elixir-format
 msgid "Password"
 msgstr "Mot de passe"
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:23
+#: lib/another_tracking_tool_web/live/user_live/login.ex:26
 #, elixir-autogen, elixir-format
 msgid "Sign up"
 msgstr "Inscrivez-vous"
@@ -165,12 +166,60 @@ msgstr "Inscrivez-vous"
 msgid "You need to reauthenticate to perform sensitive actions on your account."
 msgstr "Vous devez vous ré-authentifier pour effectuer des actions sensibles sur votre compte."
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:23
+#: lib/another_tracking_tool_web/live/user_live/login.ex:26
 #, elixir-autogen, elixir-format
 msgid "for an account now."
 msgstr "dès maintenant."
 
-#: lib/another_tracking_tool_web/live/user_live/login.ex:65
+#: lib/another_tracking_tool_web/live/user_live/login.ex:68
 #, elixir-autogen, elixir-format
 msgid "or"
 msgstr "ou"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:34
+#, elixir-autogen, elixir-format
+msgid "Confirm and log in only this time"
+msgstr "Confirmer et se connecter juste cette fois"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:31
+#, elixir-autogen, elixir-format
+msgid "Confirm and stay logged in"
+msgstr "Confirmer et rester connecté"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:28
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:33
+#, elixir-autogen, elixir-format
+msgid "Confirming..."
+msgstr "Confirmation…"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:59
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in on this device"
+msgstr "Rester connecté sur cet appareil"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:62
+#, elixir-autogen, elixir-format
+msgid "Log me in only this time"
+msgstr "Me connecter juste cette fois"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:49
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:56
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:61
+#, elixir-autogen, elixir-format
+msgid "Logging in..."
+msgstr "Connexion…"
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:85
+#, elixir-autogen, elixir-format
+msgid "Magic link is invalid or it has expired."
+msgstr "Le lien magique est invalide ou a expiré."
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:68
+#, elixir-autogen, elixir-format
+msgid "Tip: If you prefer passwords, you can enable them in the user settings."
+msgstr "Astuce : si vous préférez les mots de passe, vous pouvez les activer dans les paramètres du compte."
+
+#: lib/another_tracking_tool_web/live/user_live/confirmation.ex:12
+#, elixir-autogen, elixir-format
+msgid "Welcome %{email}"
+msgstr "Bienvenue %{email}"

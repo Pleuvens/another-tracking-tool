@@ -9,7 +9,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Confirmation do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <div class="mx-auto max-w-sm">
         <div class="text-center">
-          <.header>Welcome {@user.email}</.header>
+          <.header>{dgettext("accounts", "Welcome %{email}", email: @user.email)}</.header>
         </div>
 
         <.form
@@ -25,13 +25,16 @@ defmodule AnotherTrackingToolWeb.UserLive.Confirmation do
           <.button
             name={@form[:remember_me].name}
             value="true"
-            phx-disable-with="Confirming..."
+            phx-disable-with={dgettext("accounts", "Confirming...")}
             class="btn btn-primary w-full"
           >
-            Confirm and stay logged in
+            {dgettext("accounts", "Confirm and stay logged in")}
           </.button>
-          <.button phx-disable-with="Confirming..." class="btn btn-primary btn-soft w-full mt-2">
-            Confirm and log in only this time
+          <.button
+            phx-disable-with={dgettext("accounts", "Confirming...")}
+            class="btn btn-primary btn-soft w-full mt-2"
+          >
+            {dgettext("accounts", "Confirm and log in only this time")}
           </.button>
         </.form>
 
@@ -46,26 +49,35 @@ defmodule AnotherTrackingToolWeb.UserLive.Confirmation do
         >
           <input type="hidden" name={@form[:token].name} value={@form[:token].value} />
           <%= if @current_scope do %>
-            <.button phx-disable-with="Logging in..." class="btn btn-primary w-full">
-              Log in
+            <.button
+              phx-disable-with={dgettext("accounts", "Logging in...")}
+              class="btn btn-primary w-full"
+            >
+              {dgettext("accounts", "Log in")}
             </.button>
           <% else %>
             <.button
               name={@form[:remember_me].name}
               value="true"
-              phx-disable-with="Logging in..."
+              phx-disable-with={dgettext("accounts", "Logging in...")}
               class="btn btn-primary w-full"
             >
-              Keep me logged in on this device
+              {dgettext("accounts", "Keep me logged in on this device")}
             </.button>
-            <.button phx-disable-with="Logging in..." class="btn btn-primary btn-soft w-full mt-2">
-              Log me in only this time
+            <.button
+              phx-disable-with={dgettext("accounts", "Logging in...")}
+              class="btn btn-primary btn-soft w-full mt-2"
+            >
+              {dgettext("accounts", "Log me in only this time")}
             </.button>
           <% end %>
         </.form>
 
         <p :if={!@user.confirmed_at} class="alert alert-outline mt-8">
-          Tip: If you prefer passwords, you can enable them in the user settings.
+          {dgettext(
+            "accounts",
+            "Tip: If you prefer passwords, you can enable them in the user settings."
+          )}
         </p>
       </div>
     </Layouts.app>
@@ -82,7 +94,7 @@ defmodule AnotherTrackingToolWeb.UserLive.Confirmation do
     else
       {:ok,
        socket
-       |> put_flash(:error, "Magic link is invalid or it has expired.")
+       |> put_flash(:error, dgettext("accounts", "Magic link is invalid or it has expired."))
        |> push_navigate(to: ~p"/users/log-in")}
     end
   end
