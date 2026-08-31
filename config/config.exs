@@ -72,6 +72,14 @@ config :phoenix_live_view,
 # at the `config/runtime.exs`.
 config :another_tracking_tool, AnotherTrackingTool.Mailer, adapter: Swoosh.Adapters.Local
 
+# Sender for account emails; the address must be verified with the mail
+# provider in production (overridden in config/runtime.exs).
+config :another_tracking_tool, :mailer_from, {"AnotherTrackingTool", "contact@example.com"}
+
+# API-based mail adapters (e.g. Resend in prod) send over Req; dev and test
+# disable the API client.
+config :swoosh, :api_client, Swoosh.ApiClient.Req
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.4",

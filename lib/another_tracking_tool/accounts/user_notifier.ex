@@ -10,7 +10,7 @@ defmodule AnotherTrackingTool.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"AnotherTrackingTool", "contact@example.com"})
+      |> from(Application.get_env(:another_tracking_tool, :mailer_from))
       |> subject(subject)
       |> text_body(body)
 

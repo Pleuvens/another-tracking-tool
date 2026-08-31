@@ -89,6 +89,18 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :another_tracking_tool, AnotherTrackingTool.Mailer,
+    adapter: Swoosh.Adapters.Resend,
+    api_key:
+      System.get_env("RESEND_API_KEY") ||
+        raise("environment variable RESEND_API_KEY is missing.")
+
+  config :another_tracking_tool,
+         :mailer_from,
+         {System.get_env("MAILER_FROM_NAME") || "AnotherTrackingTool",
+          System.get_env("MAILER_FROM_EMAIL") ||
+            raise("environment variable MAILER_FROM_EMAIL is missing.")}
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
