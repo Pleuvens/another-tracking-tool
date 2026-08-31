@@ -18,10 +18,20 @@ defmodule AnotherTrackingToolWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :webhook do
+    plug :accepts, ["json"]
+  end
+
   scope "/", AnotherTrackingToolWeb do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  scope "/integrations", AnotherTrackingToolWeb do
+    pipe_through :webhook
+
+    post "/:source/webhook/:secret", IntegrationWebhookController, :create
   end
 
   # Other scopes may use custom stacks.
