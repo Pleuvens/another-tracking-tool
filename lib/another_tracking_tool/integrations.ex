@@ -8,7 +8,6 @@ defmodule AnotherTrackingTool.Integrations do
   alias AnotherTrackingTool.Accounts
   alias AnotherTrackingTool.Accounts.User
   alias AnotherTrackingTool.Catalog
-  alias AnotherTrackingTool.Catalog.Episode
   alias AnotherTrackingTool.IntegrationSources
   alias AnotherTrackingTool.Integrations.{Account, Event, IngestWorker, Plex, Settings}
   alias AnotherTrackingTool.Repo
@@ -94,17 +93,17 @@ defmodule AnotherTrackingTool.Integrations do
          user,
          %Event{action: :watched, media: %{type: :episode} = media} = event
        ) do
-    with {:ok, show} <- Catalog.fetch_tv_with_episodes(media.tmdb_id),
-         %Episode{} = episode <- Catalog.get_episode(show, media.season, media.episode) do
-      Logger.info(
-        "#{source}: recorded episode watch tmdb=#{media.tmdb_id} s#{media.season}e#{media.episode}"
-      )
-
-      Tracking.mark_episode(user, episode, %{source: source, watched_on: watched_on(event)})
-    else
-      nil ->
+    case Catalog.fetch_tv_episode_by_tvdb_id(media.tvdb_id, media.season, media.episode) do
+      {:ok, episode} ->
         Logger.info(
-          "#{source}: episode not found tmdb=#{media.tmdb_id} s#{media.season}e#{media.episode}"
+          "#{source}: recorded episode watch tvdb=#{media.tvdb_id} s#{media.season}e#{media.episode}"
+        )
+
+        Tracking.mark_episode(user, episode, %{source: source, watched_on: watched_on(event)})
+
+      {:error, :episode_not_found} ->
+        Logger.info(
+          "#{source}: episode not found tvdb=#{media.tvdb_id} s#{media.season}e#{media.episode}"
         )
 
         {:error, :episode_not_found}

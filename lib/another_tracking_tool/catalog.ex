@@ -90,6 +90,17 @@ defmodule AnotherTrackingTool.Catalog do
     end
   end
 
+  @doc "Finds the episode for a TVDB episode id, resolving its show via TMDB first."
+  def fetch_tv_episode_by_tvdb_id(tvdb_id, season_number, episode_number) do
+    with {:ok, show_tmdb_id} <- Providers.Tmdb.show_id_for_tvdb_episode(tvdb_id),
+         {:ok, show} <- fetch_tv_with_episodes(show_tmdb_id) do
+      case get_episode(show, season_number, episode_number) do
+        nil -> {:error, :episode_not_found}
+        episode -> {:ok, episode}
+      end
+    end
+  end
+
   def get_episode(%MediaItem{id: media_item_id}, season_number, episode_number) do
     Repo.get_by(Episode,
       media_item_id: media_item_id,

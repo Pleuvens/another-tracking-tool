@@ -24,7 +24,7 @@ defmodule AnotherTrackingTool.Integrations.PlexTest do
     assert event.media == %{type: :movie, tmdb_id: 438_631}
   end
 
-  test "parses an episode scrobble with the show tmdb id and season/episode" do
+  test "parses an episode scrobble with the episode's tvdb id and season/episode" do
     payload = %{
       "event" => "media.scrobble",
       "Account" => %{"id" => 2, "title" => "Bob"},
@@ -33,12 +33,12 @@ defmodule AnotherTrackingTool.Integrations.PlexTest do
         "grandparentTitle" => "Severance",
         "parentIndex" => 1,
         "index" => 3,
-        "Guid" => [%{"id" => "tmdb://95396"}]
+        "Guid" => [%{"id" => "tvdb://9249163"}]
       }
     }
 
     assert {:ok, [event]} = Plex.parse(webhook(payload))
-    assert event.media == %{type: :episode, tmdb_id: 95_396, season: 1, episode: 3}
+    assert event.media == %{type: :episode, tvdb_id: 9_249_163, season: 1, episode: 3}
   end
 
   test "ignores non-scrobble events" do

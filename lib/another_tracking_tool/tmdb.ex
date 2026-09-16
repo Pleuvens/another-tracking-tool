@@ -20,6 +20,11 @@ defmodule AnotherTrackingTool.Tmdb do
     get("/tv/#{tv_id}/season/#{season_number}", page_lang(opts))
   end
 
+  @doc "Look up an object by an external id, e.g. `find(tvdb_id, \"tvdb_id\")`."
+  def find(external_id, external_source, opts \\ []) do
+    get("/find/#{external_id}", [external_source: external_source] ++ page_lang(opts))
+  end
+
   @doc "Genre id→name map for a medium."
   def genres(kind, opts \\ []) when kind in @cinema_kinds do
     get("/genre/#{path(kind)}/list", page_lang(opts))

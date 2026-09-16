@@ -52,6 +52,19 @@ defmodule AnotherTrackingTool.Providers.Tmdb do
     end
   end
 
+  @doc """
+  Resolves a TVDB episode id to its show's TMDB id. Plex only gives us the
+  episode's own external ids, not the show's, so we look the show up via
+  TMDB's cross-reference endpoint.
+  """
+  def show_id_for_tvdb_episode(tvdb_id) do
+    case Tmdb.find(tvdb_id, "tvdb_id") do
+      {:ok, %{"tv_episode_results" => [%{"show_id" => show_id} | _]}} -> {:ok, show_id}
+      {:ok, %{"tv_episode_results" => []}} -> {:error, :not_found}
+      error -> error
+    end
+  end
+
   @doc "Sync one season's episodes (called by the per-season fan-out job)."
   def sync_season(%MediaItem{tmdb_id: tmdb_id} = media_item, season_number) do
     with {:ok, %{"episodes" => episodes}} <- Tmdb.season(tmdb_id, season_number),

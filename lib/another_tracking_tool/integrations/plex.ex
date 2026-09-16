@@ -1,8 +1,9 @@
 defmodule AnotherTrackingTool.Integrations.Plex do
   @moduledoc """
   Plex webhook connector. Turns a `media.scrobble` payload into a watched
-  event; other events are ignored. For episodes Plex's `Guid` array carries
-  the show's external ids, with the season and episode in parentIndex/index.
+  event; other events are ignored. Plex's `Guid` array carries the
+  *episode's* own external ids (not the show's), so episodes are matched by
+  their TVDB id, with season/episode read from parentIndex/index.
   """
 
   @behaviour AnotherTrackingTool.Integrations.Connector
@@ -56,9 +57,9 @@ defmodule AnotherTrackingTool.Integrations.Plex do
 
   defp media(%{"type" => "episode", "parentIndex" => season, "index" => number} = metadata)
        when is_integer(season) and is_integer(number) do
-    case tmdb_id(metadata) do
+    case tvdb_id(metadata) do
       nil -> nil
-      id -> %{type: :episode, tmdb_id: id, season: season, episode: number}
+      id -> %{type: :episode, tvdb_id: id, season: season, episode: number}
     end
   end
 
@@ -67,17 +68,25 @@ defmodule AnotherTrackingTool.Integrations.Plex do
   defp tmdb_id(%{"Guid" => guids}) when is_list(guids) do
     guids
     |> Enum.map(& &1["id"])
-    |> Enum.find_value(&parse_tmdb/1)
+    |> Enum.find_value(&parse_id("tmdb://", &1))
   end
 
   defp tmdb_id(_metadata), do: nil
 
-  defp parse_tmdb("tmdb://" <> id) do
-    case Integer.parse(id) do
-      {number, _rest} -> number
-      :error -> nil
-    end
+  defp tvdb_id(%{"Guid" => guids}) when is_list(guids) do
+    guids
+    |> Enum.map(& &1["id"])
+    |> Enum.find_value(&parse_id("tvdb://", &1))
   end
 
-  defp parse_tmdb(_id), do: nil
+  defp tvdb_id(_metadata), do: nil
+
+  defp parse_id(prefix, id) do
+    with true <- String.starts_with?(id, prefix),
+         {number, _rest} <- id |> String.trim_leading(prefix) |> Integer.parse() do
+      number
+    else
+      _ -> nil
+    end
+  end
 end

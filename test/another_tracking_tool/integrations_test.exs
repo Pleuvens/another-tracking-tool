@@ -9,6 +9,7 @@ defmodule AnotherTrackingTool.IntegrationsTest do
   alias AnotherTrackingTool.Integrations.{Account, Event, Plex}
   alias AnotherTrackingTool.Tracking
   alias AnotherTrackingTool.Tracking.{EpisodeWatch, WatchEntry}
+  alias AnotherTrackingTool.TmdbStub
 
   describe "record_account/3" do
     test "creates an unmapped account on first sight" do
@@ -119,7 +120,11 @@ defmodule AnotherTrackingTool.IntegrationsTest do
       season = season_fixture(show, %{season_number: 1})
       episode = episode_fixture(show, season, %{episode_number: 3})
 
-      event = watched_event("7", %{type: :episode, tmdb_id: 1399, season: 1, episode: 3})
+      TmdbStub.stub([
+        {"/3/find/9249163", %{"tv_episode_results" => [%{"show_id" => 1399}]}}
+      ])
+
+      event = watched_event("7", %{type: :episode, tvdb_id: 9_249_163, season: 1, episode: 3})
       Integrations.ingest(:plex, [event])
 
       watch = Repo.get_by!(EpisodeWatch, user_id: user.id, episode_id: episode.id)

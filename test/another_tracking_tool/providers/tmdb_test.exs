@@ -93,6 +93,22 @@ defmodule AnotherTrackingTool.Providers.TmdbTest do
     end
   end
 
+  describe "show_id_for_tvdb_episode/1" do
+    test "returns the show's tmdb id for a known tvdb episode id" do
+      TmdbStub.stub([
+        {"/3/find/7839618", %{"tv_episode_results" => [%{"show_id" => 97_546}]}}
+      ])
+
+      assert {:ok, 97_546} = Tmdb.show_id_for_tvdb_episode(7_839_618)
+    end
+
+    test "returns not_found when tmdb has no match" do
+      TmdbStub.stub([{"/3/find/0", %{"tv_episode_results" => []}}])
+
+      assert {:error, :not_found} = Tmdb.show_id_for_tvdb_episode(0)
+    end
+  end
+
   describe "sync_genres/0" do
     test "merges FR and EN names onto one row per genre" do
       TmdbStub.stub([

@@ -13,4 +13,11 @@ defmodule AnotherTrackingTool.TmdbTest do
     TmdbStub.stub([])
     assert {:error, {:http, 404, _}} = Tmdb.details(:movie, 999)
   end
+
+  test "find decodes the body on 200" do
+    TmdbStub.stub([{"/3/find/7839618", %{"tv_episode_results" => [%{"show_id" => 97_546}]}}])
+
+    assert {:ok, %{"tv_episode_results" => [%{"show_id" => 97_546}]}} =
+             Tmdb.find(7_839_618, "tvdb_id")
+  end
 end
