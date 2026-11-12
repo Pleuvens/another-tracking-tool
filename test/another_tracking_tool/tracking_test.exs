@@ -162,6 +162,19 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert %AnotherTrackingTool.Catalog.MediaItem{} = hd(entries).media_item
     end
 
+    test "leaves not-for-me out of the whole list", ctx do
+      %{user: user, movie: kept} = ctx
+      declined = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.set_status(user, kept, :planned)
+      {:ok, _} = Tracking.set_status(user, declined, :not_interested)
+
+      assert [entry] = Tracking.my_list(user)
+      assert entry.media_item_id == kept.id
+
+      assert [declined_entry] = Tracking.my_list(user, :not_interested)
+      assert declined_entry.media_item_id == declined.id
+    end
+
     test "narrows to one status", ctx do
       %{user: user, movie: planned} = ctx
       completed = media_item_fixture(%{kind: :movie})
@@ -188,6 +201,18 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert counts.watching == 0
       assert counts.dropped == 0
       assert counts.all == 3
+    end
+
+    test "keeps not-for-me out of the total but counts it on its own", ctx do
+      %{user: user, movie: movie} = ctx
+      declined = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.set_status(user, movie, :planned)
+      {:ok, _} = Tracking.set_status(user, declined, :not_interested)
+
+      counts = Tracking.status_counts(user)
+
+      assert counts.all == 1
+      assert counts.not_interested == 1
     end
 
     test "counts nothing for an empty list", ctx do
