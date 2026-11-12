@@ -39,7 +39,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope} active={:feed}>
-      <h1 class="font-display text-2xl font-bold text-ink">{dgettext("feed", "Activity")}</h1>
+      <Layouts.page_header>{dgettext("feed", "Activity")}</Layouts.page_header>
 
       <FeedComponents.period_chips period={@period} periods={@periods} />
       <FeedComponents.totals_panel period={@period} totals={@totals} watched={@watched} />

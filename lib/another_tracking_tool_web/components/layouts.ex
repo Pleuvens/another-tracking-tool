@@ -134,9 +134,51 @@ defmodule AnotherTrackingToolWeb.Layouts do
       <main class="flex-1 px-4 py-8 sm:px-8">
         {render_slot(@inner_block)}
       </main>
+
+      <.link navigate={~p"/search"} id="search-hotkey" phx-hook=".SearchHotkey" class="sr-only">
+        {dgettext("layouts", "Search films and series")}
+      </.link>
+      <script :type={Phoenix.LiveView.ColocatedHook} name=".SearchHotkey">
+        export default {
+          mounted() {
+            this.onKeydown = (event) => {
+              if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") { return }
+              event.preventDefault()
+              this.el.click()
+            }
+            window.addEventListener("keydown", this.onKeydown)
+          },
+          destroyed() {
+            window.removeEventListener("keydown", this.onKeydown)
+          }
+        }
+      </script>
     </div>
 
     <.flash_group flash={@flash} />
+    """
+  end
+
+  attr :search, :boolean, default: true
+  slot :inner_block, required: true
+
+  def page_header(assigns) do
+    ~H"""
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h1 class="font-display text-2xl font-bold text-ink">{render_slot(@inner_block)}</h1>
+
+      <.link
+        :if={@search}
+        navigate={~p"/search"}
+        class="flex items-center gap-2 rounded-full bg-paper-2 px-4 py-2 text-xs font-semibold text-ink-soft hover:text-ink"
+      >
+        <.icon name="hero-magnifying-glass" class="size-4" />
+        {dgettext("layouts", "Search films and series")}
+        <kbd class="rounded border border-line px-1 py-0.5 text-[10px] font-bold">
+          {dgettext("layouts", "⌘K")}
+        </kbd>
+      </.link>
+    </div>
     """
   end
 

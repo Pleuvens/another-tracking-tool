@@ -36,11 +36,6 @@ msgstr ""
 msgid "Say something…"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:34
-#, elixir-autogen, elixir-format
-msgid "Search movies…"
-msgstr ""
-
 #: lib/another_tracking_tool_web/components/media_components.ex:242
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
@@ -84,4 +79,14 @@ msgstr ""
 #: lib/another_tracking_tool_web/components/media_components.ex:45
 #, elixir-autogen, elixir-format
 msgid "Status"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:30
+#, elixir-autogen, elixir-format
+msgid "Discover"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Search films and series…"
 msgstr ""

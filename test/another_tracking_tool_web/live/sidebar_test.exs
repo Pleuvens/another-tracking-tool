@@ -56,4 +56,34 @@ defmodule AnotherTrackingToolWeb.SidebarTest do
     assert html =~ "fervil"
     assert html =~ "Log out"
   end
+
+  test "offers search from every page, with its shortcut", %{conn: conn} do
+    conn = log_in_user(conn, AccountsFixtures.user_fixture())
+
+    for path <- [~p"/feed", ~p"/watchlist"] do
+      {:ok, lv, html} = live(conn, path)
+
+      assert html =~ "Search films and series"
+      assert html =~ "⌘K"
+      assert lv |> element(~s(a#search-hotkey)) |> has_element?()
+    end
+  end
+
+  test "the shortcut link is bound to a hook", %{conn: conn} do
+    conn = log_in_user(conn, AccountsFixtures.user_fixture())
+
+    {:ok, _lv, html} = live(conn, ~p"/feed")
+
+    assert html =~ ~s(phx-hook="AnotherTrackingToolWeb.Layouts.SearchHotkey")
+    assert html =~ ~s(href="/search")
+  end
+
+  test "Discover does not offer a link to itself", %{conn: conn} do
+    conn = log_in_user(conn, AccountsFixtures.user_fixture())
+
+    {:ok, _lv, html} = live(conn, ~p"/search")
+
+    assert html =~ "Discover"
+    refute html =~ "Search films and series<"
+  end
 end
