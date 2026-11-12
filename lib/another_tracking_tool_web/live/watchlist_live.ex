@@ -15,7 +15,7 @@ defmodule AnotherTrackingToolWeb.WatchlistLive do
     if user_id == me(socket).id, do: {:noreply, load(socket)}, else: {:noreply, socket}
   end
 
-  defp load(socket), do: assign(socket, :entries, Tracking.watchlist(me(socket)))
+  defp load(socket), do: assign(socket, :entries, Tracking.my_list(me(socket)))
 
   defp me(socket), do: socket.assigns.current_scope.user
 

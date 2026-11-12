@@ -12,7 +12,7 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     %{conn: log_in_user(conn, user), user: user}
   end
 
-  test "lists the user's planned titles", %{conn: conn, user: user} do
+  test "lists everything you track, whatever its status", %{conn: conn, user: user} do
     planned = media_item_fixture(%{kind: :movie, title_fr: "Planned Movie"})
     watched = media_item_fixture(%{kind: :movie, title_fr: "Watched Movie"})
     {:ok, _} = Tracking.set_status(user, planned, :planned)
@@ -21,7 +21,17 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     {:ok, _lv, html} = live(conn, ~p"/watchlist")
 
     assert html =~ "Planned Movie"
-    refute html =~ "Watched Movie"
+    assert html =~ "Watched Movie"
+  end
+
+  test "leaves other people's titles out", %{conn: conn} do
+    other = AccountsFixtures.user_fixture()
+    theirs = media_item_fixture(%{kind: :movie, title_fr: "Theirs"})
+    {:ok, _} = Tracking.set_status(other, theirs, :planned)
+
+    {:ok, _lv, html} = live(conn, ~p"/watchlist")
+
+    refute html =~ "Theirs"
   end
 
   test "shows the empty state", %{conn: conn} do

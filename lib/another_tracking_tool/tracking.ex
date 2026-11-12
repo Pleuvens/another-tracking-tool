@@ -16,7 +16,8 @@ defmodule AnotherTrackingTool.Tracking do
   defdelegate import_entries(user, entries), to: Imports
   defdelegate import_episode_watches(user, watches), to: Imports
 
-  defdelegate watchlist(user), to: Entries
+  defdelegate my_list(user, status \\ :all), to: Entries
+  defdelegate status_counts(user), to: Entries
   defdelegate get_entry(user, media_item), to: Entries
   defdelegate upsert_entry(user, media_item, attrs), to: Entries
   defdelegate set_status(user, media_item, status), to: Entries
@@ -35,6 +36,8 @@ defmodule AnotherTrackingTool.Tracking do
   defdelegate unmark_episode(user, episode), to: Episodes
   defdelegate mark_season(user, media_item, season_number), to: Episodes
   defdelegate episode_progress(user, media_item), to: Episodes
+  defdelegate progress_for(user_id, media_item_ids), to: Episodes
+  defdelegate current_seasons(user_id, media_item_ids), to: Episodes
   defdelegate season_progress(user, media_item, season_number), to: Episodes
 
   defdelegate last_watched(user, period, limit \\ 5), to: LastWatched

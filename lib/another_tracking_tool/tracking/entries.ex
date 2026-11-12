@@ -5,14 +5,34 @@ defmodule AnotherTrackingTool.Tracking.Entries do
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.Repo
   alias AnotherTrackingTool.Tracking.{Broadcast, WatchEntry}
+  alias AnotherTrackingTool.WatchStatuses
 
-  def watchlist(%User{id: user_id}) do
-    Repo.all(
-      from e in WatchEntry,
-        where: e.user_id == ^user_id and e.status == :planned,
-        order_by: [desc: e.updated_at],
-        preload: [:media_item]
+  def my_list(%User{id: user_id}, status \\ :all) do
+    from(e in WatchEntry,
+      where: e.user_id == ^user_id,
+      order_by: [desc: e.updated_at],
+      preload: [:media_item]
     )
+    |> with_status(status)
+    |> Repo.all()
+  end
+
+  defp with_status(query, :all), do: query
+  defp with_status(query, status), do: where(query, [e], e.status == ^status)
+
+  def status_counts(%User{id: user_id}) do
+    counts =
+      from(e in WatchEntry,
+        where: e.user_id == ^user_id,
+        group_by: e.status,
+        select: {e.status, count(e.id)}
+      )
+      |> Repo.all()
+      |> Map.new()
+
+    WatchStatuses.all()
+    |> Map.new(&{&1, Map.get(counts, &1, 0)})
+    |> Map.put(:all, counts |> Map.values() |> Enum.sum())
   end
 
   def get_entry(%User{id: user_id}, %MediaItem{id: media_item_id}),
