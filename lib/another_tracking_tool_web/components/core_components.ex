@@ -135,15 +135,16 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
 
   @doc """
   A 2/3 poster frame. A missing `src` falls back to a quiet neutral gradient
-  rather than a broken image.
+  rather than a broken image. Set `framed` to false for a bare thumbnail.
   """
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
+  attr :framed, :boolean, default: true
   attr :class, :any, default: nil
 
   def poster(assigns) do
     ~H"""
-    <div class={["overflow-hidden rounded-2xl bg-paper-2 p-3", @class]}>
+    <div class={["overflow-hidden", @framed && "rounded-2xl bg-paper-2 p-3", @class]}>
       <div class="relative aspect-[2/3] overflow-hidden rounded-xl">
         <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
         <div

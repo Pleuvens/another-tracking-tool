@@ -56,16 +56,12 @@ defmodule AnotherTrackingToolWeb.FeedLive do
             <div class="flex flex-1 flex-col gap-2">
               <div class="text-sm text-ink"><b>{item.user.email}</b> {verb(item)}</div>
               <div class="flex items-center gap-3">
-                <img
-                  :if={item.media_item.poster_path}
+                <.poster
                   src={tmdb_image(item.media_item.poster_path, "w92")}
-                  class="aspect-[2/3] w-10 shrink-0 rounded-lg object-cover"
+                  alt={MediaItem.display_title(item.media_item)}
+                  framed={false}
+                  class="w-10 shrink-0 rounded-lg"
                 />
-                <div
-                  :if={!item.media_item.poster_path}
-                  class="aspect-[2/3] w-10 shrink-0 rounded-lg bg-gradient-to-b from-line-soft to-line"
-                >
-                </div>
                 <div class="flex flex-col gap-1">
                   <div class="font-display text-sm font-bold text-ink">
                     {MediaItem.display_title(item.media_item)}
