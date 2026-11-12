@@ -1,12 +1,12 @@
 defmodule AnotherTrackingToolWeb.Avatars do
-  @moduledoc "Deterministic initials and colors for user avatars."
+  @moduledoc "Deterministic initials and greys for user avatars."
 
-  @colors [
-    "oklch(70% 0.1 250)",
-    "oklch(65% 0.09 25)",
-    "oklch(65% 0.08 145)",
-    "oklch(70% 0.09 85)",
-    "oklch(65% 0.1 310)"
+  @greys [
+    "#121212",
+    "#2e2e2e",
+    "#474747",
+    "#5f5f5f",
+    "#737373"
   ]
 
   def for_users(users), do: Enum.map(users, &for_user/1)
@@ -15,5 +15,5 @@ defmodule AnotherTrackingToolWeb.Avatars do
 
   def initial(user), do: user.email |> String.first() |> String.upcase()
 
-  def color(id), do: Enum.at(@colors, :erlang.phash2(id, length(@colors)))
+  def color(id), do: Enum.at(@greys, :erlang.phash2(id, length(@greys)))
 end

@@ -63,7 +63,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
                 />
                 <div
                   :if={!item.media_item.poster_path}
-                  class="aspect-[2/3] w-10 shrink-0 rounded-lg bg-gradient-to-b from-line to-[oklch(78%_0.02_70)]"
+                  class="aspect-[2/3] w-10 shrink-0 rounded-lg bg-gradient-to-b from-line-soft to-line"
                 >
                 </div>
                 <div class="flex flex-col gap-1">

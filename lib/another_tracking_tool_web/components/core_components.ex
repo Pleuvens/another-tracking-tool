@@ -128,7 +128,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
-  @doc "A watch-status chip, tinted with the status hue."
+  @doc "A watch-status chip, shaded from the grey ramp."
   attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
 
   def status_badge(assigns) do
@@ -143,10 +143,10 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  defp status_badge_class(:watching), do: "bg-status-watching/30 text-[oklch(38%_0.06_85)]"
-  defp status_badge_class(:completed), do: "bg-status-completed/30 text-[oklch(32%_0.06_145)]"
-  defp status_badge_class(:dropped), do: "bg-status-dropped/30 text-[oklch(32%_0.07_25)]"
-  defp status_badge_class(:planned), do: "bg-status-planned/30 text-[oklch(32%_0.06_250)]"
+  defp status_badge_class(:watching), do: "bg-paper-2 text-ink"
+  defp status_badge_class(:completed), do: "bg-ink text-paper-0"
+  defp status_badge_class(:dropped), do: "bg-paper-2 text-ink-faint"
+  defp status_badge_class(:planned), do: "bg-paper-2 text-ink-soft"
 
   defp status_label(:watching), do: dgettext("catalog", "Watching")
   defp status_label(:completed), do: dgettext("catalog", "Completed")
@@ -177,7 +177,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
         <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
         <div
           :if={!@src}
-          class="size-full bg-gradient-to-b from-line to-[oklch(78%_0.02_70)]"
+          class="size-full bg-gradient-to-b from-line-soft to-line"
         >
         </div>
       </div>
