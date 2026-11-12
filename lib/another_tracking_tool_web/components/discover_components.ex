@@ -39,11 +39,12 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
       ]}
       style={"transform: translateY(#{@depth * -8}px) scale(#{1 - @depth * 0.035}); opacity: #{1 - @depth * 0.35}"}
     >
-      <div class="relative flex-1">
+      <div class="relative min-h-0 flex-1">
         <.poster
           src={tmdb_image(@card.media_item.poster_path, "w500")}
           alt={MediaItem.display_title(@card.media_item)}
           framed={false}
+          fill
           class="size-full"
         />
         <span class="absolute left-3 top-3 rounded-full bg-ink/70 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-paper-0">
@@ -51,7 +52,7 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
         </span>
       </div>
 
-      <div class="flex flex-col items-start gap-2 p-4">
+      <div class="flex shrink-0 flex-col items-start gap-2 p-4">
         <span class="flex items-center gap-1.5 rounded-full bg-paper-2 px-2.5 py-1 text-[11px] font-bold text-ink-soft">
           <.icon name="hero-sparkles" class="size-3" />
           <.reason reason={@card.reason} />

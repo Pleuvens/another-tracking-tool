@@ -193,12 +193,16 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
   attr :framed, :boolean, default: true
+  attr :fill, :boolean, default: false
   attr :class, :any, default: nil
 
   def poster(assigns) do
     ~H"""
     <div class={["overflow-hidden", @framed && "rounded-2xl bg-paper-2 p-3", @class]}>
-      <div class="relative aspect-[2/3] overflow-hidden rounded-xl">
+      <div class={[
+        "relative overflow-hidden rounded-xl",
+        if(@fill, do: "size-full", else: "aspect-[2/3]")
+      ]}>
         <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
         <div
           :if={!@src}

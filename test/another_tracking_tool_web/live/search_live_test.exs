@@ -109,6 +109,27 @@ defmodule AnotherTrackingToolWeb.SearchLiveTest do
       assert Tracking.get_entry(user, movie).status == :planned
     end
 
+    test "the card shows the title and its details below the art", %{conn: conn} do
+      drama = genre_fixture(%{name_fr: "Drame"})
+
+      film("Perfect Days", %{
+        runtime: 124,
+        overview_fr: "Hirayama nettoie des toilettes publiques à Tokyo."
+      })
+      |> with_genres([drama])
+
+      {:ok, _lv, html} = live(conn, ~p"/search")
+
+      assert html =~ "Perfect Days"
+      assert html =~ "124 min"
+      assert html =~ "Drame"
+      assert html =~ "Hirayama nettoie"
+      assert html =~ "Open page"
+
+      # the art is a shrinkable row, so the body below it is never clipped away
+      assert html =~ "min-h-0"
+    end
+
     test "a series card counts its episodes", %{conn: conn} do
       show = media_item_fixture(%{kind: :tv, title_fr: "Severance"})
       season = season_fixture(show)
