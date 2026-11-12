@@ -1,8 +1,7 @@
 defmodule AnotherTrackingTool.CatalogFixtures do
-  @moduledoc "Persisted catalog records for tests."
-
   alias AnotherTrackingTool.Catalog
-  alias AnotherTrackingTool.Catalog.Series
+  alias AnotherTrackingTool.Catalog.{Series, TmdbGenre}
+  alias AnotherTrackingTool.Repo
 
   def media_item_fixture(attrs \\ %{}) do
     {:ok, media_item} =
@@ -17,6 +16,16 @@ defmodule AnotherTrackingTool.CatalogFixtures do
 
     media_item
   end
+
+  def genre_fixture(attrs \\ %{}) do
+    %TmdbGenre{}
+    |> TmdbGenre.changeset(
+      Enum.into(attrs, %{tmdb_id: System.unique_integer([:positive]), name_fr: "Drame"})
+    )
+    |> Repo.insert!()
+  end
+
+  def with_genres(media_item, genres), do: Catalog.set_genres(media_item, genres)
 
   def season_fixture(media_item, attrs \\ %{}) do
     {:ok, season} =

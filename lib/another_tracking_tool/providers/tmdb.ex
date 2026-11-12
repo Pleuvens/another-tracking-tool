@@ -114,11 +114,7 @@ defmodule AnotherTrackingTool.Providers.Tmdb do
     Enum.each(genres, &upsert_genre(%{tmdb_id: &1["id"], name_fr: &1["name"]}))
     rows = Repo.all(from(g in TmdbGenre, where: g.tmdb_id in ^ids))
 
-    media_item
-    |> Repo.preload(:tmdb_genres)
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:tmdb_genres, rows)
-    |> Repo.update!()
+    Catalog.set_genres(media_item, rows)
   end
 
   defp upsert_genre(attrs) do

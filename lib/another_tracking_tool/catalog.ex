@@ -1,6 +1,4 @@
 defmodule AnotherTrackingTool.Catalog do
-  @moduledoc "The local media catalog: read-through search and provider-neutral persistence."
-
   import Ecto.Query
 
   alias AnotherTrackingTool.Catalog.{Episode, MediaItem, Season}
@@ -65,6 +63,14 @@ defmodule AnotherTrackingTool.Catalog do
 
   def update_media_item(%MediaItem{} = media_item, attrs),
     do: media_item |> MediaItem.changeset(attrs) |> Repo.update()
+
+  def set_genres(%MediaItem{} = media_item, genres) do
+    media_item
+    |> Repo.preload(:tmdb_genres)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:tmdb_genres, genres)
+    |> Repo.update!()
+  end
 
   def fetch_media_item(id) do
     case Repo.get(MediaItem, id) do
