@@ -185,6 +185,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   def watch_status_label(:completed), do: dgettext("catalog", "Completed")
   def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
   def watch_status_label(:planned), do: dgettext("catalog", "Planned")
+  def watch_status_label(:not_interested), do: dgettext("catalog", "Not for me")
 
   attr :src, :string, default: nil
   attr :alt, :string, default: ""

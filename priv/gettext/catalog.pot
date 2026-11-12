@@ -30,3 +30,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Watching"
 msgstr ""
+
+#: lib/another_tracking_tool_web/components/core_components.ex:188
+#, elixir-autogen, elixir-format
+msgid "Not for me"
+msgstr ""

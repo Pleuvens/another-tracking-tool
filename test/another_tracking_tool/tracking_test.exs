@@ -196,7 +196,8 @@ defmodule AnotherTrackingTool.TrackingTest do
                watching: 0,
                completed: 0,
                dropped: 0,
-               planned: 0
+               planned: 0,
+               not_interested: 0
              }
     end
   end
