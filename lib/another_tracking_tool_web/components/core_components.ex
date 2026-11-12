@@ -1,51 +1,9 @@
 defmodule AnotherTrackingToolWeb.CoreComponents do
-  @moduledoc """
-  Provides core UI components.
-
-  At first glance, this module may seem daunting, but its goal is to provide
-  core building blocks for your application, such as tables, forms, and
-  inputs. The components consist mostly of markup and are well-documented
-  with doc strings and declarative assigns. You may customize and style
-  them in any way you want, based on your application growth and needs.
-
-  The foundation for styling is Tailwind CSS, a utility-first CSS framework,
-  augmented with daisyUI, a Tailwind CSS plugin that provides UI components
-  and themes. Here are useful references:
-
-    * [daisyUI](https://daisyui.com/docs/intro/) - a good place to get
-      started and see the available components.
-
-    * [Tailwind CSS](https://tailwindcss.com) - the foundational framework
-      we build on. You will use it for layout, sizing, flexbox, grid, and
-      spacing.
-
-    * [Heroicons](https://heroicons.com) - see `icon/1` for usage.
-
-    * [Phoenix.Component](https://phoenix-live-view.hexdocs.pm/Phoenix.Component.html) -
-      the component system used by Phoenix. Some components, such as `<.link>`
-      and `<.form>`, are defined there.
-
-  """
   use Phoenix.Component
   use Gettext, backend: AnotherTrackingToolWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
-  @doc """
-  Renders flash notices.
-
-  ## Examples
-
-      <.flash kind={:info} flash={@flash} />
-      <.flash
-        id="welcome-back"
-        kind={:info}
-        phx-mounted={show("#welcome-back") |> JS.remove_attribute("hidden")}
-        hidden
-      >
-        Welcome Back!
-      </.flash>
-  """
   attr :id, :string, doc: "the optional id of flash container"
   attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
   attr :title, :string, default: nil
@@ -86,15 +44,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a button with navigation support.
-
-  ## Examples
-
-      <.button>Send!</.button>
-      <.button phx-click="go" variant="primary">Send!</.button>
-      <.button navigate={~p"/"}>Home</.button>
-  """
   attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
   attr :class, :any
   attr :variant, :string, values: ~w(primary outline ghost)
@@ -177,10 +126,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
   def watch_status_label(:planned), do: dgettext("catalog", "Planned")
 
-  @doc """
-  A 2/3 poster frame. A missing `src` falls back to a quiet neutral gradient
-  rather than a broken image. Set `framed` to false for a bare thumbnail.
-  """
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
   attr :framed, :boolean, default: true
@@ -201,7 +146,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "A pill search field."
   attr :rest, :global, include: ~w(name value placeholder autocomplete)
 
   def search_input(assigns) do
@@ -217,7 +161,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "An overlapping stack of avatars for \"who's watched this\"."
   attr :people, :list, required: true, doc: "list of %{initial:, color:}"
   attr :extra, :integer, default: 0
 
@@ -241,7 +184,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "A 0–5 star rating."
   attr :value, :integer, default: 0
   attr :max, :integer, default: 5
 
@@ -253,51 +195,10 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "TMDB image URL for a stored path, or nil."
   def tmdb_image(path, size \\ "w342")
   def tmdb_image(nil, _size), do: nil
   def tmdb_image(path, size), do: "https://image.tmdb.org/t/p/#{size}#{path}"
 
-  @doc """
-  Renders an input with label and error messages.
-
-  A `Phoenix.HTML.FormField` may be passed as argument,
-  which is used to retrieve the input name, id, and values.
-  Otherwise all attributes may be passed explicitly.
-
-  ## Types
-
-  This function accepts all HTML input types, considering that:
-
-    * You may also set `type="select"` to render a `<select>` tag
-
-    * `type="checkbox"` is used exclusively to render boolean values
-
-    * For live file uploads, see `Phoenix.Component.live_file_input/1`
-
-  See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-  for more information. Unsupported types, such as radio, are best
-  written directly in your templates.
-
-  ## Examples
-
-  ```heex
-  <.input field={@form[:email]} type="email" />
-  <.input name="my-input" errors={["oh no!"]} />
-  ```
-
-  ## Select type
-
-  When using `type="select"`, you must pass the `options` and optionally
-  a `value` to mark which option should be preselected.
-
-  ```heex
-  <.input field={@form[:user_type]} type="select" options={["Admin": "admin", "User": "user"]} />
-  ```
-
-  For more information on what kind of data can be passed to `options` see
-  [`options_for_select`](https://phoenix-html.hexdocs.pm/Phoenix.HTML.Form.html#options_for_select/2).
-  """
   attr :id, :any, default: nil
   attr :name, :any
   attr :label, :string, default: nil
@@ -447,9 +348,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a header with title.
-  """
   slot :inner_block, required: true
   slot :subtitle
   slot :actions
@@ -470,16 +368,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a table with generic styling.
-
-  ## Examples
-
-      <.table id="users" rows={@users}>
-        <:col :let={user} label="id">{user.id}</:col>
-        <:col :let={user} label="username">{user.username}</:col>
-      </.table>
-  """
   attr :id, :string, required: true
   attr :rows, :list, required: true
   attr :row_id, :any, default: nil, doc: "the function for generating the row id"
@@ -533,16 +421,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a data list.
-
-  ## Examples
-
-      <.list>
-        <:item title="Title">{@post.title}</:item>
-        <:item title="Views">{@post.views}</:item>
-      </.list>
-  """
   slot :item, required: true do
     attr :title, :string, required: true
   end
@@ -560,24 +438,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a [Heroicon](https://heroicons.com).
-
-  Heroicons come in three styles – outline, solid, and mini.
-  By default, the outline style is used, but solid and mini may
-  be applied by using the `-solid` and `-mini` suffix.
-
-  You can customize the size and colors of the icons by setting
-  width, height, and background color classes.
-
-  Icons are extracted from the `deps/heroicons` directory and bundled within
-  your compiled app.css by the plugin in `assets/vendor/heroicons.js`.
-
-  ## Examples
-
-      <.icon name="hero-x-mark" />
-      <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-  """
   attr :name, :string, required: true
   attr :class, :any, default: "size-4"
 
@@ -610,9 +470,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     )
   end
 
-  @doc """
-  Translates an error message using gettext.
-  """
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:
@@ -631,9 +488,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
-  @doc """
-  Translates the errors for a field from a keyword list of errors.
-  """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
