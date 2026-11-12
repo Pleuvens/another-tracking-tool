@@ -187,9 +187,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
           </p>
 
           <div class="space-y-3">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+            <.section_label>
               {dgettext("tracking", "My status")}
-            </p>
+            </.section_label>
             <div class="flex flex-wrap gap-2">
               <button
                 :for={status <- WatchStatuses.all()}
@@ -207,9 +207,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
           </div>
 
           <div class="space-y-2">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+            <.section_label>
               {dgettext("tracking", "My rating")}
-            </p>
+            </.section_label>
             <div class="text-2xl tracking-[4px]">
               <button
                 :for={i <- 1..5}
@@ -223,9 +223,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
           </div>
 
           <div class="space-y-2">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+            <.section_label>
               {dgettext("tracking", "Watched on")}
-            </p>
+            </.section_label>
             <div :if={!@editing_date} class="flex items-center gap-3">
               <span class={
                 if watched_on(@my_entry), do: "text-ink", else: "text-sm italic text-ink-soft"
@@ -250,9 +250,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
 
       <div :if={@media_item.kind == :tv} class="mt-10 space-y-4">
         <div class="flex items-center justify-between">
-          <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+          <.section_label>
             {dgettext("tracking", "Episodes")}
-          </p>
+          </.section_label>
           <span class="text-xs text-ink-soft">{@progress.watched}/{@progress.total}</span>
         </div>
         <div class="h-2 overflow-hidden rounded-full bg-paper-2">
@@ -307,9 +307,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
       </div>
 
       <div class="mt-10 space-y-3">
-        <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+        <.section_label>
           {dgettext("tracking", "Your circle")}
-        </p>
+        </.section_label>
         <div class="flex items-center gap-4">
           <.avatar_stack people={circle_avatars(@entries)} extra={max(length(@entries) - 5, 0)} />
           <span :if={@circle_rating} class="font-display font-bold text-ink">
@@ -322,9 +322,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
       </div>
 
       <div class="mt-10 space-y-4">
-        <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
+        <.section_label>
           {dgettext("tracking", "Comments")}
-        </p>
+        </.section_label>
 
         <.form
           for={@comment_form}

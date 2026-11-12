@@ -128,6 +128,17 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
+  attr :class, :any, default: nil
+  slot :inner_block, required: true
+
+  def section_label(assigns) do
+    ~H"""
+    <p class={["text-xs font-extrabold uppercase tracking-widest text-ink-soft", @class]}>
+      {render_slot(@inner_block)}
+    </p>
+    """
+  end
+
   attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
   attr :muted, :boolean, default: false
   attr :class, :any, default: nil
