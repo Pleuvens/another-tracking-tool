@@ -21,31 +21,6 @@ msgstr ""
 msgid "Nothing here yet. Go watch something."
 msgstr ""
 
-#: lib/another_tracking_tool_web/format.ex:57
-#, elixir-autogen, elixir-format
-msgid "added to their list"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:56
-#, elixir-autogen, elixir-format
-msgid "dropped"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:54
-#, elixir-autogen, elixir-format
-msgid "finished"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:55
-#, elixir-autogen, elixir-format
-msgid "started"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:60
-#, elixir-autogen, elixir-format
-msgid "watched S%{s}E%{e}"
-msgstr ""
-
 #: lib/another_tracking_tool_web/format.ex:51
 #, elixir-autogen, elixir-format
 msgid "day"

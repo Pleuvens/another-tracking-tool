@@ -21,31 +21,6 @@ msgstr "Activité"
 msgid "Nothing here yet. Go watch something."
 msgstr "Rien pour l'instant. Va regarder quelque chose."
 
-#: lib/another_tracking_tool_web/format.ex:57
-#, elixir-autogen, elixir-format
-msgid "added to their list"
-msgstr "a ajouté à sa liste"
-
-#: lib/another_tracking_tool_web/format.ex:56
-#, elixir-autogen, elixir-format
-msgid "dropped"
-msgstr "a abandonné"
-
-#: lib/another_tracking_tool_web/format.ex:54
-#, elixir-autogen, elixir-format
-msgid "finished"
-msgstr "a terminé"
-
-#: lib/another_tracking_tool_web/format.ex:55
-#, elixir-autogen, elixir-format
-msgid "started"
-msgstr "a commencé"
-
-#: lib/another_tracking_tool_web/format.ex:60
-#, elixir-autogen, elixir-format
-msgid "watched S%{s}E%{e}"
-msgstr "a vu S%{s}E%{e}"
-
 #: lib/another_tracking_tool_web/format.ex:51
 #, elixir-autogen, elixir-format
 msgid "day"
