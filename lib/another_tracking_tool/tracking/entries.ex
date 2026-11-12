@@ -10,7 +10,7 @@ defmodule AnotherTrackingTool.Tracking.Entries do
   def my_list(%User{id: user_id}, status \\ :all) do
     from(e in WatchEntry,
       where: e.user_id == ^user_id,
-      order_by: [desc: e.updated_at],
+      order_by: [desc: e.updated_at, asc: e.id],
       preload: [:media_item]
     )
     |> with_status(status)

@@ -145,11 +145,15 @@ defmodule AnotherTrackingTool.TrackingTest do
     test "returns every status newest first, with media preloaded", ctx do
       %{user: user, movie: planned} = ctx
       completed = media_item_fixture(%{kind: :movie})
-      {:ok, _} = Tracking.set_status(user, planned, :planned)
+      {:ok, older} = Tracking.set_status(user, planned, :planned)
       {:ok, _} = Tracking.set_status(user, completed, :completed)
 
       {:ok, _} =
         Tracking.set_status(user_fixture(), media_item_fixture(%{kind: :movie}), :planned)
+
+      Repo.update_all(from(e in WatchEntry, where: e.id == ^older.id),
+        set: [updated_at: ~U[2020-01-01 00:00:00Z]]
+      )
 
       entries = Tracking.my_list(user)
 
