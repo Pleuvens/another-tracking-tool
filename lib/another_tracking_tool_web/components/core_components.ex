@@ -82,6 +82,69 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
+  attr :label, :string, required: true
+  attr :value, :string, required: true
+  attr :unit, :string, default: nil
+  attr :hero, :boolean, default: false
+  slot :foot
+
+  def stat_tile(assigns) do
+    ~H"""
+    <div class={[
+      "flex flex-col gap-1 rounded-2xl border p-4",
+      if(@hero, do: "border-ink bg-ink text-paper-0", else: "border-line bg-paper-0")
+    ]}>
+      <span class={[
+        "text-[10px] font-extrabold uppercase tracking-widest",
+        if(@hero, do: "text-paper-2/70", else: "text-ink-soft")
+      ]}>
+        {@label}
+      </span>
+      <span class="flex flex-wrap items-baseline gap-1.5 font-display text-3xl font-bold tabular-nums">
+        {@value}
+        <span
+          :if={@unit}
+          class={[
+            "font-sans text-xs font-bold tracking-wide",
+            if(@hero, do: "text-paper-2/70", else: "text-ink-soft")
+          ]}
+        >
+          {@unit}
+        </span>
+      </span>
+      <span
+        :if={@foot != []}
+        class={["text-xs", if(@hero, do: "text-paper-2/70", else: "text-ink-soft")]}
+      >
+        {render_slot(@foot)}
+      </span>
+    </div>
+    """
+  end
+
+  attr :active, :boolean, default: false
+  attr :rest, :global
+  slot :inner_block, required: true
+
+  def filter_chip(assigns) do
+    ~H"""
+    <button
+      type="button"
+      aria-pressed={to_string(@active)}
+      class={[
+        "rounded-full border px-3 py-1 text-xs font-bold",
+        if(@active,
+          do: "border-ink bg-ink text-paper-0",
+          else: "border-line text-ink-soft hover:bg-paper-2 hover:text-ink"
+        )
+      ]}
+      {@rest}
+    >
+      {render_slot(@inner_block)}
+    </button>
+    """
+  end
+
   attr :class, :any, default: nil
   slot :inner_block, required: true
 
