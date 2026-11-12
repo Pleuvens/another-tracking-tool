@@ -1,51 +1,14 @@
 defmodule AnotherTrackingToolWeb.CoreComponents do
-  @moduledoc """
-  Provides core UI components.
-
-  At first glance, this module may seem daunting, but its goal is to provide
-  core building blocks for your application, such as tables, forms, and
-  inputs. The components consist mostly of markup and are well-documented
-  with doc strings and declarative assigns. You may customize and style
-  them in any way you want, based on your application growth and needs.
-
-  The foundation for styling is Tailwind CSS, a utility-first CSS framework,
-  augmented with daisyUI, a Tailwind CSS plugin that provides UI components
-  and themes. Here are useful references:
-
-    * [daisyUI](https://daisyui.com/docs/intro/) - a good place to get
-      started and see the available components.
-
-    * [Tailwind CSS](https://tailwindcss.com) - the foundational framework
-      we build on. You will use it for layout, sizing, flexbox, grid, and
-      spacing.
-
-    * [Heroicons](https://heroicons.com) - see `icon/1` for usage.
-
-    * [Phoenix.Component](https://phoenix-live-view.hexdocs.pm/Phoenix.Component.html) -
-      the component system used by Phoenix. Some components, such as `<.link>`
-      and `<.form>`, are defined there.
-
-  """
   use Phoenix.Component
   use Gettext, backend: AnotherTrackingToolWeb.Gettext
 
+  alias AnotherTrackingTool.WatchStatuses
+  alias Phoenix.Flash
+  alias Phoenix.HTML.Form
+  alias Phoenix.HTML.FormField
   alias Phoenix.LiveView.JS
+  alias Phoenix.LiveView.LiveStream
 
-  @doc """
-  Renders flash notices.
-
-  ## Examples
-
-      <.flash kind={:info} flash={@flash} />
-      <.flash
-        id="welcome-back"
-        kind={:info}
-        phx-mounted={show("#welcome-back") |> JS.remove_attribute("hidden")}
-        hidden
-      >
-        Welcome Back!
-      </.flash>
-  """
   attr :id, :string, doc: "the optional id of flash container"
   attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
   attr :title, :string, default: nil
@@ -59,7 +22,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
 
     ~H"""
     <div
-      :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
+      :if={msg = render_slot(@inner_block) || Flash.get(@flash, @kind)}
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
@@ -86,15 +49,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a button with navigation support.
-
-  ## Examples
-
-      <.button>Send!</.button>
-      <.button phx-click="go" variant="primary">Send!</.button>
-      <.button navigate={~p"/"}>Home</.button>
-  """
   attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
   attr :class, :any
   attr :variant, :string, values: ~w(primary outline ghost)
@@ -128,15 +82,55 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
+  attr :class, :any, default: nil
+  slot :inner_block, required: true
+
+  def section_label(assigns) do
+    ~H"""
+    <p class={["text-xs font-extrabold uppercase tracking-widest text-ink-soft", @class]}>
+      {render_slot(@inner_block)}
+    </p>
+    """
+  end
+
+  attr :status, :atom, required: true, values: WatchStatuses.all()
+  attr :muted, :boolean, default: false
+  attr :class, :any, default: nil
+
+  def status_pill(assigns) do
+    ~H"""
+    <span class={[
+      "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold",
+      pill_class(@muted, @status),
+      @class
+    ]}>
+      <span
+        :if={!@muted and @status != :dropped}
+        class={["size-1.5 rounded-full", dot_class(@status)]}
+      ></span>
+      {watch_status_label(@status)}
+    </span>
+    """
+  end
+
+  defp pill_class(true, _status), do: "border-transparent bg-paper-2 text-ink-soft"
+  defp pill_class(false, :completed), do: "border-ink bg-ink text-paper-0"
+  defp pill_class(false, :watching), do: "border-ink text-ink"
+  defp pill_class(false, :planned), do: "border-line text-ink-soft"
+  defp pill_class(false, :dropped), do: "border-dashed border-line text-ink-faint"
+
+  defp dot_class(:completed), do: "bg-current"
+  defp dot_class(:planned), do: "shadow-[inset_0_0_0_1px_currentColor]"
+
+  defp dot_class(:watching),
+    do:
+      "bg-[linear-gradient(90deg,currentColor_50%,transparent_50%)] shadow-[inset_0_0_0_1px_currentColor]"
+
   def watch_status_label(:watching), do: dgettext("catalog", "Watching")
   def watch_status_label(:completed), do: dgettext("catalog", "Completed")
   def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
   def watch_status_label(:planned), do: dgettext("catalog", "Planned")
 
-  @doc """
-  A 2/3 poster frame. A missing `src` falls back to a quiet neutral gradient
-  rather than a broken image. Set `framed` to false for a bare thumbnail.
-  """
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
   attr :framed, :boolean, default: true
@@ -157,7 +151,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "A pill search field."
   attr :rest, :global, include: ~w(name value placeholder autocomplete)
 
   def search_input(assigns) do
@@ -173,7 +166,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "An overlapping stack of avatars for \"who's watched this\"."
   attr :people, :list, required: true, doc: "list of %{initial:, color:}"
   attr :extra, :integer, default: 0
 
@@ -197,7 +189,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "A 0–5 star rating."
   attr :value, :integer, default: 0
   attr :max, :integer, default: 5
 
@@ -209,51 +200,10 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc "TMDB image URL for a stored path, or nil."
   def tmdb_image(path, size \\ "w342")
   def tmdb_image(nil, _size), do: nil
   def tmdb_image(path, size), do: "https://image.tmdb.org/t/p/#{size}#{path}"
 
-  @doc """
-  Renders an input with label and error messages.
-
-  A `Phoenix.HTML.FormField` may be passed as argument,
-  which is used to retrieve the input name, id, and values.
-  Otherwise all attributes may be passed explicitly.
-
-  ## Types
-
-  This function accepts all HTML input types, considering that:
-
-    * You may also set `type="select"` to render a `<select>` tag
-
-    * `type="checkbox"` is used exclusively to render boolean values
-
-    * For live file uploads, see `Phoenix.Component.live_file_input/1`
-
-  See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-  for more information. Unsupported types, such as radio, are best
-  written directly in your templates.
-
-  ## Examples
-
-  ```heex
-  <.input field={@form[:email]} type="email" />
-  <.input name="my-input" errors={["oh no!"]} />
-  ```
-
-  ## Select type
-
-  When using `type="select"`, you must pass the `options` and optionally
-  a `value` to mark which option should be preselected.
-
-  ```heex
-  <.input field={@form[:user_type]} type="select" options={["Admin": "admin", "User": "user"]} />
-  ```
-
-  For more information on what kind of data can be passed to `options` see
-  [`options_for_select`](https://phoenix-html.hexdocs.pm/Phoenix.HTML.Form.html#options_for_select/2).
-  """
   attr :id, :any, default: nil
   attr :name, :any
   attr :label, :string, default: nil
@@ -264,13 +214,13 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     values: ~w(checkbox color date datetime-local email file month number password
                search select tel text textarea time url week hidden)
 
-  attr :field, Phoenix.HTML.FormField,
+  attr :field, FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+  attr :options, :list, doc: "the options to pass to Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
   attr :class, :any, default: nil, doc: "the input class to use over defaults"
   attr :error_class, :any, default: nil, doc: "the input error class to use over defaults"
@@ -279,8 +229,8 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
-  def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+  def input(%{field: %FormField{} = field} = assigns) do
+    errors = if used_input?(field), do: field.errors, else: []
 
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
@@ -299,7 +249,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   def input(%{type: "checkbox"} = assigns) do
     assigns =
       assign_new(assigns, :checked, fn ->
-        Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
+        Form.normalize_value("checkbox", assigns[:value])
       end)
 
     ~H"""
@@ -342,7 +292,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
           {@rest}
         >
           <option :if={@prompt} value="">{@prompt}</option>
-          {Phoenix.HTML.Form.options_for_select(@options, @value)}
+          {Form.options_for_select(@options, @value)}
         </select>
       </label>
       <.error :for={msg <- @errors}>{msg}</.error>
@@ -363,7 +313,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
             @errors != [] && (@error_class || "textarea-error")
           ]}
           {@rest}
-        >{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
+        >{Form.normalize_value("textarea", @value)}</textarea>
       </label>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
@@ -380,7 +330,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
           type={@type}
           name={@name}
           id={@id}
-          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          value={Form.normalize_value(@type, @value)}
           class={[
             @class || "w-full input",
             @errors != [] && (@error_class || "input-error")
@@ -403,9 +353,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a header with title.
-  """
   slot :inner_block, required: true
   slot :subtitle
   slot :actions
@@ -426,16 +373,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a table with generic styling.
-
-  ## Examples
-
-      <.table id="users" rows={@users}>
-        <:col :let={user} label="id">{user.id}</:col>
-        <:col :let={user} label="username">{user.username}</:col>
-      </.table>
-  """
   attr :id, :string, required: true
   attr :rows, :list, required: true
   attr :row_id, :any, default: nil, doc: "the function for generating the row id"
@@ -453,7 +390,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
 
   def table(assigns) do
     assigns =
-      with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
+      with %{rows: %LiveStream{}} <- assigns do
         assign(assigns, row_id: assigns.row_id || fn {id, _item} -> id end)
       end
 
@@ -467,7 +404,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
           </th>
         </tr>
       </thead>
-      <tbody id={@id} phx-update={is_struct(@rows, Phoenix.LiveView.LiveStream) && "stream"}>
+      <tbody id={@id} phx-update={is_struct(@rows, LiveStream) && "stream"}>
         <tr :for={row <- @rows} id={@row_id && @row_id.(row)}>
           <td
             :for={col <- @col}
@@ -489,16 +426,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a data list.
-
-  ## Examples
-
-      <.list>
-        <:item title="Title">{@post.title}</:item>
-        <:item title="Views">{@post.views}</:item>
-      </.list>
-  """
   slot :item, required: true do
     attr :title, :string, required: true
   end
@@ -516,24 +443,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a [Heroicon](https://heroicons.com).
-
-  Heroicons come in three styles – outline, solid, and mini.
-  By default, the outline style is used, but solid and mini may
-  be applied by using the `-solid` and `-mini` suffix.
-
-  You can customize the size and colors of the icons by setting
-  width, height, and background color classes.
-
-  Icons are extracted from the `deps/heroicons` directory and bundled within
-  your compiled app.css by the plugin in `assets/vendor/heroicons.js`.
-
-  ## Examples
-
-      <.icon name="hero-x-mark" />
-      <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-  """
   attr :name, :string, required: true
   attr :class, :any, default: "size-4"
 
@@ -566,9 +475,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     )
   end
 
-  @doc """
-  Translates an error message using gettext.
-  """
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:
@@ -587,9 +493,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
-  @doc """
-  Translates the errors for a field from a keyword list of errors.
-  """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end

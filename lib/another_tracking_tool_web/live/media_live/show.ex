@@ -133,6 +133,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
 
   defp me(socket), do: socket.assigns.current_scope.user
 
+  defp chosen?(%{status: status}, status), do: true
+  defp chosen?(_entry, _status), do: false
+
   defp my_rating(nil), do: 0
   defp my_rating(%{rating: nil}), do: 0
   defp my_rating(%{rating: rating}), do: rating
@@ -161,193 +164,224 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
         />
 
         <div class="space-y-5">
-          <div>
-            <h1 class="font-display text-3xl font-bold text-ink">
-              {MediaItem.display_title(@media_item)}
-            </h1>
-            <p :if={MediaItem.year(@media_item)} class="text-ink-soft">
-              {MediaItem.year(@media_item)}
-            </p>
-          </div>
-
-          <div :if={@media_item.tmdb_genres != []} class="flex flex-wrap gap-2">
-            <span
-              :for={genre <- @media_item.tmdb_genres}
-              class="rounded-full bg-paper-2 px-3 py-1 text-xs font-bold text-ink-soft"
-            >
-              {genre.name_fr || genre.name_en}
-            </span>
-          </div>
-
-          <p :if={MediaItem.display_overview(@media_item)} class="leading-relaxed text-ink">
-            {MediaItem.display_overview(@media_item)}
-          </p>
-
-          <div class="space-y-3">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-              {dgettext("tracking", "My status")}
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                :for={status <- WatchStatuses.all()}
-                phx-click="set_status"
-                phx-value-status={status}
-                class={[
-                  "rounded-full px-4 py-1.5 text-sm font-extrabold",
-                  if(@my_entry && @my_entry.status == status,
-                    do: "bg-ink text-paper-0",
-                    else: "bg-paper-2 text-ink-soft hover:text-ink"
-                  )
-                ]}
-              >
-                {watch_status_label(status)}
-              </button>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-              {dgettext("tracking", "My rating")}
-            </p>
-            <div class="text-2xl tracking-[4px]">
-              <button
-                :for={i <- 1..5}
-                phx-click="rate"
-                phx-value-rating={i}
-                class={if i > my_rating(@my_entry), do: "text-line", else: "text-ink"}
-              >
-                ★
-              </button>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-              {dgettext("tracking", "Watched on")}
-            </p>
-            <div :if={!@editing_date} class="flex items-center gap-3">
-              <span class={
-                if watched_on(@my_entry), do: "text-ink", else: "text-sm italic text-ink-soft"
-              }>
-                {watched_label(@my_entry)}
-              </span>
-              <button phx-click="edit_date" class="text-xs font-bold text-ink-soft hover:text-ink">
-                {dgettext("tracking", "Edit")}
-              </button>
-            </div>
-            <form :if={@editing_date} phx-change="set_date">
-              <input
-                type="date"
-                name="watched_on"
-                value={watched_on(@my_entry)}
-                class="rounded-xl bg-paper-2 px-3 py-2 text-sm text-ink"
-              />
-            </form>
-          </div>
+          <.title_block media_item={@media_item} />
+          <.status_field my_entry={@my_entry} />
+          <.rating_field my_entry={@my_entry} />
+          <.watched_on_field my_entry={@my_entry} editing_date={@editing_date} />
         </div>
       </div>
 
-      <div :if={@media_item.kind == :tv} class="mt-10 space-y-4">
-        <div class="flex items-center justify-between">
-          <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-            {dgettext("tracking", "Episodes")}
-          </p>
-          <span class="text-xs text-ink-soft">{@progress.watched}/{@progress.total}</span>
-        </div>
-        <div class="h-2 overflow-hidden rounded-full bg-paper-2">
-          <div
-            class="h-full bg-ink transition-all"
-            style={"width: #{Format.percent(@progress.watched, @progress.total)}%"}
-          >
-          </div>
-        </div>
+      <.episodes_panel
+        :if={@media_item.kind == :tv}
+        seasons={@seasons}
+        watched_ids={@watched_ids}
+        progress={@progress}
+      />
 
-        <p :if={@seasons == []} class="text-sm text-ink-soft">
-          {dgettext("tracking", "Episodes are still loading…")}
+      <.circle_panel entries={@entries} circle_rating={@circle_rating} />
+      <.comments_panel comments={@comments} comment_form={@comment_form} />
+    </Layouts.app>
+    """
+  end
+
+  defp title_block(assigns) do
+    ~H"""
+    <div class="space-y-5">
+      <div>
+        <h1 class="font-display text-3xl font-bold text-ink">
+          {MediaItem.display_title(@media_item)}
+        </h1>
+        <p :if={MediaItem.year(@media_item)} class="text-ink-soft">
+          {MediaItem.year(@media_item)}
         </p>
+      </div>
 
-        <div :for={season <- @seasons} class="space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="font-display font-bold text-ink">
-              {season.name || dgettext("tracking", "Season %{n}", n: season.season_number)}
-            </h3>
-            <button
-              phx-click="mark_season"
-              phx-value-season={season.season_number}
-              class="text-xs font-bold text-ink-soft hover:text-ink"
-            >
-              {dgettext("tracking", "Mark season watched")}
-            </button>
-          </div>
+      <div :if={@media_item.tmdb_genres != []} class="flex flex-wrap gap-2">
+        <span
+          :for={genre <- @media_item.tmdb_genres}
+          class="rounded-full bg-paper-2 px-3 py-1 text-xs font-bold text-ink-soft"
+        >
+          {genre.name_fr || genre.name_en}
+        </span>
+      </div>
+
+      <p :if={MediaItem.display_overview(@media_item)} class="leading-relaxed text-ink">
+        {MediaItem.display_overview(@media_item)}
+      </p>
+    </div>
+    """
+  end
+
+  defp status_field(assigns) do
+    ~H"""
+    <div class="space-y-3">
+      <.section_label>{dgettext("tracking", "My status")}</.section_label>
+      <div class="flex flex-wrap gap-2">
+        <button
+          :for={status <- WatchStatuses.all()}
+          phx-click="set_status"
+          phx-value-status={status}
+          class="group rounded-full"
+        >
+          <.status_pill
+            status={status}
+            muted={!chosen?(@my_entry, status)}
+            class="px-4 py-1.5 text-sm group-hover:text-ink"
+          />
+        </button>
+      </div>
+    </div>
+    """
+  end
+
+  defp rating_field(assigns) do
+    ~H"""
+    <div class="space-y-2">
+      <.section_label>{dgettext("tracking", "My rating")}</.section_label>
+      <div class="text-2xl tracking-[4px]">
+        <button
+          :for={i <- 1..5}
+          phx-click="rate"
+          phx-value-rating={i}
+          class={if i > my_rating(@my_entry), do: "text-line", else: "text-ink"}
+        >
+          ★
+        </button>
+      </div>
+    </div>
+    """
+  end
+
+  defp watched_on_field(assigns) do
+    ~H"""
+    <div class="space-y-2">
+      <.section_label>{dgettext("tracking", "Watched on")}</.section_label>
+      <div :if={!@editing_date} class="flex items-center gap-3">
+        <span class={if watched_on(@my_entry), do: "text-ink", else: "text-sm italic text-ink-soft"}>
+          {watched_label(@my_entry)}
+        </span>
+        <button phx-click="edit_date" class="text-xs font-bold text-ink-soft hover:text-ink">
+          {dgettext("tracking", "Edit")}
+        </button>
+      </div>
+      <form :if={@editing_date} phx-change="set_date">
+        <input
+          type="date"
+          name="watched_on"
+          value={watched_on(@my_entry)}
+          class="rounded-xl bg-paper-2 px-3 py-2 text-sm text-ink"
+        />
+      </form>
+    </div>
+    """
+  end
+
+  defp episodes_panel(assigns) do
+    ~H"""
+    <div class="mt-10 space-y-4">
+      <div class="flex items-center justify-between">
+        <.section_label>{dgettext("tracking", "Episodes")}</.section_label>
+        <span class="text-xs text-ink-soft">{@progress.watched}/{@progress.total}</span>
+      </div>
+      <div class="h-2 overflow-hidden rounded-full bg-paper-2">
+        <div
+          class="h-full bg-ink transition-all"
+          style={"width: #{Format.percent(@progress.watched, @progress.total)}%"}
+        >
+        </div>
+      </div>
+
+      <p :if={@seasons == []} class="text-sm text-ink-soft">
+        {dgettext("tracking", "Episodes are still loading…")}
+      </p>
+
+      <div :for={season <- @seasons} class="space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display font-bold text-ink">
+            {season.name || dgettext("tracking", "Season %{n}", n: season.season_number)}
+          </h3>
           <button
-            :for={episode <- season.episodes}
-            phx-click="toggle_episode"
-            phx-value-id={episode.id}
-            phx-value-watched={to_string(MapSet.member?(@watched_ids, episode.id))}
-            class={[
-              "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm",
-              if(MapSet.member?(@watched_ids, episode.id),
-                do: "bg-paper-2 text-ink",
-                else: "bg-paper-2 text-ink-soft hover:text-ink"
-              )
-            ]}
+            phx-click="mark_season"
+            phx-value-season={season.season_number}
+            class="text-xs font-bold text-ink-soft hover:text-ink"
           >
-            <span class="w-8 shrink-0 font-bold tabular-nums">
-              {episode.season_number}×{episode.episode_number}
-            </span>
-            <span class="flex-1 truncate">{episode.name}</span>
-            <.icon
-              :if={MapSet.member?(@watched_ids, episode.id)}
-              name="hero-check-circle-solid"
-              class="size-5 text-ink"
-            />
+            {dgettext("tracking", "Mark season watched")}
           </button>
         </div>
+        <.episode_row
+          :for={episode <- season.episodes}
+          episode={episode}
+          watched={MapSet.member?(@watched_ids, episode.id)}
+        />
       </div>
+    </div>
+    """
+  end
 
-      <div class="mt-10 space-y-3">
-        <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-          {dgettext("tracking", "Your circle")}
-        </p>
-        <div class="flex items-center gap-4">
-          <.avatar_stack people={circle_avatars(@entries)} extra={max(length(@entries) - 5, 0)} />
-          <span :if={@circle_rating} class="font-display font-bold text-ink">
-            {@circle_rating} / 5
-          </span>
-          <span :if={@entries == []} class="text-sm text-ink-soft">
-            {dgettext("tracking", "No one yet — be the first.")}
-          </span>
-        </div>
+  defp episode_row(assigns) do
+    ~H"""
+    <button
+      phx-click="toggle_episode"
+      phx-value-id={@episode.id}
+      phx-value-watched={to_string(@watched)}
+      class={[
+        "flex w-full items-center gap-3 rounded-xl bg-paper-2 px-3 py-2 text-left text-sm",
+        if(@watched, do: "text-ink", else: "text-ink-soft hover:text-ink")
+      ]}
+    >
+      <span class="w-8 shrink-0 font-bold tabular-nums">
+        {@episode.season_number}×{@episode.episode_number}
+      </span>
+      <span class="flex-1 truncate">{@episode.name}</span>
+      <.icon :if={@watched} name="hero-check-circle-solid" class="size-5 text-ink" />
+    </button>
+    """
+  end
+
+  defp circle_panel(assigns) do
+    ~H"""
+    <div class="mt-10 space-y-3">
+      <.section_label>{dgettext("tracking", "Your circle")}</.section_label>
+      <div class="flex items-center gap-4">
+        <.avatar_stack people={circle_avatars(@entries)} extra={max(length(@entries) - 5, 0)} />
+        <span :if={@circle_rating} class="font-display font-bold text-ink">
+          {@circle_rating} / 5
+        </span>
+        <span :if={@entries == []} class="text-sm text-ink-soft">
+          {dgettext("tracking", "No one yet — be the first.")}
+        </span>
       </div>
+    </div>
+    """
+  end
 
-      <div class="mt-10 space-y-4">
-        <p class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-          {dgettext("tracking", "Comments")}
-        </p>
+  defp comments_panel(assigns) do
+    ~H"""
+    <div class="mt-10 space-y-4">
+      <.section_label>{dgettext("tracking", "Comments")}</.section_label>
 
-        <.form
-          for={@comment_form}
-          id="comment_form"
-          phx-change="change_comment"
-          phx-submit="comment"
-          class="flex gap-2"
-        >
-          <input
-            type="text"
-            name="comment[body]"
-            value={@comment_form[:body].value}
-            placeholder={dgettext("tracking", "Say something…")}
-            class="flex-1 rounded-full bg-paper-2 px-5 py-3 text-sm text-ink placeholder:text-ink-soft focus:outline-none"
-          />
-          <.button variant="primary">{dgettext("tracking", "Post")}</.button>
-        </.form>
+      <.form
+        for={@comment_form}
+        id="comment_form"
+        phx-change="change_comment"
+        phx-submit="comment"
+        class="flex gap-2"
+      >
+        <input
+          type="text"
+          name="comment[body]"
+          value={@comment_form[:body].value}
+          placeholder={dgettext("tracking", "Say something…")}
+          class="flex-1 rounded-full bg-paper-2 px-5 py-3 text-sm text-ink placeholder:text-ink-soft focus:outline-none"
+        />
+        <.button variant="primary">{dgettext("tracking", "Post")}</.button>
+      </.form>
 
-        <div :for={comment <- @comments} class="rounded-2xl bg-paper-2 p-4">
-          <div class="text-xs font-bold text-ink-soft">{comment.user.email}</div>
-          <div class="text-ink">{comment.body}</div>
-        </div>
+      <div :for={comment <- @comments} class="rounded-2xl bg-paper-2 p-4">
+        <div class="text-xs font-bold text-ink-soft">{comment.user.email}</div>
+        <div class="text-ink">{comment.body}</div>
       </div>
-    </Layouts.app>
+    </div>
     """
   end
 end

@@ -37,9 +37,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
 
       <div class="mt-6 space-y-8">
         <section :for={{date, items} <- groups(@activity)} class="space-y-3">
-          <div class="text-xs font-extrabold uppercase tracking-widest text-ink-soft">
-            {Format.day_label(date)}
-          </div>
+          <.section_label>{Format.day_label(date)}</.section_label>
 
           <.link
             :for={item <- items}
