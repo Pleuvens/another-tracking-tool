@@ -11,22 +11,22 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/components/core_components.ex:193
+#: lib/another_tracking_tool_web/components/core_components.ex:184
 #, elixir-autogen, elixir-format
 msgid "Completed"
 msgstr "Vu"
 
-#: lib/another_tracking_tool_web/components/core_components.ex:194
+#: lib/another_tracking_tool_web/components/core_components.ex:185
 #, elixir-autogen, elixir-format
 msgid "Dropped"
 msgstr "Abandonné"
 
-#: lib/another_tracking_tool_web/components/core_components.ex:195
+#: lib/another_tracking_tool_web/components/core_components.ex:186
 #, elixir-autogen, elixir-format
 msgid "Planned"
 msgstr "Prévu"
 
-#: lib/another_tracking_tool_web/components/core_components.ex:192
+#: lib/another_tracking_tool_web/components/core_components.ex:183
 #, elixir-autogen, elixir-format
 msgid "Watching"
 msgstr "En cours"

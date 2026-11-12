@@ -1,14 +1,12 @@
 defmodule AnotherTrackingToolWeb.Format do
-  @moduledoc "View-layer formatting helpers (dates, times, watch verbs)."
-
   use Gettext, backend: AnotherTrackingToolWeb.Gettext
 
   def day_label(date) do
     today = Date.utc_today()
 
     cond do
-      date == today -> gettext("Today")
-      date == Date.add(today, -1) -> gettext("Yesterday")
+      date == today -> dgettext("feed", "Today")
+      date == Date.add(today, -1) -> dgettext("feed", "Yesterday")
       true -> Calendar.strftime(date, "%d/%m/%Y")
     end
   end
