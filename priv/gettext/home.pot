@@ -11,22 +11,22 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:7
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:5
 #, elixir-autogen, elixir-format
 msgid "Light, quiet, and let the posters do the talking."
 msgstr ""
 
-#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:4
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:3
 #, elixir-autogen, elixir-format
 msgid "Media tracker"
 msgstr ""
 
-#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:10
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:8
 #, elixir-autogen, elixir-format
 msgid "Track what your household watches, without fighting a form."
 msgstr ""
 
-#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:13
+#: lib/another_tracking_tool_web/controllers/page_html/home.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Find a movie"
 msgstr ""

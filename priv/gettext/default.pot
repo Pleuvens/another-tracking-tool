@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:494
+#: lib/another_tracking_tool_web/components/core_components.ex:457
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -32,17 +32,7 @@ msgstr ""
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:81
+#: lib/another_tracking_tool_web/components/core_components.ex:44
 #, elixir-autogen, elixir-format
 msgid "close"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:10
-#, elixir-autogen, elixir-format
-msgid "Today"
-msgstr ""
-
-#: lib/another_tracking_tool_web/format.ex:11
-#, elixir-autogen, elixir-format
-msgid "Yesterday"
 msgstr ""
