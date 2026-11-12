@@ -68,12 +68,8 @@ defmodule AnotherTrackingTool.Tracking.Episodes do
     after_change(user, media_item.id, {:episodes_changed, season_number})
   end
 
-  def episode_progress(%User{id: user_id}, %MediaItem{id: media_item_id}) do
-    %{
-      watched: watched_count(user_id, media_item_id),
-      total: total_count(media_item_id)
-    }
-  end
+  def episode_progress(%User{id: user_id}, %MediaItem{id: media_item_id}),
+    do: user_id |> progress_for([media_item_id]) |> Map.fetch!(media_item_id)
 
   def season_progress(%User{id: user_id}, %MediaItem{id: media_item_id}, season_number) do
     watched =
@@ -152,14 +148,6 @@ defmodule AnotherTrackingTool.Tracking.Episodes do
       from w in EpisodeWatch,
         where: w.user_id == ^user_id and w.media_item_id == ^media_item_id,
         select: count(w.id)
-    )
-  end
-
-  defp total_count(media_item_id) do
-    Repo.one(
-      from e in Episode,
-        where: e.media_item_id == ^media_item_id and e.season_number >= 1,
-        select: count(e.id)
     )
   end
 
