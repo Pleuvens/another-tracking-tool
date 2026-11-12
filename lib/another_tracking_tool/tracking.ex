@@ -116,7 +116,8 @@ defmodule AnotherTrackingTool.Tracking do
     films = film_totals(user_id, since)
     episodes = episode_totals(user_id, since)
 
-    Map.merge(films, episodes)
+    films
+    |> Map.merge(episodes)
     |> Map.put(:minutes, films.film_minutes + episodes.episode_minutes)
   end
 
