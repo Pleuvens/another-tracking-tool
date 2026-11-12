@@ -141,99 +141,81 @@ defmodule AnotherTrackingTool.TrackingTest do
     end
   end
 
-  describe "watchlist" do
-    test "returns only the user's planned entries with media preloaded", ctx do
-      %{user: user, movie: movie} = ctx
-      other_movie = media_item_fixture(%{kind: :movie})
-      {:ok, _} = Tracking.set_status(user, movie, :planned)
-      {:ok, _} = Tracking.set_status(user, other_movie, :completed)
+  describe "my_list" do
+    test "returns every status newest first, with media preloaded", ctx do
+      %{user: user, movie: planned} = ctx
+      completed = media_item_fixture(%{kind: :movie})
+      {:ok, older} = Tracking.set_status(user, planned, :planned)
+      {:ok, _} = Tracking.set_status(user, completed, :completed)
 
       {:ok, _} =
         Tracking.set_status(user_fixture(), media_item_fixture(%{kind: :movie}), :planned)
 
-      assert [entry] = Tracking.watchlist(user)
-      assert entry.media_item_id == movie.id
-      assert %AnotherTrackingTool.Catalog.MediaItem{} = entry.media_item
+      Repo.update_all(from(e in WatchEntry, where: e.id == ^older.id),
+        set: [updated_at: ~U[2020-01-01 00:00:00Z]]
+      )
+
+      entries = Tracking.my_list(user)
+
+      assert length(entries) == 2
+      assert Enum.map(entries, & &1.media_item_id) == [completed.id, planned.id]
+      assert %AnotherTrackingTool.Catalog.MediaItem{} = hd(entries).media_item
+    end
+
+    test "narrows to one status", ctx do
+      %{user: user, movie: planned} = ctx
+      completed = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.set_status(user, planned, :planned)
+      {:ok, _} = Tracking.set_status(user, completed, :completed)
+
+      assert [entry] = Tracking.my_list(user, :planned)
+      assert entry.media_item_id == planned.id
     end
   end
 
-  describe "watch_totals" do
-    test "sums film runtime for completed films only", ctx do
-      %{user: user} = ctx
-      film = media_item_fixture(%{kind: :movie, runtime: 136})
-      planned = media_item_fixture(%{kind: :movie, runtime: 90})
-      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: Date.utc_today()})
-      {:ok, _} = Tracking.set_status(user, planned, :planned)
+  describe "status_counts" do
+    test "counts each status and the whole list", ctx do
+      %{user: user, movie: movie} = ctx
+      other = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.set_status(user, movie, :planned)
+      {:ok, _} = Tracking.set_status(user, other, :planned)
+      {:ok, _} = Tracking.set_status(user, media_item_fixture(%{kind: :movie}), :completed)
 
-      totals = Tracking.watch_totals(user, :all)
+      counts = Tracking.status_counts(user)
 
-      assert totals.films == 1
-      assert totals.film_minutes == 136
-      assert totals.minutes == 136
+      assert counts.planned == 2
+      assert counts.completed == 1
+      assert counts.watching == 0
+      assert counts.dropped == 0
+      assert counts.all == 3
     end
 
-    test "sums episode runtime and counts the series behind them", ctx do
-      %{user: user} = ctx
-      show = media_item_fixture(%{kind: :tv})
-      season = season_fixture(show)
-      first = episode_fixture(show, season, %{runtime: 50})
-      second = episode_fixture(show, season, %{runtime: 42})
-
-      :ok = Tracking.mark_episode(user, first)
-      :ok = Tracking.mark_episode(user, second)
-
-      totals = Tracking.watch_totals(user, :all)
-
-      assert totals.episodes == 2
-      assert totals.episode_minutes == 92
-      assert totals.series == 1
-    end
-
-    test "counts a title with no runtime as zero minutes", ctx do
-      %{user: user} = ctx
-      film = media_item_fixture(%{kind: :movie})
-      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: Date.utc_today()})
-
-      totals = Tracking.watch_totals(user, :all)
-
-      assert totals.films == 1
-      assert totals.film_minutes == 0
-    end
-
-    test "ignores watches outside the period", ctx do
-      %{user: user} = ctx
-      old = media_item_fixture(%{kind: :movie, runtime: 100})
-      recent = media_item_fixture(%{kind: :movie, runtime: 120})
-      {:ok, _} = Tracking.mark_watched(user, old, %{watched_on: ~D[2020-02-01]})
-      {:ok, _} = Tracking.mark_watched(user, recent, %{watched_on: Date.utc_today()})
-
-      assert Tracking.watch_totals(user, :month).film_minutes == 120
-      assert Tracking.watch_totals(user, :year).film_minutes == 120
-      assert Tracking.watch_totals(user, :all).film_minutes == 220
-    end
-
-    test "falls back to the logging date when no watched_on is given", ctx do
-      %{user: user} = ctx
-      show = media_item_fixture(%{kind: :tv})
-      episode = episode_fixture(show, season_fixture(show), %{runtime: 45})
-      :ok = Tracking.mark_episode(user, episode)
-
-      assert Tracking.watch_totals(user, :month).episode_minutes == 45
-    end
-
-    test "counts only the given user", ctx do
-      %{user: user} = ctx
-      film = media_item_fixture(%{kind: :movie, runtime: 100})
-      {:ok, _} = Tracking.mark_watched(user_fixture(), film, %{watched_on: Date.utc_today()})
-
-      assert Tracking.watch_totals(user, :all) == %{
-               films: 0,
-               film_minutes: 0,
-               episodes: 0,
-               episode_minutes: 0,
-               series: 0,
-               minutes: 0
+    test "counts nothing for an empty list", ctx do
+      assert Tracking.status_counts(ctx.user) == %{
+               all: 0,
+               watching: 0,
+               completed: 0,
+               dropped: 0,
+               planned: 0
              }
+    end
+  end
+
+  describe "current_seasons" do
+    test "gives the furthest season watched per show", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      first = season_fixture(show, %{season_number: 1})
+      second = season_fixture(show, %{season_number: 2})
+      :ok = Tracking.mark_episode(user, episode_fixture(show, first, %{episode_number: 1}))
+      :ok = Tracking.mark_episode(user, episode_fixture(show, second, %{episode_number: 1}))
+
+      assert Tracking.current_seasons(user.id, [show.id]) == %{show.id => 2}
+    end
+
+    test "says nothing for a show with no watches", ctx do
+      show = media_item_fixture(%{kind: :tv})
+      assert Tracking.current_seasons(ctx.user.id, [show.id]) == %{}
     end
   end
 

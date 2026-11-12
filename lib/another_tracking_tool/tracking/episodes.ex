@@ -93,6 +93,19 @@ defmodule AnotherTrackingTool.Tracking.Episodes do
     %{watched: watched, total: total}
   end
 
+  def current_seasons(_user_id, []), do: %{}
+
+  def current_seasons(user_id, media_item_ids) do
+    from(w in EpisodeWatch,
+      join: e in assoc(w, :episode),
+      where: w.user_id == ^user_id and w.media_item_id in ^media_item_ids,
+      group_by: w.media_item_id,
+      select: {w.media_item_id, max(e.season_number)}
+    )
+    |> Repo.all()
+    |> Map.new()
+  end
+
   def progress_for(_user_id, []), do: %{}
 
   def progress_for(user_id, media_item_ids) do

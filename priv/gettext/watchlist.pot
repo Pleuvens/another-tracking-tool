@@ -11,12 +11,27 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/watchlist_live.ex:26
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:46
 #, elixir-autogen, elixir-format
 msgid "My list"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/watchlist_live.ex:29
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:60
 #, elixir-autogen, elixir-format
 msgid "Nothing planned yet — go feed it some ideas"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/list_components.ex:74
+#, elixir-autogen, elixir-format
+msgid "%{watched} of %{total} episodes"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/list_components.ex:97
+#, elixir-autogen, elixir-format
+msgid "All"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:62
+#, elixir-autogen, elixir-format
+msgid "Nothing with that status"
 msgstr ""
