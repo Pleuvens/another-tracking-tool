@@ -187,6 +187,32 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert first.media_item.id == jun.id
       assert second.media_item.id == jan.id
     end
+
+    test "interleaves films and episodes by date", ctx do
+      %{user: user, movie: film} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      episode = episode_fixture(show, season)
+
+      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
+
+      assert [first, second | _] = Tracking.recent_activity()
+      assert first.type == :movie
+      assert second.type == :episode
+    end
+
+    test "the limit counts across both films and episodes", ctx do
+      %{user: user, movie: film} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      episode = episode_fixture(show, season_fixture(show))
+
+      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
+
+      assert [only] = Tracking.recent_activity(1)
+      assert only.media_item.id == film.id
+    end
   end
 
   describe "watchlist" do
@@ -202,6 +228,86 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert [entry] = Tracking.watchlist(user)
       assert entry.media_item_id == movie.id
       assert %AnotherTrackingTool.Catalog.MediaItem{} = entry.media_item
+    end
+  end
+
+  describe "watch_totals" do
+    test "sums film runtime for completed films only", ctx do
+      %{user: user} = ctx
+      film = media_item_fixture(%{kind: :movie, runtime: 136})
+      planned = media_item_fixture(%{kind: :movie, runtime: 90})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: Date.utc_today()})
+      {:ok, _} = Tracking.set_status(user, planned, :planned)
+
+      totals = Tracking.watch_totals(user, :all)
+
+      assert totals.films == 1
+      assert totals.film_minutes == 136
+      assert totals.minutes == 136
+    end
+
+    test "sums episode runtime and counts the series behind them", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      first = episode_fixture(show, season, %{runtime: 50})
+      second = episode_fixture(show, season, %{runtime: 42})
+
+      :ok = Tracking.mark_episode(user, first)
+      :ok = Tracking.mark_episode(user, second)
+
+      totals = Tracking.watch_totals(user, :all)
+
+      assert totals.episodes == 2
+      assert totals.episode_minutes == 92
+      assert totals.series == 1
+    end
+
+    test "counts a title with no runtime as zero minutes", ctx do
+      %{user: user} = ctx
+      film = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: Date.utc_today()})
+
+      totals = Tracking.watch_totals(user, :all)
+
+      assert totals.films == 1
+      assert totals.film_minutes == 0
+    end
+
+    test "ignores watches outside the period", ctx do
+      %{user: user} = ctx
+      old = media_item_fixture(%{kind: :movie, runtime: 100})
+      recent = media_item_fixture(%{kind: :movie, runtime: 120})
+      {:ok, _} = Tracking.mark_watched(user, old, %{watched_on: ~D[2020-02-01]})
+      {:ok, _} = Tracking.mark_watched(user, recent, %{watched_on: Date.utc_today()})
+
+      assert Tracking.watch_totals(user, :month).film_minutes == 120
+      assert Tracking.watch_totals(user, :year).film_minutes == 120
+      assert Tracking.watch_totals(user, :all).film_minutes == 220
+    end
+
+    test "falls back to the logging date when no watched_on is given", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      episode = episode_fixture(show, season_fixture(show), %{runtime: 45})
+      :ok = Tracking.mark_episode(user, episode)
+
+      assert Tracking.watch_totals(user, :month).episode_minutes == 45
+    end
+
+    test "counts only the given user", ctx do
+      %{user: user} = ctx
+      film = media_item_fixture(%{kind: :movie, runtime: 100})
+      {:ok, _} = Tracking.mark_watched(user_fixture(), film, %{watched_on: Date.utc_today()})
+
+      assert Tracking.watch_totals(user, :all) == %{
+               films: 0,
+               film_minutes: 0,
+               episodes: 0,
+               episode_minutes: 0,
+               series: 0,
+               minutes: 0
+             }
     end
   end
 end

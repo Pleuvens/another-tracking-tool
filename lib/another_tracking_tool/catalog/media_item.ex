@@ -21,6 +21,7 @@ defmodule AnotherTrackingTool.Catalog.MediaItem do
     field :poster_path, :string
     field :backdrop_path, :string
     field :released_on, :date
+    field :runtime, :integer
     field :original_language, :string
     field :tmdb_popularity, :float
     field :tmdb_vote_average, :float
@@ -38,8 +39,8 @@ defmodule AnotherTrackingTool.Catalog.MediaItem do
   end
 
   @castable ~w(kind tmdb_id imdb_id tvdb_id mal_id anilist_id original_title title_fr
-    title_en overview_fr overview_en poster_path backdrop_path released_on original_language
-    tmdb_popularity tmdb_vote_average tmdb_vote_count details_synced_at)a
+    title_en overview_fr overview_en poster_path backdrop_path released_on runtime
+    original_language tmdb_popularity tmdb_vote_average tmdb_vote_count details_synced_at)a
 
   def changeset(media_item, attrs) do
     media_item
