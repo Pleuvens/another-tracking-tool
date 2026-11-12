@@ -11,12 +11,12 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:52
+#: lib/another_tracking_tool_web/live/feed_live.ex:42
 #, elixir-autogen, elixir-format
 msgid "Activity"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:118
+#: lib/another_tracking_tool_web/components/feed_components.ex:73
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet. Go watch something."
 msgstr ""
@@ -49,66 +49,66 @@ msgid_plural "months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:103
+#: lib/another_tracking_tool_web/components/feed_components.ex:56
 #, elixir-autogen, elixir-format
 msgid "%{count} episode"
 msgid_plural "%{count} episodes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:42
+#: lib/another_tracking_tool_web/components/feed_components.ex:173
 #, elixir-autogen, elixir-format
 msgid "All time"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:90
+#: lib/another_tracking_tool_web/components/feed_components.ex:43
 #, elixir-autogen, elixir-format
 msgid "Films"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:98
+#: lib/another_tracking_tool_web/components/feed_components.ex:51
 #, elixir-autogen, elixir-format
 msgid "Series"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:40
+#: lib/another_tracking_tool_web/components/feed_components.ex:171
 #, elixir-autogen, elixir-format
 msgid "This month"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:41
+#: lib/another_tracking_tool_web/components/feed_components.ex:172
 #, elixir-autogen, elixir-format
 msgid "This year"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:82
+#: lib/another_tracking_tool_web/components/feed_components.ex:35
 #, elixir-autogen, elixir-format
 msgid "Time watched"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:46
+#: lib/another_tracking_tool_web/components/feed_components.ex:177
 #, elixir-autogen, elixir-format
 msgid "everything you have logged"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:92
+#: lib/another_tracking_tool_web/components/feed_components.ex:45
 #, elixir-autogen, elixir-format
 msgid "film"
 msgid_plural "films"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:100
+#: lib/another_tracking_tool_web/components/feed_components.ex:53
 #, elixir-autogen, elixir-format
 msgid "series"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:44
+#: lib/another_tracking_tool_web/components/feed_components.ex:175
 #, elixir-autogen, elixir-format
 msgid "so far this month"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:45
+#: lib/another_tracking_tool_web/components/feed_components.ex:176
 #, elixir-autogen, elixir-format
 msgid "so far this year"
 msgstr ""
@@ -123,19 +123,19 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:151
+#: lib/another_tracking_tool_web/components/feed_components.ex:106
 #, elixir-autogen, elixir-format
 msgid "%{count} ep"
 msgid_plural "%{count} ep"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:115
+#: lib/another_tracking_tool_web/components/feed_components.ex:70
 #, elixir-autogen, elixir-format
 msgid "Last watched"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:201
+#: lib/another_tracking_tool_web/components/feed_components.ex:157
 #, elixir-autogen, elixir-format
 msgid "up to %{code} · %{name}"
 msgstr ""
@@ -168,7 +168,7 @@ msgid_plural "%{count}w ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:167
+#: lib/another_tracking_tool_web/components/feed_components.ex:124
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr ""
