@@ -50,6 +50,22 @@ defmodule AnotherTrackingToolWeb.MediaLive.ShowTest do
     assert Tracking.get_entry(user, movie).status == :watching
   end
 
+  test "the tracking panel marks the chosen status", %{conn: conn, user: user, movie: movie} do
+    {:ok, _} = Tracking.set_status(user, movie, :completed)
+    {:ok, lv, _html} = live(conn, ~p"/media/#{movie.id}")
+
+    assert lv |> element("button[aria-pressed='true']") |> render() =~ "Completed"
+  end
+
+  test "the watched date opens an editor in place", %{conn: conn, movie: movie} do
+    {:ok, lv, html} = live(conn, ~p"/media/#{movie.id}")
+    refute html =~ ~s(type="date")
+
+    html = lv |> element("button[phx-click='edit_date']") |> render_click()
+
+    assert html =~ ~s(type="date")
+  end
+
   test "rating a movie persists it", %{conn: conn, user: user, movie: movie} do
     {:ok, lv, _html} = live(conn, ~p"/media/#{movie.id}")
 

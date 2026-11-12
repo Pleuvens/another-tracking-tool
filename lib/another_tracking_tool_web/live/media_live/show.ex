@@ -165,9 +165,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
 
         <div class="space-y-5">
           <.title_block media_item={@media_item} />
-          <.status_field my_entry={@my_entry} />
-          <.rating_field my_entry={@my_entry} />
-          <.watched_on_field my_entry={@my_entry} editing_date={@editing_date} />
+          <.tracking_panel my_entry={@my_entry} editing_date={@editing_date} />
         </div>
       </div>
 
@@ -212,66 +210,71 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     """
   end
 
-  defp status_field(assigns) do
+  defp tracking_panel(assigns) do
     ~H"""
-    <div class="space-y-3">
-      <.section_label>{dgettext("tracking", "My status")}</.section_label>
-      <div class="flex flex-wrap gap-2">
-        <button
-          :for={status <- WatchStatuses.all()}
-          phx-click="set_status"
-          phx-value-status={status}
-          class="group rounded-full"
-        >
-          <.status_pill
-            status={status}
-            muted={!chosen?(@my_entry, status)}
-            class="px-4 py-1.5 text-sm group-hover:text-ink"
-          />
-        </button>
+    <div class="flex flex-wrap items-start gap-x-8 gap-y-4 rounded-2xl border border-line bg-paper-0 p-4">
+      <div class="flex flex-col gap-2">
+        <.section_label>{dgettext("tracking", "Status")}</.section_label>
+        <.status_control my_entry={@my_entry} />
       </div>
-    </div>
-    """
-  end
 
-  defp rating_field(assigns) do
-    ~H"""
-    <div class="space-y-2">
-      <.section_label>{dgettext("tracking", "My rating")}</.section_label>
-      <div class="text-2xl tracking-[4px]">
-        <button
-          :for={i <- 1..5}
-          phx-click="rate"
-          phx-value-rating={i}
-          class={if i > my_rating(@my_entry), do: "text-line", else: "text-ink"}
-        >
-          ★
-        </button>
+      <div class="flex flex-col gap-2">
+        <.section_label>{dgettext("tracking", "Rating")}</.section_label>
+        <div class="flex text-xl leading-none tracking-[3px]">
+          <button
+            :for={i <- 1..5}
+            phx-click="rate"
+            phx-value-rating={i}
+            class={if i > my_rating(@my_entry), do: "text-line hover:text-ink", else: "text-ink"}
+          >
+            ★
+          </button>
+        </div>
       </div>
-    </div>
-    """
-  end
 
-  defp watched_on_field(assigns) do
-    ~H"""
-    <div class="space-y-2">
-      <.section_label>{dgettext("tracking", "Watched on")}</.section_label>
-      <div :if={!@editing_date} class="flex items-center gap-3">
-        <span class={if watched_on(@my_entry), do: "text-ink", else: "text-sm italic text-ink-soft"}>
+      <div class="flex flex-col gap-2">
+        <.section_label>{dgettext("tracking", "Watched on")}</.section_label>
+        <button
+          :if={!@editing_date}
+          phx-click="edit_date"
+          class={[
+            "rounded-xl border border-dashed border-line px-3 py-1 text-sm hover:border-solid",
+            if(watched_on(@my_entry), do: "text-ink", else: "italic text-ink-soft")
+          ]}
+        >
           {watched_label(@my_entry)}
-        </span>
-        <button phx-click="edit_date" class="text-xs font-bold text-ink-soft hover:text-ink">
-          {dgettext("tracking", "Edit")}
         </button>
+        <form :if={@editing_date} phx-change="set_date">
+          <input
+            type="date"
+            name="watched_on"
+            value={watched_on(@my_entry)}
+            class="rounded-xl bg-paper-2 px-3 py-1 text-sm text-ink"
+          />
+        </form>
       </div>
-      <form :if={@editing_date} phx-change="set_date">
-        <input
-          type="date"
-          name="watched_on"
-          value={watched_on(@my_entry)}
-          class="rounded-xl bg-paper-2 px-3 py-2 text-sm text-ink"
-        />
-      </form>
+    </div>
+    """
+  end
+
+  defp status_control(assigns) do
+    ~H"""
+    <div class="flex flex-wrap gap-0.5 rounded-full bg-paper-2 p-0.5">
+      <button
+        :for={status <- WatchStatuses.all()}
+        phx-click="set_status"
+        phx-value-status={status}
+        aria-pressed={to_string(chosen?(@my_entry, status))}
+        class={[
+          "rounded-full px-3 py-1 text-xs font-bold",
+          if(chosen?(@my_entry, status),
+            do: "bg-ink text-paper-0",
+            else: "text-ink-soft hover:text-ink"
+          )
+        ]}
+      >
+        {watch_status_label(status)}
+      </button>
     </div>
     """
   end
