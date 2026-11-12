@@ -73,11 +73,6 @@
   --color-ink-soft: #5e5e5e;
   --color-ink: #121212;
 
-  --color-status-watching: #121212;
-  --color-status-completed: #121212;
-  --color-status-dropped: #8a8a8a;
-  --color-status-planned: #5e5e5e;
-
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Quicksand", ui-sans-serif, system-ui, sans-serif;
 }

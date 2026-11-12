@@ -287,7 +287,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
             class={[
               "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm",
               if(MapSet.member?(@watched_ids, episode.id),
-                do: "bg-status-completed/25 text-ink",
+                do: "bg-paper-2 text-ink",
                 else: "bg-paper-2 text-ink-soft hover:text-ink"
               )
             ]}
@@ -299,7 +299,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
             <.icon
               :if={MapSet.member?(@watched_ids, episode.id)}
               name="hero-check-circle-solid"
-              class="size-5 text-status-completed"
+              class="size-5 text-ink"
             />
           </button>
         </div>
