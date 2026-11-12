@@ -133,6 +133,9 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
 
   defp me(socket), do: socket.assigns.current_scope.user
 
+  defp chosen?(%{status: status}, status), do: true
+  defp chosen?(_entry, _status), do: false
+
   defp my_rating(nil), do: 0
   defp my_rating(%{rating: nil}), do: 0
   defp my_rating(%{rating: rating}), do: rating
@@ -192,15 +195,13 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
                 :for={status <- WatchStatuses.all()}
                 phx-click="set_status"
                 phx-value-status={status}
-                class={[
-                  "rounded-full px-4 py-1.5 text-sm font-extrabold",
-                  if(@my_entry && @my_entry.status == status,
-                    do: "bg-ink text-paper-0",
-                    else: "bg-paper-2 text-ink-soft hover:text-ink"
-                  )
-                ]}
+                class="group rounded-full"
               >
-                {watch_status_label(status)}
+                <.status_pill
+                  status={status}
+                  muted={!chosen?(@my_entry, status)}
+                  class="px-4 py-1.5 text-sm group-hover:text-ink"
+                />
               </button>
             </div>
           </div>
