@@ -148,6 +148,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   end
 
   attr :status, :atom, required: true, values: WatchStatuses.all()
+  attr :label, :string, default: nil
   attr :muted, :boolean, default: false
   attr :class, :any, default: nil
 
@@ -162,7 +163,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
         :if={!@muted and @status != :dropped}
         class={["size-1.5 rounded-full", dot_class(@status)]}
       ></span>
-      {watch_status_label(@status)}
+      {@label || watch_status_label(@status)}
     </span>
     """
   end
