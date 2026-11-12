@@ -176,7 +176,10 @@ defmodule AnotherTrackingToolWeb.FeedLive do
 
           <div class="flex min-w-0 flex-1 flex-col">
             <span class="text-xs font-bold text-ink">{User.display_name(watch.user)}</span>
-            <span class="truncate text-xs text-ink-soft">{circle_subtitle(watch)}</span>
+            <span class="flex items-center gap-1.5 truncate text-xs text-ink-soft">
+              {circle_subtitle(watch)}
+              <.stars :if={watch.rating} value={watch.rating} class="text-[10px]" />
+            </span>
           </div>
 
           <span class="shrink-0 text-xs text-ink-soft">{Format.ago(watch.at)}</span>
@@ -190,11 +193,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
     do:
       "#{episode.season_number}×#{episode.episode_number} · #{MediaItem.display_title(media_item)}"
 
-  defp circle_subtitle(%{media_item: media_item, rating: nil}),
-    do: MediaItem.display_title(media_item)
-
-  defp circle_subtitle(%{media_item: media_item, rating: rating}),
-    do: "#{MediaItem.display_title(media_item)} · #{String.duplicate("★", rating)}"
+  defp circle_subtitle(%{media_item: media_item}), do: MediaItem.display_title(media_item)
 
   defp subtitle(%{latest_episode: %Episode{} = episode}),
     do:

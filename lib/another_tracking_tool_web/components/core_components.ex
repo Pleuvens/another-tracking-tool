@@ -262,10 +262,11 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
 
   attr :value, :integer, default: 0
   attr :max, :integer, default: 5
+  attr :class, :any, default: "text-lg"
 
   def stars(assigns) do
     ~H"""
-    <div class="text-lg tracking-[3px] text-ink">
+    <div class={["tracking-[3px] text-ink", @class]}>
       <span :for={i <- 1..@max} class={if i > @value, do: "text-line"}>★</span>
     </div>
     """
