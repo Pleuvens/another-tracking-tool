@@ -62,7 +62,7 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
         </h2>
 
         <div class="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
-          <span>{meta(@card.media_item)}</span>
+          <span>{card_meta(@card)}</span>
           <span
             :for={genre <- Enum.take(@card.media_item.tmdb_genres, 2)}
             class="rounded-full border border-line px-2 py-0.5 text-[10px] font-bold"
@@ -202,11 +202,13 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
   defp kind_label(%{kind: :tv}), do: dgettext("tracking", "Series")
   defp kind_label(_media_item), do: dgettext("tracking", "Film")
 
-  defp meta(%{kind: :tv} = media_item) do
-    [MediaItem.year(media_item), episode_count(media_item)]
+  defp card_meta(%{media_item: %{kind: :tv} = media_item, episodes: episodes}) do
+    [MediaItem.year(media_item), episode_count(episodes)]
     |> Enum.reject(&is_nil/1)
     |> Enum.join(" · ")
   end
+
+  defp card_meta(%{media_item: media_item}), do: meta(media_item)
 
   defp meta(media_item) do
     [MediaItem.year(media_item), runtime(media_item)]
@@ -214,11 +216,10 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
     |> Enum.join(" · ")
   end
 
-  defp episode_count(%{episodes: episodes}) when is_list(episodes) do
-    dngettext("tracking", "%{count} episode", "%{count} episodes", length(episodes))
-  end
+  defp episode_count(nil), do: nil
 
-  defp episode_count(_media_item), do: nil
+  defp episode_count(count),
+    do: dngettext("tracking", "%{count} episode", "%{count} episodes", count)
 
   defp runtime(%{runtime: nil}), do: nil
   defp runtime(%{runtime: minutes}), do: dgettext("tracking", "%{count} min", count: minutes)

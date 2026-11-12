@@ -79,8 +79,23 @@ defmodule AnotherTrackingToolWeb.SearchLive do
   defp undo(user, %{previous: previous, media_item: media_item}),
     do: Tracking.set_status(user, media_item, previous)
 
-  defp load_deck(socket),
-    do: assign(socket, :cards, Tracking.suggestions(me(socket), @deck_depth))
+  defp load_deck(socket) do
+    cards = Tracking.suggestions(me(socket), @deck_depth)
+    totals = Tracking.progress_for(me(socket).id, series_ids(cards))
+
+    assign(socket, :cards, Enum.map(cards, &Map.put(&1, :episodes, episodes_of(totals, &1))))
+  end
+
+  defp series_ids(cards) do
+    for %{media_item: %{kind: :tv, id: id}} <- cards, do: id
+  end
+
+  defp episodes_of(totals, %{media_item: %{id: id}}) do
+    case Map.get(totals, id) do
+      %{total: total} when total > 0 -> total
+      _missing -> nil
+    end
+  end
 
   defp search(query, socket) do
     case Catalog.search(query) do

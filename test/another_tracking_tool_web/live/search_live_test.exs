@@ -109,6 +109,19 @@ defmodule AnotherTrackingToolWeb.SearchLiveTest do
       assert Tracking.get_entry(user, movie).status == :planned
     end
 
+    test "a series card counts its episodes", %{conn: conn} do
+      show = media_item_fixture(%{kind: :tv, title_fr: "Severance"})
+      season = season_fixture(show)
+      episode_fixture(show, season, %{episode_number: 1})
+      episode_fixture(show, season, %{episode_number: 2})
+
+      {:ok, _lv, html} = live(conn, ~p"/search")
+
+      assert html =~ "Severance"
+      assert html =~ "2 episodes"
+      assert html =~ "Series"
+    end
+
     test "says so when there is nothing left to suggest", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/search")
 
