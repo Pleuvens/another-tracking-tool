@@ -50,16 +50,4 @@ defmodule AnotherTrackingToolWeb.Format do
   defp unit_label(:hour, count), do: dngettext("feed", "hour", "hours", count)
   defp unit_label(:day, count), do: dngettext("feed", "day", "days", count)
   defp unit_label(:month, count), do: dngettext("feed", "month", "months", count)
-
-  def watch_verb(:completed), do: dgettext("feed", "finished")
-  def watch_verb(:watching), do: dgettext("feed", "started")
-  def watch_verb(:dropped), do: dgettext("feed", "dropped")
-  def watch_verb(:planned), do: dgettext("feed", "added to their list")
-
-  def episode_verb(episode) do
-    dgettext("feed", "watched S%{s}E%{e}",
-      s: episode.season_number,
-      e: episode.episode_number
-    )
-  end
 end

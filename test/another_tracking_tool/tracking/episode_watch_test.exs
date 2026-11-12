@@ -75,17 +75,19 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
     assert Tracking.get_entry(user, show).status == :completed
   end
 
-  test "episode watches appear in recent_activity", ctx do
+  test "episode watches show up under their title", ctx do
     %{user: user, show: show, season: season} = ctx
     e1 = episode_fixture(show, season, %{episode_number: 1})
     Tracking.mark_episode(user, e1)
 
-    assert [%{type: :episode, episode: episode, media_item: mi}] = Tracking.recent_activity()
+    assert [%{media_item: mi, latest_episode: episode, episodes: 1}] =
+             Tracking.last_watched(user, :all)
+
     assert episode.id == e1.id
     assert mi.id == show.id
   end
 
-  test "recent_activity uses episode watched_on for its date", ctx do
+  test "an episode watch is dated by its watched_on", ctx do
     %{user: user, show: show, season: season} = ctx
     e1 = episode_fixture(show, season, %{episode_number: 1})
     Tracking.mark_episode(user, e1)
@@ -93,7 +95,7 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
     watch = Repo.get_by!(EpisodeWatch, episode_id: e1.id)
     Repo.update!(Ecto.Changeset.change(watch, watched_on: ~D[2019-03-03]))
 
-    assert [%{type: :episode, at: at, watched_on: ~D[2019-03-03]}] = Tracking.recent_activity()
+    assert [%{at: at}] = Tracking.last_watched(user, :all)
     assert DateTime.to_date(at) == ~D[2019-03-03]
   end
 end

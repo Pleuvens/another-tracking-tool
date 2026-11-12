@@ -3,7 +3,6 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
 
   import Phoenix.LiveViewTest
   import AnotherTrackingTool.CatalogFixtures
-  import AnotherTrackingTool.TrackingFixtures
 
   alias AnotherTrackingTool.AccountsFixtures
 
@@ -14,45 +13,68 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     %{conn: log_in_user(conn, user), user: user}
   end
 
-  test "shows recent activity with author and title", %{conn: conn} do
-    author = AccountsFixtures.user_fixture(email: "marie@example.com")
+  test "shows a title you watched", %{conn: conn, user: user} do
     movie = media_item_fixture(%{kind: :movie, title_fr: "Dune"})
-    watch_entry_fixture(author, movie, %{status: :completed, rating: 4})
+    {:ok, _} = Tracking.mark_watched(user, movie, %{watched_on: Date.utc_today()})
 
     {:ok, _lv, html} = live(conn, ~p"/feed")
 
-    assert html =~ "marie@example.com"
+    assert html =~ "Last watched"
     assert html =~ "Dune"
+    assert html =~ "Today"
   end
 
-  test "empty state when there is no activity", %{conn: conn} do
+  test "empty state when you have watched nothing", %{conn: conn} do
     {:ok, _lv, html} = live(conn, ~p"/feed")
     assert html =~ "Nothing here yet"
   end
 
-  test "groups an entry under its watched date", %{conn: conn} do
-    author = AccountsFixtures.user_fixture()
-    movie = media_item_fixture(%{kind: :movie, title_fr: "Old Movie"})
-
-    {:ok, _} =
-      AnotherTrackingTool.Tracking.mark_watched(author, movie, %{watched_on: ~D[2020-05-05]})
+  test "someone else's watch stays off your rows", %{conn: conn} do
+    other = AccountsFixtures.user_fixture(email: "julien@example.com")
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Arrival"})
+    {:ok, _} = Tracking.mark_watched(other, movie, %{watched_on: Date.utc_today()})
 
     {:ok, _lv, html} = live(conn, ~p"/feed")
 
-    assert html =~ "05/05/2020"
-    assert html =~ "Old Movie"
+    refute html =~ "Arrival"
+    assert html =~ "Nothing here yet"
   end
 
-  test "new activity from another session appears live", %{conn: conn} do
+  test "a series takes one row, whatever the episode count", %{conn: conn, user: user} do
+    show = media_item_fixture(%{kind: :tv, title_fr: "Severance"})
+    season = season_fixture(show)
+    first = episode_fixture(show, season, %{episode_number: 1, name: "Première"})
+    second = episode_fixture(show, season, %{episode_number: 2, name: "Deuxième"})
+
+    :ok = Tracking.mark_episode(user, first)
+    :ok = Tracking.mark_episode(user, second)
+
+    {:ok, _lv, html} = live(conn, ~p"/feed")
+
+    assert html =~ "Severance"
+    assert html =~ "up to 1×2"
+    assert html =~ "Deuxième"
+    assert html =~ "2 ep"
+    refute html =~ "Première"
+  end
+
+  test "your own watch from another session appears live", %{conn: conn, user: user} do
     {:ok, lv, _html} = live(conn, ~p"/feed")
 
-    other = AccountsFixtures.user_fixture(email: "julien@example.com")
     movie = media_item_fixture(%{kind: :movie, title_fr: "Arrival"})
-    watch_entry_fixture(other, movie, %{status: :watching})
+    {:ok, _} = Tracking.mark_watched(user, movie, %{watched_on: Date.utc_today()})
 
-    html = render(lv)
-    assert html =~ "julien@example.com"
-    assert html =~ "Arrival"
+    assert render(lv) =~ "Arrival"
+  end
+
+  test "someone else's watch leaves your page alone", %{conn: conn} do
+    {:ok, lv, _html} = live(conn, ~p"/feed")
+
+    other = AccountsFixtures.user_fixture()
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Stalker"})
+    {:ok, _} = Tracking.mark_watched(other, movie, %{watched_on: Date.utc_today()})
+
+    refute render(lv) =~ "Stalker"
   end
 
   describe "totals" do

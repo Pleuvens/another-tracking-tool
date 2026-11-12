@@ -1,9 +1,9 @@
 defmodule AnotherTrackingToolWeb.FeedLive do
   use AnotherTrackingToolWeb, :live_view
 
-  alias AnotherTrackingTool.Catalog.MediaItem
+  alias AnotherTrackingTool.Catalog.{Episode, MediaItem}
   alias AnotherTrackingTool.Tracking
-  alias AnotherTrackingToolWeb.{Avatars, Format}
+  alias AnotherTrackingToolWeb.Format
 
   @periods [:month, :year, :all]
 
@@ -20,13 +20,15 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   end
 
   @impl true
-  def handle_info({:activity, _activity}, socket), do: {:noreply, load(socket)}
+  def handle_info({:activity, %{user_id: user_id}}, socket) do
+    if user_id == me(socket).id, do: {:noreply, load(socket)}, else: {:noreply, socket}
+  end
 
   defp load(socket) do
     totals = Tracking.watch_totals(me(socket), socket.assigns.period)
 
     socket
-    |> assign(:activity, Tracking.recent_activity())
+    |> assign(:last_watched, Tracking.last_watched(me(socket), socket.assigns.period))
     |> assign(:totals, totals)
     |> assign(:watched, Format.watch_time(totals.minutes))
   end
@@ -43,15 +45,6 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   defp period_note(:year), do: dgettext("feed", "so far this year")
   defp period_note(:all), do: dgettext("feed", "everything you have logged")
 
-  defp groups(activity) do
-    activity
-    |> Enum.group_by(&DateTime.to_date(&1.at))
-    |> Enum.sort_by(fn {date, _} -> date end, {:desc, Date})
-  end
-
-  defp verb(%{type: :movie, status: status}), do: Format.watch_verb(status)
-  defp verb(%{type: :episode, episode: episode}), do: Format.episode_verb(episode)
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -60,7 +53,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
 
       <.period_chips period={@period} periods={@periods} />
       <.totals_panel period={@period} totals={@totals} watched={@watched} />
-      <.activity_list activity={@activity} />
+      <.last_watched_list rows={@last_watched} />
     </Layouts.app>
     """
   end
@@ -115,50 +108,71 @@ defmodule AnotherTrackingToolWeb.FeedLive do
     """
   end
 
-  defp activity_list(assigns) do
+  defp last_watched_list(assigns) do
     ~H"""
-    <p :if={@activity == []} class="mt-6 text-ink-soft">
-      {dgettext("feed", "Nothing here yet. Go watch something.")}
-    </p>
+    <div class="mt-8 space-y-3">
+      <.section_label>{dgettext("feed", "Last watched")}</.section_label>
 
-    <div class="mt-6 space-y-8">
-      <section :for={{date, items} <- groups(@activity)} class="space-y-3">
-        <.section_label>{Format.day_label(date)}</.section_label>
-        <.activity_row :for={item <- items} item={item} />
-      </section>
+      <p :if={@rows == []} class="text-sm text-ink-soft">
+        {dgettext("feed", "Nothing here yet. Go watch something.")}
+      </p>
+
+      <div :if={@rows != []} class="divide-y divide-line-soft rounded-2xl border border-line">
+        <.last_watched_row :for={row <- @rows} row={row} />
+      </div>
     </div>
     """
   end
 
-  defp activity_row(assigns) do
+  defp last_watched_row(assigns) do
     ~H"""
     <.link
-      navigate={~p"/media/#{@item.media_item.id}"}
-      class="flex gap-3 rounded-2xl bg-paper-2 p-3"
+      navigate={~p"/media/#{@row.media_item.id}"}
+      class="flex items-center gap-3 p-3 hover:bg-paper-2"
     >
-      <.avatar initial={Avatars.initial(@item.user)} color={Avatars.color(@item.user.id)} />
+      <.poster
+        src={tmdb_image(@row.media_item.poster_path, "w92")}
+        alt={MediaItem.display_title(@row.media_item)}
+        framed={false}
+        class="w-9 shrink-0 rounded-md"
+      />
 
-      <div class="flex flex-1 flex-col gap-2">
-        <div class="text-sm text-ink"><b>{@item.user.email}</b> {verb(@item)}</div>
-        <div class="flex items-center gap-3">
-          <.poster
-            src={tmdb_image(@item.media_item.poster_path, "w92")}
-            alt={MediaItem.display_title(@item.media_item)}
-            framed={false}
-            class="w-10 shrink-0 rounded-lg"
-          />
-          <div class="flex flex-col gap-1">
-            <div class="font-display text-sm font-bold text-ink">
-              {MediaItem.display_title(@item.media_item)}
-            </div>
-            <div class="flex items-center gap-2 text-xs text-ink-soft">
-              <.stars :if={@item[:rating]} value={@item.rating} />
-              <span :if={is_nil(@item.watched_on)}>{Format.time(@item.at)}</span>
-            </div>
-          </div>
-        </div>
+      <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span class="font-display text-sm font-bold text-ink">
+          {MediaItem.display_title(@row.media_item)}
+        </span>
+        <span class="truncate text-xs text-ink-soft">{subtitle(@row)}</span>
+      </div>
+
+      <div class="flex shrink-0 flex-col items-end gap-1">
+        <span class="text-xs text-ink-soft">{Format.day_label(DateTime.to_date(@row.at))}</span>
+        <span :if={@row.episodes > 0} class="text-xs font-bold text-ink">
+          {dngettext("feed", "%{count} ep", "%{count} ep", @row.episodes)}
+        </span>
+        <span :if={@row.progress} class="h-0.5 w-14 overflow-hidden rounded-full bg-line">
+          <span
+            class="block h-full bg-ink"
+            style={"width: #{Format.percent(@row.progress.watched, @row.progress.total)}%"}
+          ></span>
+        </span>
       </div>
     </.link>
     """
   end
+
+  defp subtitle(%{latest_episode: %Episode{} = episode}),
+    do:
+      dgettext("feed", "up to %{code} · %{name}",
+        code: "#{episode.season_number}×#{episode.episode_number}",
+        name: episode.name
+      )
+
+  defp subtitle(%{media_item: media_item}) do
+    [MediaItem.year(media_item), genre(media_item)]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join(" · ")
+  end
+
+  defp genre(%{tmdb_genres: [genre | _]}), do: genre.name_fr || genre.name_en
+  defp genre(_media_item), do: nil
 end

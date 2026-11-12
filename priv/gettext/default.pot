@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:457
+#: lib/another_tracking_tool_web/components/core_components.ex:474
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""

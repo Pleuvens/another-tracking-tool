@@ -141,80 +141,6 @@ defmodule AnotherTrackingTool.TrackingTest do
     end
   end
 
-  describe "recent_activity" do
-    test "returns entries newest-first with user and media preloaded", ctx do
-      %{movie: movie} = ctx
-      other = media_item_fixture(%{kind: :movie})
-      {:ok, old} = Tracking.set_status(ctx.user, movie, :planned)
-
-      Repo.update_all(from(e in WatchEntry, where: e.id == ^old.id),
-        set: [updated_at: ~U[2020-01-01 00:00:00Z]]
-      )
-
-      {:ok, _} = Tracking.set_status(ctx.user, other, :completed)
-
-      assert [a, b] = Tracking.recent_activity()
-      assert a.media_item.id == other.id
-      assert b.media_item.id == movie.id
-      assert a.user.id == ctx.user.id
-      assert %AnotherTrackingTool.Catalog.MediaItem{} = a.media_item
-    end
-
-    test "respects the limit", %{user: user, movie: movie} do
-      {:ok, _} = Tracking.set_status(user, movie, :completed)
-      assert length(Tracking.recent_activity(0)) == 0
-    end
-
-    test "orders by watched_on when present, else updated_at", ctx do
-      %{user: user, movie: recent} = ctx
-      old = media_item_fixture(%{kind: :movie})
-
-      {:ok, _} = Tracking.mark_watched(user, old, %{watched_on: ~D[2000-01-01]})
-      {:ok, _} = Tracking.set_status(user, recent, :watching)
-
-      assert [a, b] = Tracking.recent_activity()
-      assert a.media_item.id == recent.id
-      assert b.media_item.id == old.id
-    end
-
-    test "orders completed entries by their watched date", %{user: user} do
-      jan = media_item_fixture(%{kind: :movie})
-      jun = media_item_fixture(%{kind: :movie})
-      {:ok, _} = Tracking.mark_watched(user, jan, %{watched_on: ~D[2024-01-01]})
-      {:ok, _} = Tracking.mark_watched(user, jun, %{watched_on: ~D[2024-06-01]})
-
-      assert [first, second] = Tracking.recent_activity()
-      assert first.media_item.id == jun.id
-      assert second.media_item.id == jan.id
-    end
-
-    test "interleaves films and episodes by date", ctx do
-      %{user: user, movie: film} = ctx
-      show = media_item_fixture(%{kind: :tv})
-      season = season_fixture(show)
-      episode = episode_fixture(show, season)
-
-      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
-      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
-
-      assert [first, second | _] = Tracking.recent_activity()
-      assert first.type == :movie
-      assert second.type == :episode
-    end
-
-    test "the limit counts across both films and episodes", ctx do
-      %{user: user, movie: film} = ctx
-      show = media_item_fixture(%{kind: :tv})
-      episode = episode_fixture(show, season_fixture(show))
-
-      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
-      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
-
-      assert [only] = Tracking.recent_activity(1)
-      assert only.media_item.id == film.id
-    end
-  end
-
   describe "watchlist" do
     test "returns only the user's planned entries with media preloaded", ctx do
       %{user: user, movie: movie} = ctx
@@ -308,6 +234,87 @@ defmodule AnotherTrackingTool.TrackingTest do
                series: 0,
                minutes: 0
              }
+    end
+  end
+
+  describe "last_watched" do
+    test "gives a series one row, however many episodes", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv, title_fr: "Severance"})
+      season = season_fixture(show)
+      first = episode_fixture(show, season, %{episode_number: 1, name: "Première"})
+      second = episode_fixture(show, season, %{episode_number: 2, name: "Deuxième"})
+      third = episode_fixture(show, season, %{episode_number: 3, name: "Troisième"})
+
+      :ok = Tracking.mark_episode(user, first)
+      :ok = Tracking.mark_episode(user, second)
+      :ok = Tracking.mark_episode(user, third)
+
+      assert [row] = Tracking.last_watched(user, :all)
+      assert row.media_item.id == show.id
+      assert row.episodes == 3
+      assert row.latest_episode.name == "Troisième"
+    end
+
+    test "counts the latest episode by number, not by when it was logged", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      early = episode_fixture(show, season, %{episode_number: 2, name: "Deux"})
+      late = episode_fixture(show, season, %{episode_number: 7, name: "Sept"})
+
+      :ok = Tracking.mark_episode(user, late)
+      :ok = Tracking.mark_episode(user, early)
+
+      assert [row] = Tracking.last_watched(user, :all)
+      assert row.latest_episode.name == "Sept"
+    end
+
+    test "carries the overall progress for a series", ctx do
+      %{user: user} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      watched = episode_fixture(show, season, %{episode_number: 1})
+      _unwatched = episode_fixture(show, season, %{episode_number: 2})
+
+      :ok = Tracking.mark_episode(user, watched)
+
+      assert [row] = Tracking.last_watched(user, :all)
+      assert row.progress == %{watched: 1, total: 2}
+    end
+
+    test "gives a film a row with its genres loaded", ctx do
+      %{user: user, movie: movie} = ctx
+      {:ok, _} = Tracking.mark_watched(user, movie, %{watched_on: Date.utc_today()})
+
+      assert [row] = Tracking.last_watched(user, :all)
+      assert row.media_item.id == movie.id
+      assert row.episodes == 0
+      assert row.latest_episode == nil
+      assert row.progress == nil
+      assert is_list(row.media_item.tmdb_genres)
+    end
+
+    test "orders newest first and honours the limit", ctx do
+      %{user: user, movie: old} = ctx
+      recent = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.mark_watched(user, old, %{watched_on: ~D[2024-01-01]})
+      {:ok, _} = Tracking.mark_watched(user, recent, %{watched_on: ~D[2024-06-01]})
+
+      assert [first, second] = Tracking.last_watched(user, :all)
+      assert first.media_item.id == recent.id
+      assert second.media_item.id == old.id
+      assert [only] = Tracking.last_watched(user, :all, 1)
+      assert only.media_item.id == recent.id
+    end
+
+    test "keeps to the period and to the user", ctx do
+      %{user: user, movie: movie} = ctx
+      {:ok, _} = Tracking.mark_watched(user, movie, %{watched_on: ~D[2020-02-01]})
+      {:ok, _} = Tracking.mark_watched(user_fixture(), movie, %{watched_on: Date.utc_today()})
+
+      assert Tracking.last_watched(user, :month) == []
+      assert [_] = Tracking.last_watched(user, :all)
     end
   end
 end
