@@ -187,6 +187,32 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert first.media_item.id == jun.id
       assert second.media_item.id == jan.id
     end
+
+    test "interleaves films and episodes by date", ctx do
+      %{user: user, movie: film} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      season = season_fixture(show)
+      episode = episode_fixture(show, season)
+
+      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
+
+      assert [first, second | _] = Tracking.recent_activity()
+      assert first.type == :movie
+      assert second.type == :episode
+    end
+
+    test "the limit counts across both films and episodes", ctx do
+      %{user: user, movie: film} = ctx
+      show = media_item_fixture(%{kind: :tv})
+      episode = episode_fixture(show, season_fixture(show))
+
+      :ok = Tracking.mark_episode(user, episode, %{watched_on: ~D[2024-03-01]})
+      {:ok, _} = Tracking.mark_watched(user, film, %{watched_on: ~D[2024-06-01]})
+
+      assert [only] = Tracking.recent_activity(1)
+      assert only.media_item.id == film.id
+    end
   end
 
   describe "watchlist" do
