@@ -535,4 +535,19 @@ defmodule AnotherTrackingTool.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "pending_invite_count/0" do
+    test "counts only invites that can still be used" do
+      admin = user_fixture()
+      {:ok, pending} = Accounts.create_invite(admin)
+      {:ok, expired} = Accounts.create_invite(admin)
+      {:ok, used} = Accounts.create_invite(admin)
+
+      Repo.update!(Ecto.Changeset.change(expired, expires_at: ~U[2020-01-01 00:00:00Z]))
+      Repo.update!(Ecto.Changeset.change(used, used_at: DateTime.utc_now(:second)))
+
+      assert Accounts.pending_invite_count() == 1
+      assert Accounts.get_redeemable_invite(pending.code)
+    end
+  end
 end

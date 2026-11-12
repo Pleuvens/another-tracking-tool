@@ -111,6 +111,16 @@ defmodule AnotherTrackingTool.Accounts do
     Repo.all(from i in Invite, order_by: [desc: i.inserted_at], preload: [:used_by])
   end
 
+  def pending_invite_count do
+    now = DateTime.utc_now(:second)
+
+    Repo.one(
+      from i in Invite,
+        where: is_nil(i.used_at) and i.expires_at > ^now,
+        select: count(i.id)
+    )
+  end
+
   def get_redeemable_invite(code) when is_binary(code) do
     Repo.one(redeemable_invite_query(code))
   end
