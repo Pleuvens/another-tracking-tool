@@ -11,26 +11,22 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:152
-#: lib/another_tracking_tool_web/live/media_live/show.ex:355
+#: lib/another_tracking_tool_web/components/core_components.ex:130
 #, elixir-autogen, elixir-format
 msgid "Completed"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:153
-#: lib/another_tracking_tool_web/live/media_live/show.ex:356
+#: lib/another_tracking_tool_web/components/core_components.ex:131
 #, elixir-autogen, elixir-format
 msgid "Dropped"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:154
-#: lib/another_tracking_tool_web/live/media_live/show.ex:357
+#: lib/another_tracking_tool_web/components/core_components.ex:132
 #, elixir-autogen, elixir-format
 msgid "Planned"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:151
-#: lib/another_tracking_tool_web/live/media_live/show.ex:354
+#: lib/another_tracking_tool_web/components/core_components.ex:129
 #, elixir-autogen, elixir-format
 msgid "Watching"
 msgstr ""
