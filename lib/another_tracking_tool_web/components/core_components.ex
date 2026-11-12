@@ -128,51 +128,23 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
-  @doc "A watch-status chip, shaded from the grey ramp."
-  attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
-
-  def status_badge(assigns) do
-    ~H"""
-    <span class={[
-      "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold",
-      status_badge_class(@status)
-    ]}>
-      <span class="size-1.5 rounded-full bg-current opacity-70"></span>
-      {status_label(@status)}
-    </span>
-    """
-  end
-
-  defp status_badge_class(:watching), do: "bg-paper-2 text-ink"
-  defp status_badge_class(:completed), do: "bg-ink text-paper-0"
-  defp status_badge_class(:dropped), do: "bg-paper-2 text-ink-faint"
-  defp status_badge_class(:planned), do: "bg-paper-2 text-ink-soft"
-
-  defp status_label(:watching), do: dgettext("catalog", "Watching")
-  defp status_label(:completed), do: dgettext("catalog", "Completed")
-  defp status_label(:dropped), do: dgettext("catalog", "Dropped")
-  defp status_label(:planned), do: dgettext("catalog", "Planned")
+  def watch_status_label(:watching), do: dgettext("catalog", "Watching")
+  def watch_status_label(:completed), do: dgettext("catalog", "Completed")
+  def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
+  def watch_status_label(:planned), do: dgettext("catalog", "Planned")
 
   @doc """
-  A 2/3 poster frame with a poster-driven ambient glow.
-
-  Pass `accent` (any CSS color) for the glow; missing `src` falls back to a quiet
-  neutral gradient rather than a broken image.
+  A 2/3 poster frame. A missing `src` falls back to a quiet neutral gradient
+  rather than a broken image. Set `framed` to false for a bare thumbnail.
   """
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
-  attr :accent, :string, default: nil
+  attr :framed, :boolean, default: true
   attr :class, :any, default: nil
 
   def poster(assigns) do
     ~H"""
-    <div class={["group relative overflow-hidden rounded-2xl bg-paper-2 p-3", @class]}>
-      <div
-        :if={@accent}
-        class="pointer-events-none absolute inset-x-[-20%] top-[-20%] h-[70%] opacity-50 blur-2xl"
-        style={"background: #{@accent}"}
-      >
-      </div>
+    <div class={["overflow-hidden", @framed && "rounded-2xl bg-paper-2 p-3", @class]}>
       <div class="relative aspect-[2/3] overflow-hidden rounded-xl">
         <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
         <div

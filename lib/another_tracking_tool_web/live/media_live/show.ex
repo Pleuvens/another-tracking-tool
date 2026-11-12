@@ -200,7 +200,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
                   )
                 ]}
               >
-                {status_label(status)}
+                {watch_status_label(status)}
               </button>
             </div>
           </div>
@@ -350,9 +350,4 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     </Layouts.app>
     """
   end
-
-  defp status_label(:watching), do: dgettext("catalog", "Watching")
-  defp status_label(:completed), do: dgettext("catalog", "Completed")
-  defp status_label(:dropped), do: dgettext("catalog", "Dropped")
-  defp status_label(:planned), do: dgettext("catalog", "Planned")
 end
