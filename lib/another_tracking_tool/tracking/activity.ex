@@ -64,7 +64,11 @@ defmodule AnotherTrackingTool.Tracking.Activity do
     )
     |> Period.since(since)
     |> Repo.all()
+    |> Enum.map(&%{&1 | at: as_datetime(&1.at)})
   end
+
+  defp as_datetime(%DateTime{} = at), do: at
+  defp as_datetime(%NaiveDateTime{} = at), do: DateTime.from_naive!(at, "Etc/UTC")
 
   defp latest_episodes(_user_id, _since, []), do: %{}
 
