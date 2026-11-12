@@ -81,3 +81,14 @@ msgstr "À voir"
 #, elixir-autogen, elixir-format
 msgid "You"
 msgstr "Vous"
+
+#: lib/another_tracking_tool_web/components/layouts.ex:139
+#: lib/another_tracking_tool_web/components/layouts.ex:176
+#, elixir-autogen, elixir-format
+msgid "Search films and series"
+msgstr "Chercher films et séries"
+
+#: lib/another_tracking_tool_web/components/layouts.ex:178
+#, elixir-autogen, elixir-format
+msgid "⌘K"
+msgstr "⌘K"

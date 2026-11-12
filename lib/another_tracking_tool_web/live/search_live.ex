@@ -27,12 +27,15 @@ defmodule AnotherTrackingToolWeb.SearchLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope} active={:search}>
-      <form id="search_form" phx-change="search" phx-submit="search">
+      <Layouts.page_header search={false}>{dgettext("tracking", "Discover")}</Layouts.page_header>
+
+      <form id="search_form" class="mt-4" phx-change="search" phx-submit="search">
         <.search_input
           name="q"
           value={@query}
-          placeholder={dgettext("tracking", "Search movies…")}
+          placeholder={dgettext("tracking", "Search films and series…")}
           phx-debounce="300"
+          autofocus
         />
       </form>
 

@@ -43,7 +43,7 @@ defmodule AnotherTrackingToolWeb.WatchlistLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope} active={:watchlist}>
-      <h1 class="font-display text-2xl font-bold text-ink">{dgettext("watchlist", "My list")}</h1>
+      <Layouts.page_header>{dgettext("watchlist", "My list")}</Layouts.page_header>
 
       <ListComponents.status_filters status={@status} counts={@counts} />
 
