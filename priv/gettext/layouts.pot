@@ -11,52 +11,73 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:50
+#: lib/another_tracking_tool_web/components/layouts.ex:28
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:106
+#: lib/another_tracking_tool_web/components/layouts.ex:127
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:47
+#: lib/another_tracking_tool_web/components/layouts.ex:25
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:72
-#, elixir-autogen, elixir-format
-msgid "Home"
-msgstr ""
-
-#: lib/another_tracking_tool_web/components/layouts.ex:81
+#: lib/another_tracking_tool_web/components/layouts.ex:90
 #, elixir-autogen, elixir-format
 msgid "Import"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:84
+#: lib/another_tracking_tool_web/components/layouts.ex:83
 #, elixir-autogen, elixir-format
 msgid "Profile"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:78
-#, elixir-autogen, elixir-format
-msgid "Watchlist"
-msgstr ""
-
-#: lib/another_tracking_tool_web/components/layouts.ex:75
+#: lib/another_tracking_tool_web/components/layouts.ex:65
 #, elixir-autogen, elixir-format
 msgid "Discover"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:91
+#: lib/another_tracking_tool_web/components/layouts.ex:101
 #, elixir-autogen, elixir-format
 msgid "Invites"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:98
+#: lib/another_tracking_tool_web/components/layouts.ex:108
 #, elixir-autogen, elixir-format
 msgid "Integrations"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:58
+#, elixir-autogen, elixir-format
+msgid "Activity"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:94
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:73
+#, elixir-autogen, elixir-format
+msgid "My list"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:21
+#: lib/another_tracking_tool_web/components/layouts.ex:53
+#, elixir-autogen, elixir-format
+msgid "Track"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:56
+#, elixir-autogen, elixir-format
+msgid "Watch"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/layouts.ex:77
+#, elixir-autogen, elixir-format
+msgid "You"
 msgstr ""

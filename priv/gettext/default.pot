@@ -11,23 +11,23 @@
 msgid ""
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/core_components.ex:477
+#: lib/another_tracking_tool_web/components/core_components.ex:480
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:165
-#: lib/another_tracking_tool_web/components/layouts.ex:180
+#: lib/another_tracking_tool_web/components/layouts.ex:219
+#: lib/another_tracking_tool_web/components/layouts.ex:234
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:172
+#: lib/another_tracking_tool_web/components/layouts.ex:226
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/another_tracking_tool_web/components/layouts.ex:157
+#: lib/another_tracking_tool_web/components/layouts.ex:211
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
