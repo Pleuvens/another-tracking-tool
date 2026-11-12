@@ -20,7 +20,9 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   end
 
   @impl true
-  def handle_info({:activity, _activity}, socket), do: {:noreply, load(socket)}
+  def handle_info({:activity, %{user_id: user_id}}, socket) do
+    if user_id == me(socket).id, do: {:noreply, load(socket)}, else: {:noreply, socket}
+  end
 
   defp load(socket) do
     totals = Tracking.watch_totals(me(socket), socket.assigns.period)

@@ -67,6 +67,16 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     assert render(lv) =~ "Arrival"
   end
 
+  test "someone else's watch leaves your page alone", %{conn: conn} do
+    {:ok, lv, _html} = live(conn, ~p"/feed")
+
+    other = AccountsFixtures.user_fixture()
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Stalker"})
+    {:ok, _} = Tracking.mark_watched(other, movie, %{watched_on: Date.utc_today()})
+
+    refute render(lv) =~ "Stalker"
+  end
+
   describe "totals" do
     test "shows the time watched for the current month", %{conn: conn, user: user} do
       film = media_item_fixture(%{kind: :movie, runtime: 136})
