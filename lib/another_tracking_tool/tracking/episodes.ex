@@ -97,6 +97,35 @@ defmodule AnotherTrackingTool.Tracking.Episodes do
     %{watched: watched, total: total}
   end
 
+  def progress_for(_user_id, []), do: %{}
+
+  def progress_for(user_id, media_item_ids) do
+    watched = count_by_media_item(watched_query(user_id, media_item_ids))
+    total = count_by_media_item(total_query(media_item_ids))
+
+    Map.new(media_item_ids, fn id ->
+      {id, %{watched: Map.get(watched, id, 0), total: Map.get(total, id, 0)}}
+    end)
+  end
+
+  defp watched_query(user_id, media_item_ids) do
+    from(w in EpisodeWatch,
+      where: w.user_id == ^user_id and w.media_item_id in ^media_item_ids,
+      group_by: w.media_item_id,
+      select: {w.media_item_id, count(w.id)}
+    )
+  end
+
+  defp total_query(media_item_ids) do
+    from(e in Episode,
+      where: e.media_item_id in ^media_item_ids and e.season_number >= 1,
+      group_by: e.media_item_id,
+      select: {e.media_item_id, count(e.id)}
+    )
+  end
+
+  defp count_by_media_item(query), do: query |> Repo.all() |> Map.new()
+
   def derive_show_status(%User{} = user, media_item_id) do
     watched = watched_count(user.id, media_item_id)
     aired = aired_count(media_item_id)
