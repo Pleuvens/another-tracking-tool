@@ -34,6 +34,65 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     refute html =~ "Theirs"
   end
 
+  test "filters by status, with counts on the chips", %{conn: conn, user: user} do
+    planned = media_item_fixture(%{kind: :movie, title_fr: "Planned Movie"})
+    watched = media_item_fixture(%{kind: :movie, title_fr: "Watched Movie"})
+    {:ok, _} = Tracking.set_status(user, planned, :planned)
+    {:ok, _} = Tracking.set_status(user, watched, :completed)
+
+    {:ok, lv, html} = live(conn, ~p"/watchlist")
+    assert html =~ "All · 2"
+    assert html =~ "Planned · 1"
+
+    html = lv |> element("button", "Planned · 1") |> render_click()
+
+    assert html =~ "Planned Movie"
+    refute html =~ "Watched Movie"
+  end
+
+  test "a series tile carries its progress and season", %{conn: conn, user: user} do
+    show = media_item_fixture(%{kind: :tv, title_fr: "Severance"})
+    season = season_fixture(show, %{season_number: 2})
+    watched = episode_fixture(show, season, %{episode_number: 1})
+    _unwatched = episode_fixture(show, season, %{episode_number: 2})
+
+    :ok = Tracking.mark_episode(user, watched)
+
+    {:ok, _lv, html} = live(conn, ~p"/watchlist")
+
+    assert html =~ "Severance"
+    assert html =~ "1 of 2 episodes"
+    assert html =~ "S2"
+  end
+
+  test "a rated film tile shows its stars", %{conn: conn, user: user} do
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Dune"})
+    {:ok, _} = Tracking.rate(user, movie, 4)
+
+    {:ok, _lv, html} = live(conn, ~p"/watchlist")
+
+    assert html =~ "★"
+  end
+
+  test "an unrated film tile falls back to its status", %{conn: conn, user: user} do
+    movie = media_item_fixture(%{kind: :movie, title_fr: "Dune"})
+    {:ok, _} = Tracking.set_status(user, movie, :planned)
+
+    {:ok, _lv, html} = live(conn, ~p"/watchlist")
+
+    assert html =~ "Planned"
+  end
+
+  test "an empty filter says so", %{conn: conn, user: user} do
+    movie = media_item_fixture(%{kind: :movie})
+    {:ok, _} = Tracking.set_status(user, movie, :planned)
+
+    {:ok, lv, _html} = live(conn, ~p"/watchlist")
+    html = lv |> element("button", "Dropped · 0") |> render_click()
+
+    assert html =~ "Nothing with that status"
+  end
+
   test "shows the empty state", %{conn: conn} do
     {:ok, _lv, html} = live(conn, ~p"/watchlist")
     assert html =~ "Nothing planned yet"

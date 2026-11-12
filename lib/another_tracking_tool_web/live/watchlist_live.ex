@@ -1,13 +1,19 @@
 defmodule AnotherTrackingToolWeb.WatchlistLive do
   use AnotherTrackingToolWeb, :live_view
 
-  alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.Tracking
+  alias AnotherTrackingTool.WatchStatuses
+  alias AnotherTrackingToolWeb.ListComponents
 
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Tracking.subscribe_activity()
-    {:ok, load(socket)}
+    {:ok, socket |> assign(:status, :all) |> load()}
+  end
+
+  @impl true
+  def handle_event("set_status_filter", %{"status" => status}, socket) do
+    {:noreply, socket |> assign(:status, filter_from(status)) |> load()}
   end
 
   @impl true
@@ -15,9 +21,23 @@ defmodule AnotherTrackingToolWeb.WatchlistLive do
     if user_id == me(socket).id, do: {:noreply, load(socket)}, else: {:noreply, socket}
   end
 
-  defp load(socket), do: assign(socket, :entries, Tracking.my_list(me(socket)))
+  defp load(socket) do
+    user = me(socket)
+    entries = Tracking.my_list(user, socket.assigns.status)
+    show_ids = Enum.map(entries, & &1.media_item_id)
+
+    socket
+    |> assign(:entries, entries)
+    |> assign(:counts, Tracking.status_counts(user))
+    |> assign(:progress, Tracking.progress_for(user.id, show_ids))
+    |> assign(:seasons, Tracking.current_seasons(user.id, show_ids))
+  end
 
   defp me(socket), do: socket.assigns.current_scope.user
+
+  defp filter_from(status) do
+    Enum.find([:all | WatchStatuses.all()], :all, &(Atom.to_string(&1) == status))
+  end
 
   @impl true
   def render(assigns) do
@@ -25,22 +45,19 @@ defmodule AnotherTrackingToolWeb.WatchlistLive do
     <Layouts.app flash={@flash} current_scope={@current_scope} active={:watchlist}>
       <h1 class="font-display text-2xl font-bold text-ink">{dgettext("watchlist", "My list")}</h1>
 
+      <ListComponents.status_filters status={@status} counts={@counts} />
+
       <p :if={@entries == []} class="mt-6 text-ink-soft">
-        {dgettext("watchlist", "Nothing planned yet — go feed it some ideas")}
+        {empty_message(@status)}
       </p>
 
-      <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        <.link :for={entry <- @entries} navigate={~p"/media/#{entry.media_item_id}"}>
-          <.poster
-            src={tmdb_image(entry.media_item.poster_path)}
-            alt={MediaItem.display_title(entry.media_item)}
-          />
-          <div class="mt-2 font-display text-sm font-bold text-ink">
-            {MediaItem.display_title(entry.media_item)}
-          </div>
-        </.link>
-      </div>
+      <ListComponents.tile_grid entries={@entries} progress={@progress} seasons={@seasons} />
     </Layouts.app>
     """
   end
+
+  defp empty_message(:all),
+    do: dgettext("watchlist", "Nothing planned yet \u2014 go feed it some ideas")
+
+  defp empty_message(_status), do: dgettext("watchlist", "Nothing with that status")
 end

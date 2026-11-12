@@ -7,12 +7,12 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:364
+#: lib/another_tracking_tool_web/components/media_components.ex:202
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr "Commentaires"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:354
+#: lib/another_tracking_tool_web/components/media_components.ex:189
 #, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr "Personne pour l'instant — soyez le premier."
@@ -22,12 +22,12 @@ msgstr "Personne pour l'instant — soyez le premier."
 msgid "Not found."
 msgstr "Introuvable."
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:380
+#: lib/another_tracking_tool_web/components/media_components.ex:218
 #, elixir-autogen, elixir-format
 msgid "Post"
 msgstr "Publier"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:377
+#: lib/another_tracking_tool_web/components/media_components.ex:215
 #, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr "Dites quelque chose…"
@@ -37,47 +37,47 @@ msgstr "Dites quelque chose…"
 msgid "Search movies…"
 msgstr "Rechercher des films…"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:149
+#: lib/another_tracking_tool_web/components/media_components.ex:242
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr "Un jour, dans le passé"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:236
+#: lib/another_tracking_tool_web/components/media_components.ex:64
 #, elixir-autogen, elixir-format
 msgid "Watched on"
 msgstr "Vu le"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:347
+#: lib/another_tracking_tool_web/components/media_components.ex:182
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr "Votre cercle"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:286
+#: lib/another_tracking_tool_web/components/media_components.ex:118
 #, elixir-autogen, elixir-format
 msgid "Episodes"
 msgstr "Épisodes"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:298
+#: lib/another_tracking_tool_web/components/media_components.ex:130
 #, elixir-autogen, elixir-format
 msgid "Episodes are still loading…"
 msgstr "Les épisodes se chargent encore…"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:311
+#: lib/another_tracking_tool_web/components/media_components.ex:143
 #, elixir-autogen, elixir-format
 msgid "Mark season watched"
 msgstr "Marquer la saison comme vue"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:304
+#: lib/another_tracking_tool_web/components/media_components.ex:136
 #, elixir-autogen, elixir-format
 msgid "Season %{n}"
 msgstr "Saison %{n}"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:222
+#: lib/another_tracking_tool_web/components/media_components.ex:50
 #, elixir-autogen, elixir-format
 msgid "Rating"
 msgstr "Note"
 
-#: lib/another_tracking_tool_web/live/media_live/show.ex:217
+#: lib/another_tracking_tool_web/components/media_components.ex:45
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr "Statut"
