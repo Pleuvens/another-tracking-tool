@@ -89,33 +89,24 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   slot :foot
 
   def stat_tile(assigns) do
+    assigns =
+      assign(assigns, :quiet, if(assigns.hero, do: "text-paper-2/70", else: "text-ink-soft"))
+
     ~H"""
     <div class={[
       "flex flex-col gap-1 rounded-2xl border p-4",
       if(@hero, do: "border-ink bg-ink text-paper-0", else: "border-line bg-paper-0")
     ]}>
-      <span class={[
-        "text-[10px] font-extrabold uppercase tracking-widest",
-        if(@hero, do: "text-paper-2/70", else: "text-ink-soft")
-      ]}>
+      <span class={["text-[10px] font-extrabold uppercase tracking-widest", @quiet]}>
         {@label}
       </span>
       <span class="flex flex-wrap items-baseline gap-1.5 font-display text-3xl font-bold tabular-nums">
         {@value}
-        <span
-          :if={@unit}
-          class={[
-            "font-sans text-xs font-bold tracking-wide",
-            if(@hero, do: "text-paper-2/70", else: "text-ink-soft")
-          ]}
-        >
+        <span :if={@unit} class={["font-sans text-xs font-bold tracking-wide", @quiet]}>
           {@unit}
         </span>
       </span>
-      <span
-        :if={@foot != []}
-        class={["text-xs", if(@hero, do: "text-paper-2/70", else: "text-ink-soft")]}
-      >
+      <span :if={@foot != []} class={["text-xs", @quiet]}>
         {render_slot(@foot)}
       </span>
     </div>
