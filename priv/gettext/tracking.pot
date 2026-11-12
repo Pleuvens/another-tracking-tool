@@ -81,12 +81,84 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:30
+#: lib/another_tracking_tool_web/live/search_live.ex:103
 #, elixir-autogen, elixir-format
 msgid "Discover"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:36
+#: lib/another_tracking_tool_web/components/discover_components.ex:218
 #, elixir-autogen, elixir-format
-msgid "Search films and series…"
+msgid "%{count} episode"
+msgid_plural "%{count} episodes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:224
+#, elixir-autogen, elixir-format
+msgid "%{count} min"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:114
+#, elixir-autogen, elixir-format
+msgid "%{name} rated it"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:203
+#, elixir-autogen, elixir-format
+msgid "Film"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:121
+#, elixir-autogen, elixir-format
+msgid "New ground for you"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:144
+#, elixir-autogen, elixir-format
+msgid "No match for “%{query}”"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:85
+#, elixir-autogen, elixir-format
+msgid "Open page"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:109
+#, elixir-autogen, elixir-format
+msgid "Or search by name"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:202
+#, elixir-autogen, elixir-format
+msgid "Series"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:123
+#, elixir-autogen, elixir-format
+msgid "That is every suggestion"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:173
+#, elixir-autogen, elixir-format
+msgid "Undo"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:136
+#, elixir-autogen, elixir-format
+msgid "Use the buttons or the arrow keys."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:126
+#, elixir-autogen, elixir-format
+msgid "You have made a call on everything we know about. Search for something by name instead."
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:106
+#, elixir-autogen, elixir-format
+msgid "You watch a lot of %{genre}"
+msgstr ""
+
+#: lib/another_tracking_tool_web/components/discover_components.ex:98
+#, elixir-autogen, elixir-format
+msgid "Your most-watched genre: %{genre}"
 msgstr ""
