@@ -3,6 +3,27 @@ defmodule AnotherTrackingToolWeb.FormatTest do
 
   alias AnotherTrackingToolWeb.Format
 
+  describe "ago" do
+    @now ~U[2026-11-12 18:00:00Z]
+
+    test "reads in minutes within the hour" do
+      assert Format.ago(~U[2026-11-12 17:45:00Z], @now) == "15 min ago"
+      assert Format.ago(~U[2026-11-12 18:00:00Z], @now) == "1 min ago"
+    end
+
+    test "reads in hours within the day" do
+      assert Format.ago(~U[2026-11-12 10:00:00Z], @now) == "8h ago"
+    end
+
+    test "reads in days within the week" do
+      assert Format.ago(~U[2026-11-09 18:00:00Z], @now) == "3d ago"
+    end
+
+    test "reads in weeks past that" do
+      assert Format.ago(~U[2026-10-22 18:00:00Z], @now) == "3w ago"
+    end
+  end
+
   describe "watch_time" do
     test "reads in minutes below an hour" do
       assert Format.watch_time(0) == %{value: "0", unit: "minutes"}
