@@ -7,7 +7,8 @@ defmodule AnotherTrackingTool.Tracking do
     Episodes,
     Imports,
     LastWatched,
-    Stats
+    Stats,
+    Suggestions
   }
 
   defdelegate subscribe(media_item), to: Broadcast
@@ -42,5 +43,6 @@ defmodule AnotherTrackingTool.Tracking do
 
   defdelegate last_watched(user, period, limit \\ 5), to: LastWatched
   defdelegate circle_latest(user, limit \\ 8), to: Circle
+  defdelegate suggestions(user, limit \\ 10), to: Suggestions
   defdelegate watch_totals(user, period), to: Stats
 end
