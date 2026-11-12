@@ -134,25 +134,16 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   def watch_status_label(:planned), do: dgettext("catalog", "Planned")
 
   @doc """
-  A 2/3 poster frame with a poster-driven ambient glow.
-
-  Pass `accent` (any CSS color) for the glow; missing `src` falls back to a quiet
-  neutral gradient rather than a broken image.
+  A 2/3 poster frame. A missing `src` falls back to a quiet neutral gradient
+  rather than a broken image.
   """
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
-  attr :accent, :string, default: nil
   attr :class, :any, default: nil
 
   def poster(assigns) do
     ~H"""
-    <div class={["group relative overflow-hidden rounded-2xl bg-paper-2 p-3", @class]}>
-      <div
-        :if={@accent}
-        class="pointer-events-none absolute inset-x-[-20%] top-[-20%] h-[70%] opacity-50 blur-2xl"
-        style={"background: #{@accent}"}
-      >
-      </div>
+    <div class={["overflow-hidden rounded-2xl bg-paper-2 p-3", @class]}>
       <div class="relative aspect-[2/3] overflow-hidden rounded-xl">
         <img :if={@src} src={@src} alt={@alt} class="size-full object-cover" />
         <div
