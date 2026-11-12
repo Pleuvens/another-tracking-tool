@@ -115,12 +115,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
             navigate={~p"/media/#{item.media_item.id}"}
             class="flex gap-3 rounded-2xl bg-paper-2 p-3"
           >
-            <div
-              class="flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-extrabold text-white"
-              style={"background: #{Avatars.color(item.user.id)}"}
-            >
-              {Avatars.initial(item.user)}
-            </div>
+            <.avatar initial={Avatars.initial(item.user)} color={Avatars.color(item.user.id)} />
 
             <div class="flex flex-1 flex-col gap-2">
               <div class="text-sm text-ink"><b>{item.user.email}</b> {verb(item)}</div>

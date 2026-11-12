@@ -220,19 +220,36 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     """
   end
 
+  attr :initial, :string, required: true
+  attr :color, :string, required: true
+  attr :class, :any, default: nil
+
+  def avatar(assigns) do
+    ~H"""
+    <div
+      class={[
+        "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-extrabold text-white",
+        @class
+      ]}
+      style={"background: #{@color}"}
+    >
+      {@initial}
+    </div>
+    """
+  end
+
   attr :people, :list, required: true, doc: "list of %{initial:, color:}"
   attr :extra, :integer, default: 0
 
   def avatar_stack(assigns) do
     ~H"""
     <div class="flex">
-      <div
+      <.avatar
         :for={person <- @people}
-        class="-ml-2.5 flex size-9 items-center justify-center rounded-full border-2 border-paper text-xs font-extrabold text-white first:ml-0"
-        style={"background: #{person.color}"}
-      >
-        {person.initial}
-      </div>
+        initial={person.initial}
+        color={person.color}
+        class="-ml-2.5 border-2 border-paper first:ml-0"
+      />
       <div
         :if={@extra > 0}
         class="-ml-2.5 flex size-9 items-center justify-center rounded-full border-2 border-paper bg-line text-xs font-extrabold text-ink-soft"
