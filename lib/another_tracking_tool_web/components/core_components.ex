@@ -128,6 +128,46 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
+  @doc """
+  A watch-status pill. Fill, dot and border carry the state, so it reads with no
+  colour: solid for completed, half dot for watching, hollow dot for planned,
+  dashed edge for dropped.
+
+  Set `muted` when the status is offered as a choice rather than stated as a fact.
+  """
+  attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
+  attr :muted, :boolean, default: false
+  attr :class, :any, default: nil
+
+  def status_pill(assigns) do
+    ~H"""
+    <span class={[
+      "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold",
+      pill_class(@muted, @status),
+      @class
+    ]}>
+      <span
+        :if={!@muted and @status != :dropped}
+        class={["size-1.5 rounded-full", dot_class(@status)]}
+      ></span>
+      {watch_status_label(@status)}
+    </span>
+    """
+  end
+
+  defp pill_class(true, _status), do: "border-transparent bg-paper-2 text-ink-soft"
+  defp pill_class(false, :completed), do: "border-ink bg-ink text-paper-0"
+  defp pill_class(false, :watching), do: "border-ink text-ink"
+  defp pill_class(false, :planned), do: "border-line text-ink-soft"
+  defp pill_class(false, :dropped), do: "border-dashed border-line text-ink-faint"
+
+  defp dot_class(:completed), do: "bg-current"
+  defp dot_class(:planned), do: "shadow-[inset_0_0_0_1px_currentColor]"
+
+  defp dot_class(:watching),
+    do:
+      "bg-[linear-gradient(90deg,currentColor_50%,transparent_50%)] shadow-[inset_0_0_0_1px_currentColor]"
+
   def watch_status_label(:watching), do: dgettext("catalog", "Watching")
   def watch_status_label(:completed), do: dgettext("catalog", "Completed")
   def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
