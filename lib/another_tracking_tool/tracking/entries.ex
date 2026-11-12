@@ -17,7 +17,7 @@ defmodule AnotherTrackingTool.Tracking.Entries do
     |> Repo.all()
   end
 
-  defp with_status(query, :all), do: query
+  defp with_status(query, :all), do: where(query, [e], e.status != :not_interested)
   defp with_status(query, status), do: where(query, [e], e.status == ^status)
 
   def status_counts(%User{id: user_id}) do
@@ -32,7 +32,7 @@ defmodule AnotherTrackingTool.Tracking.Entries do
 
     WatchStatuses.all()
     |> Map.new(&{&1, Map.get(counts, &1, 0)})
-    |> Map.put(:all, counts |> Map.values() |> Enum.sum())
+    |> Map.put(:all, counts |> Map.delete(:not_interested) |> Map.values() |> Enum.sum())
   end
 
   def get_entry(%User{id: user_id}, %MediaItem{id: media_item_id}),

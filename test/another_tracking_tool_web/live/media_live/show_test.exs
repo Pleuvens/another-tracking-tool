@@ -66,6 +66,15 @@ defmodule AnotherTrackingToolWeb.MediaLive.ShowTest do
     assert html =~ ~s(type="date")
   end
 
+  test "not for me is one of the status choices", %{conn: conn, user: user, movie: movie} do
+    {:ok, lv, html} = live(conn, ~p"/media/#{movie.id}")
+    assert html =~ "Not for me"
+
+    lv |> element("button", "Not for me") |> render_click()
+
+    assert Tracking.get_entry(user, movie).status == :not_interested
+  end
+
   test "rating a movie persists it", %{conn: conn, user: user, movie: movie} do
     {:ok, lv, _html} = live(conn, ~p"/media/#{movie.id}")
 

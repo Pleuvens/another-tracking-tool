@@ -93,6 +93,19 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     assert html =~ "Nothing with that status"
   end
 
+  test "a declined title waits behind its own chip", %{conn: conn, user: user} do
+    declined = media_item_fixture(%{kind: :movie, title_fr: "Declined Movie"})
+    {:ok, _} = Tracking.set_status(user, declined, :not_interested)
+
+    {:ok, lv, html} = live(conn, ~p"/watchlist")
+    refute html =~ "Declined Movie"
+    assert html =~ "Not for me · 1"
+
+    html = lv |> element("button", "Not for me · 1") |> render_click()
+
+    assert html =~ "Declined Movie"
+  end
+
   test "shows the empty state", %{conn: conn} do
     {:ok, _lv, html} = live(conn, ~p"/watchlist")
     assert html =~ "Nothing planned yet"

@@ -30,3 +30,8 @@ msgstr "Prévu"
 #, elixir-autogen, elixir-format
 msgid "Watching"
 msgstr "En cours"
+
+#: lib/another_tracking_tool_web/components/core_components.ex:188
+#, elixir-autogen, elixir-format
+msgid "Not for me"
+msgstr "Pas pour moi"

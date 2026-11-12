@@ -160,7 +160,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
       @class
     ]}>
       <span
-        :if={!@muted and @status != :dropped}
+        :if={!@muted and shows_dot?(@status)}
         class={["size-1.5 rounded-full", dot_class(@status)]}
       ></span>
       {@label || watch_status_label(@status)}
@@ -173,6 +173,9 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   defp pill_class(false, :watching), do: "border-ink text-ink"
   defp pill_class(false, :planned), do: "border-line text-ink-soft"
   defp pill_class(false, :dropped), do: "border-dashed border-line text-ink-faint"
+  defp pill_class(false, :not_interested), do: "border-line text-ink-faint line-through"
+
+  defp shows_dot?(status), do: status not in [:dropped, :not_interested]
 
   defp dot_class(:completed), do: "bg-current"
   defp dot_class(:planned), do: "shadow-[inset_0_0_0_1px_currentColor]"
@@ -185,6 +188,7 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
   def watch_status_label(:completed), do: dgettext("catalog", "Completed")
   def watch_status_label(:dropped), do: dgettext("catalog", "Dropped")
   def watch_status_label(:planned), do: dgettext("catalog", "Planned")
+  def watch_status_label(:not_interested), do: dgettext("catalog", "Not for me")
 
   attr :src, :string, default: nil
   attr :alt, :string, default: ""
