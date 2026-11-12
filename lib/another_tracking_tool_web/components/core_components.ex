@@ -128,13 +128,6 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
-  @doc """
-  A watch-status pill. Fill, dot and border carry the state, so it reads with no
-  colour: solid for completed, half dot for watching, hollow dot for planned,
-  dashed edge for dropped.
-
-  Set `muted` when the status is offered as a choice rather than stated as a fact.
-  """
   attr :status, :atom, required: true, values: AnotherTrackingTool.WatchStatuses.all()
   attr :muted, :boolean, default: false
   attr :class, :any, default: nil
