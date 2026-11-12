@@ -5,16 +5,43 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   alias AnotherTrackingTool.Tracking
   alias AnotherTrackingToolWeb.{Avatars, Format}
 
+  @periods [:month, :year, :all]
+
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Tracking.subscribe_activity()
-    {:ok, assign(socket, :activity, Tracking.recent_activity())}
+
+    {:ok, socket |> assign(:periods, @periods) |> assign(:period, :month) |> load()}
   end
 
   @impl true
-  def handle_info({:activity, _activity}, socket) do
-    {:noreply, assign(socket, :activity, Tracking.recent_activity())}
+  def handle_event("set_period", %{"period" => period}, socket) do
+    {:noreply, socket |> assign(:period, period_from(period)) |> load()}
   end
+
+  @impl true
+  def handle_info({:activity, _activity}, socket), do: {:noreply, load(socket)}
+
+  defp load(socket) do
+    totals = Tracking.watch_totals(me(socket), socket.assigns.period)
+
+    socket
+    |> assign(:activity, Tracking.recent_activity())
+    |> assign(:totals, totals)
+    |> assign(:watched, Format.watch_time(totals.minutes))
+  end
+
+  defp me(socket), do: socket.assigns.current_scope.user
+
+  defp period_from(period), do: Enum.find(@periods, :month, &(Atom.to_string(&1) == period))
+
+  defp period_label(:month), do: dgettext("feed", "This month")
+  defp period_label(:year), do: dgettext("feed", "This year")
+  defp period_label(:all), do: dgettext("feed", "All time")
+
+  defp period_note(:month), do: dgettext("feed", "so far this month")
+  defp period_note(:year), do: dgettext("feed", "so far this year")
+  defp period_note(:all), do: dgettext("feed", "everything you have logged")
 
   defp groups(activity) do
     activity
@@ -30,6 +57,50 @@ defmodule AnotherTrackingToolWeb.FeedLive do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope} active={:feed}>
       <h1 class="font-display text-2xl font-bold text-ink">{dgettext("feed", "Activity")}</h1>
+
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        <.filter_chip
+          :for={period <- @periods}
+          active={@period == period}
+          phx-click="set_period"
+          phx-value-period={period}
+        >
+          {period_label(period)}
+        </.filter_chip>
+      </div>
+
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        <.stat_tile
+          hero
+          label={dgettext("feed", "Time watched")}
+          value={@watched.value}
+          unit={@watched.unit}
+        >
+          <:foot>{period_note(@period)}</:foot>
+        </.stat_tile>
+
+        <.stat_tile
+          label={dgettext("feed", "Films")}
+          value={to_string(@totals.films)}
+          unit={dngettext("feed", "film", "films", @totals.films)}
+        >
+          <:foot>
+            {Format.watch_time(@totals.film_minutes).value} {Format.watch_time(@totals.film_minutes).unit}
+          </:foot>
+        </.stat_tile>
+
+        <.stat_tile
+          label={dgettext("feed", "Series")}
+          value={to_string(@totals.series)}
+          unit={dgettext("feed", "series")}
+        >
+          <:foot>
+            {dngettext("feed", "%{count} episode", "%{count} episodes", @totals.episodes)} · {Format.watch_time(
+              @totals.episode_minutes
+            ).value} {Format.watch_time(@totals.episode_minutes).unit}
+          </:foot>
+        </.stat_tile>
+      </div>
 
       <p :if={@activity == []} class="mt-6 text-ink-soft">
         {dgettext("feed", "Nothing here yet. Go watch something.")}

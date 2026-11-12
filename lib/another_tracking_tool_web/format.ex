@@ -29,6 +29,11 @@ defmodule AnotherTrackingToolWeb.Format do
   def watch_time(minutes) when minutes < @two_months, do: scale(minutes / @minutes_per_day, :day)
   def watch_time(minutes), do: scale(minutes / @minutes_per_month, :month)
 
+  def watch_time_text(minutes) do
+    time = watch_time(minutes)
+    "#{time.value} #{time.unit}"
+  end
+
   defp scale(value, unit) do
     figure = figure(value)
     %{value: figure, unit: unit_label(unit, plural_count(figure))}
