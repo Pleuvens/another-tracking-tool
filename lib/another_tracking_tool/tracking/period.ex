@@ -9,4 +9,7 @@ defmodule AnotherTrackingTool.Tracking.Period do
 
   def since(query, %Date{} = date),
     do: where(query, [w], coalesce(w.watched_on, fragment("(?)::date", w.inserted_at)) >= ^date)
+
+  def at(%Date{} = watched_on, _fallback), do: DateTime.new!(watched_on, ~T[00:00:00])
+  def at(nil, fallback), do: fallback
 end

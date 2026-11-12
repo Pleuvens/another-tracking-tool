@@ -13,6 +13,31 @@ defmodule AnotherTrackingToolWeb.Format do
 
   def time(datetime), do: Calendar.strftime(datetime, "%H:%M")
 
+  @seconds_per_hour 3_600
+  @seconds_per_day 86_400
+  @seconds_per_week 604_800
+
+  def ago(datetime, now \\ DateTime.utc_now())
+
+  def ago(%DateTime{} = datetime, now) do
+    seconds = DateTime.diff(now, datetime)
+    ago_label(seconds)
+  end
+
+  defp ago_label(seconds) when seconds < @seconds_per_hour do
+    minutes = max(div(seconds, 60), 1)
+    dngettext("feed", "%{count} min ago", "%{count} min ago", minutes)
+  end
+
+  defp ago_label(seconds) when seconds < @seconds_per_day,
+    do: dngettext("feed", "%{count}h ago", "%{count}h ago", div(seconds, @seconds_per_hour))
+
+  defp ago_label(seconds) when seconds < @seconds_per_week,
+    do: dngettext("feed", "%{count}d ago", "%{count}d ago", div(seconds, @seconds_per_day))
+
+  defp ago_label(seconds),
+    do: dngettext("feed", "%{count}w ago", "%{count}w ago", div(seconds, @seconds_per_week))
+
   def percent(_done, total) when total in [nil, 0], do: 0
   def percent(done, total), do: round(done / total * 100)
 

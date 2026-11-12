@@ -1,11 +1,12 @@
 defmodule AnotherTrackingTool.Tracking do
   alias AnotherTrackingTool.Tracking.{
-    Activity,
     Broadcast,
+    Circle,
     Comments,
     Entries,
     Episodes,
     Imports,
+    LastWatched,
     Stats
   }
 
@@ -36,6 +37,7 @@ defmodule AnotherTrackingTool.Tracking do
   defdelegate episode_progress(user, media_item), to: Episodes
   defdelegate season_progress(user, media_item, season_number), to: Episodes
 
-  defdelegate last_watched(user, period, limit \\ 5), to: Activity
+  defdelegate last_watched(user, period, limit \\ 5), to: LastWatched
+  defdelegate circle_latest(user, limit \\ 8), to: Circle
   defdelegate watch_totals(user, period), to: Stats
 end

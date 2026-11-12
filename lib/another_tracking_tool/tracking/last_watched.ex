@@ -1,4 +1,4 @@
-defmodule AnotherTrackingTool.Tracking.Activity do
+defmodule AnotherTrackingTool.Tracking.LastWatched do
   import Ecto.Query
 
   alias AnotherTrackingTool.Accounts.User
@@ -25,7 +25,7 @@ defmodule AnotherTrackingTool.Tracking.Activity do
     |> Enum.map(fn entry ->
       %{
         media_item: entry.media_item,
-        at: activity_at(entry.watched_on, entry.updated_at),
+        at: Period.at(entry.watched_on, entry.updated_at),
         episodes: 0,
         latest_episode: nil,
         progress: nil
@@ -92,7 +92,4 @@ defmodule AnotherTrackingTool.Tracking.Activity do
     |> Repo.all()
     |> Map.new(&{&1.id, &1})
   end
-
-  defp activity_at(%Date{} = date, _fallback), do: DateTime.new!(date, ~T[00:00:00])
-  defp activity_at(nil, fallback), do: fallback
 end

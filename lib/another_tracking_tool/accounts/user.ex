@@ -19,6 +19,8 @@ defmodule AnotherTrackingTool.Accounts.User do
     timestamps(type: :utc_datetime)
   end
 
+  def display_name(%__MODULE__{email: email}), do: email |> String.split("@") |> hd()
+
   def locale_changeset(user, attrs) do
     user
     |> cast(attrs, [:locale])

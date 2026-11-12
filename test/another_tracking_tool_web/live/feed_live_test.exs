@@ -29,15 +29,36 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     assert html =~ "Nothing here yet"
   end
 
-  test "someone else's watch stays off your rows", %{conn: conn} do
+  test "someone else's watch lands in the circle, not in your rows", %{conn: conn} do
     other = AccountsFixtures.user_fixture(email: "julien@example.com")
     movie = media_item_fixture(%{kind: :movie, title_fr: "Arrival"})
     {:ok, _} = Tracking.mark_watched(other, movie, %{watched_on: Date.utc_today()})
 
     {:ok, _lv, html} = live(conn, ~p"/feed")
 
-    refute html =~ "Arrival"
+    assert html =~ "Your circle"
+    assert html =~ "julien"
+    assert html =~ "Arrival"
     assert html =~ "Nothing here yet"
+  end
+
+  test "the circle shows each person once", %{conn: conn} do
+    marie = AccountsFixtures.user_fixture(email: "marie@example.com")
+    first = media_item_fixture(%{kind: :movie, title_fr: "Premier"})
+    second = media_item_fixture(%{kind: :movie, title_fr: "Second"})
+
+    {:ok, _} = Tracking.mark_watched(marie, first, %{watched_on: ~D[2024-01-01]})
+    {:ok, _} = Tracking.mark_watched(marie, second, %{watched_on: Date.utc_today()})
+
+    {:ok, _lv, html} = live(conn, ~p"/feed")
+
+    assert html =~ "Second"
+    refute html =~ "Premier"
+  end
+
+  test "no circle section when nobody else has watched anything", %{conn: conn} do
+    {:ok, _lv, html} = live(conn, ~p"/feed")
+    refute html =~ "Your circle"
   end
 
   test "a series takes one row, whatever the episode count", %{conn: conn, user: user} do
@@ -67,14 +88,16 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     assert render(lv) =~ "Arrival"
   end
 
-  test "someone else's watch leaves your page alone", %{conn: conn} do
+  test "someone else's watch reaches the circle live", %{conn: conn} do
     {:ok, lv, _html} = live(conn, ~p"/feed")
 
     other = AccountsFixtures.user_fixture()
     movie = media_item_fixture(%{kind: :movie, title_fr: "Stalker"})
     {:ok, _} = Tracking.mark_watched(other, movie, %{watched_on: Date.utc_today()})
 
-    refute render(lv) =~ "Stalker"
+    html = render(lv)
+    assert html =~ "Your circle"
+    assert html =~ "Stalker"
   end
 
   describe "totals" do
