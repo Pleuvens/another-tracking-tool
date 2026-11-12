@@ -1,9 +1,10 @@
 defmodule AnotherTrackingToolWeb.FeedLive do
   use AnotherTrackingToolWeb, :live_view
 
+  alias AnotherTrackingTool.Accounts.User
   alias AnotherTrackingTool.Catalog.{Episode, MediaItem}
   alias AnotherTrackingTool.Tracking
-  alias AnotherTrackingToolWeb.Format
+  alias AnotherTrackingToolWeb.{Avatars, Format}
 
   @periods [:month, :year, :all]
 
@@ -20,15 +21,14 @@ defmodule AnotherTrackingToolWeb.FeedLive do
   end
 
   @impl true
-  def handle_info({:activity, %{user_id: user_id}}, socket) do
-    if user_id == me(socket).id, do: {:noreply, load(socket)}, else: {:noreply, socket}
-  end
+  def handle_info({:activity, _subject}, socket), do: {:noreply, load(socket)}
 
   defp load(socket) do
     totals = Tracking.watch_totals(me(socket), socket.assigns.period)
 
     socket
     |> assign(:last_watched, Tracking.last_watched(me(socket), socket.assigns.period))
+    |> assign(:circle, Tracking.circle_latest(me(socket)))
     |> assign(:totals, totals)
     |> assign(:watched, Format.watch_time(totals.minutes))
   end
@@ -54,6 +54,7 @@ defmodule AnotherTrackingToolWeb.FeedLive do
       <.period_chips period={@period} periods={@periods} />
       <.totals_panel period={@period} totals={@totals} watched={@watched} />
       <.last_watched_list rows={@last_watched} />
+      <.circle_strip watches={@circle} />
     </Layouts.app>
     """
   end
@@ -159,6 +160,41 @@ defmodule AnotherTrackingToolWeb.FeedLive do
     </.link>
     """
   end
+
+  defp circle_strip(assigns) do
+    ~H"""
+    <div :if={@watches != []} class="mt-8 space-y-3">
+      <.section_label>{dgettext("feed", "Your circle")}</.section_label>
+
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <.link
+          :for={watch <- @watches}
+          navigate={~p"/media/#{watch.media_item.id}"}
+          class="flex items-center gap-2.5 rounded-xl border border-line p-2.5 hover:bg-paper-2"
+        >
+          <.avatar initial={Avatars.initial(watch.user)} color={Avatars.color(watch.user.id)} />
+
+          <div class="flex min-w-0 flex-1 flex-col">
+            <span class="text-xs font-bold text-ink">{User.display_name(watch.user)}</span>
+            <span class="truncate text-xs text-ink-soft">{circle_subtitle(watch)}</span>
+          </div>
+
+          <span class="shrink-0 text-xs text-ink-soft">{Format.ago(watch.at)}</span>
+        </.link>
+      </div>
+    </div>
+    """
+  end
+
+  defp circle_subtitle(%{episode: %Episode{} = episode, media_item: media_item}),
+    do:
+      "#{episode.season_number}×#{episode.episode_number} · #{MediaItem.display_title(media_item)}"
+
+  defp circle_subtitle(%{media_item: media_item, rating: nil}),
+    do: MediaItem.display_title(media_item)
+
+  defp circle_subtitle(%{media_item: media_item, rating: rating}),
+    do: "#{MediaItem.display_title(media_item)} · #{String.duplicate("★", rating)}"
 
   defp subtitle(%{latest_episode: %Episode{} = episode}),
     do:

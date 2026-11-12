@@ -16,7 +16,7 @@ msgstr ""
 msgid "Activity"
 msgstr "Activité"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:117
+#: lib/another_tracking_tool_web/live/feed_live.ex:118
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet. Go watch something."
 msgstr "Rien pour l'instant. Va regarder quelque chose."
@@ -49,7 +49,7 @@ msgid_plural "months"
 msgstr[0] "mois"
 msgstr[1] "mois"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:102
+#: lib/another_tracking_tool_web/live/feed_live.ex:103
 #, elixir-autogen, elixir-format
 msgid "%{count} episode"
 msgid_plural "%{count} episodes"
@@ -61,12 +61,12 @@ msgstr[1] "%{count} épisodes"
 msgid "All time"
 msgstr "Tout"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:89
+#: lib/another_tracking_tool_web/live/feed_live.ex:90
 #, elixir-autogen, elixir-format
 msgid "Films"
 msgstr "Films"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:97
+#: lib/another_tracking_tool_web/live/feed_live.ex:98
 #, elixir-autogen, elixir-format
 msgid "Series"
 msgstr "Séries"
@@ -81,7 +81,7 @@ msgstr "Ce mois-ci"
 msgid "This year"
 msgstr "Cette année"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:81
+#: lib/another_tracking_tool_web/live/feed_live.ex:82
 #, elixir-autogen, elixir-format
 msgid "Time watched"
 msgstr "Temps de visionnage"
@@ -91,14 +91,14 @@ msgstr "Temps de visionnage"
 msgid "everything you have logged"
 msgstr "tout ce que vous avez enregistré"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:91
+#: lib/another_tracking_tool_web/live/feed_live.ex:92
 #, elixir-autogen, elixir-format
 msgid "film"
 msgid_plural "films"
 msgstr[0] "film"
 msgstr[1] "films"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:99
+#: lib/another_tracking_tool_web/live/feed_live.ex:100
 #, elixir-autogen, elixir-format
 msgid "series"
 msgstr "séries"
@@ -123,19 +123,19 @@ msgstr "Aujourd'hui"
 msgid "Yesterday"
 msgstr "Hier"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:150
+#: lib/another_tracking_tool_web/live/feed_live.ex:151
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{count} ep"
 msgid_plural "%{count} ep"
 msgstr[0] "%{count} épisode"
 msgstr[1] "%{count} épisodes"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:114
+#: lib/another_tracking_tool_web/live/feed_live.ex:115
 #, elixir-autogen, elixir-format
 msgid "Last watched"
 msgstr "Derniers visionnages"
 
-#: lib/another_tracking_tool_web/live/feed_live.ex:165
+#: lib/another_tracking_tool_web/live/feed_live.ex:201
 #, elixir-autogen, elixir-format
 msgid "up to %{code} · %{name}"
 msgstr "jusqu'à %{code} · %{name}"
@@ -167,3 +167,8 @@ msgid "%{count}w ago"
 msgid_plural "%{count}w ago"
 msgstr[0] "%{count} épisode"
 msgstr[1] "%{count} épisodes"
+
+#: lib/another_tracking_tool_web/live/feed_live.ex:167
+#, elixir-autogen, elixir-format
+msgid "Your circle"
+msgstr "Votre cercle"
