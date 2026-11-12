@@ -19,6 +19,7 @@ defmodule AnotherTrackingTool.Providers.TmdbTest do
            "id" => 603,
            "title" => "Matrix",
            "overview" => "Un hacker...",
+           "runtime" => 136,
            "genres" => [%{"id" => 28, "name" => "Action"}],
            "external_ids" => %{"imdb_id" => "tt0133093"}
          }}
@@ -27,6 +28,7 @@ defmodule AnotherTrackingTool.Providers.TmdbTest do
       assert {:ok, enriched} = Tmdb.enrich(item)
       assert enriched.overview_fr == "Un hacker..."
       assert enriched.imdb_id == "tt0133093"
+      assert enriched.runtime == 136
       refute is_nil(enriched.details_synced_at)
 
       enriched = Repo.preload(enriched, :tmdb_genres)

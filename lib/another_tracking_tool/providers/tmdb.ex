@@ -162,6 +162,7 @@ defmodule AnotherTrackingTool.Providers.Tmdb do
       poster_path: fr["poster_path"],
       backdrop_path: fr["backdrop_path"],
       released_on: Coerce.date(fr["release_date"] || fr["first_air_date"]),
+      runtime: fr["runtime"],
       original_language: fr["original_language"],
       tmdb_popularity: fr["popularity"],
       tmdb_vote_average: fr["vote_average"],
