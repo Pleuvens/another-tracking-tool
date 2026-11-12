@@ -1,6 +1,4 @@
 defmodule AnotherTrackingTool.Tracking do
-  @moduledoc "Watch entries and comments on media items, broadcast live to the circle."
-
   import Ecto.Query
 
   alias AnotherTrackingTool.Accounts.User

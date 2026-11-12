@@ -1,6 +1,4 @@
 defmodule AnotherTrackingTool.Providers.Tmdb do
-  @moduledoc "TMDB metadata provider — implements the catalog provider behaviour."
-
   @behaviour AnotherTrackingTool.Catalog.Provider
 
   require Logger
