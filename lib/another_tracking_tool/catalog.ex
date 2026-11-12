@@ -1,6 +1,4 @@
 defmodule AnotherTrackingTool.Catalog do
-  @moduledoc "The local media catalog: read-through search and provider-neutral persistence."
-
   import Ecto.Query
 
   alias AnotherTrackingTool.Catalog.{Episode, MediaItem, Season}

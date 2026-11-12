@@ -4,7 +4,7 @@ defmodule AnotherTrackingTool.Tracking.Suggestions do
   alias AnotherTrackingTool.Accounts.User
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.Repo
-  alias AnotherTrackingTool.Tracking.{EpisodeWatch, WatchEntry}
+  alias AnotherTrackingTool.Tracking.{WatchEntry, Watched}
 
   @pool 200
   @top_genre_points 8
@@ -70,23 +70,19 @@ defmodule AnotherTrackingTool.Tracking.Suggestions do
 
   defp genre_minutes(%User{id: user_id}) do
     films =
-      from(e in WatchEntry,
-        join: m in assoc(e, :media_item),
-        join: g in assoc(m, :tmdb_genres),
-        where: e.user_id == ^user_id and e.status == :completed and m.kind == :movie,
-        group_by: g.id,
-        select: {g.id, coalesce(sum(m.runtime), 0)}
-      )
+      user_id
+      |> Watched.films()
+      |> join(:inner, [media_item: m], g in assoc(m, :tmdb_genres), as: :genre)
+      |> group_by([genre: g], g.id)
+      |> select([media_item: m, genre: g], {g.id, coalesce(sum(m.runtime), 0)})
 
     episodes =
-      from(w in EpisodeWatch,
-        join: ep in assoc(w, :episode),
-        join: m in assoc(w, :media_item),
-        join: g in assoc(m, :tmdb_genres),
-        where: w.user_id == ^user_id,
-        group_by: g.id,
-        select: {g.id, coalesce(sum(ep.runtime), 0)}
-      )
+      user_id
+      |> Watched.episodes()
+      |> join(:inner, [watch: w], m in assoc(w, :media_item), as: :media_item)
+      |> join(:inner, [media_item: m], g in assoc(m, :tmdb_genres), as: :genre)
+      |> group_by([genre: g], g.id)
+      |> select([episode: ep, genre: g], {g.id, coalesce(sum(ep.runtime), 0)})
 
     Map.merge(
       films |> Repo.all() |> Map.new(),

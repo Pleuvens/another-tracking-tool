@@ -4,7 +4,7 @@ defmodule AnotherTrackingTool.Tracking.LastWatched do
   alias AnotherTrackingTool.Accounts.User
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.Repo
-  alias AnotherTrackingTool.Tracking.{Episodes, EpisodeWatch, Period, WatchEntry}
+  alias AnotherTrackingTool.Tracking.{Episodes, EpisodeWatch, Period, Watched}
 
   def last_watched(%User{id: user_id}, period, limit \\ 5) do
     since = Period.start(period)
@@ -15,11 +15,9 @@ defmodule AnotherTrackingTool.Tracking.LastWatched do
   end
 
   defp film_rows(user_id, since) do
-    from(e in WatchEntry,
-      join: m in assoc(e, :media_item),
-      where: e.user_id == ^user_id and e.status == :completed and m.kind == :movie,
-      preload: [media_item: :tmdb_genres]
-    )
+    user_id
+    |> Watched.films()
+    |> preload(media_item: :tmdb_genres)
     |> Period.since(since)
     |> Repo.all()
     |> Enum.map(fn entry ->

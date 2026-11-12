@@ -1,6 +1,4 @@
 defmodule AnotherTrackingTool.CatalogFixtures do
-  @moduledoc "Persisted catalog records for tests."
-
   alias AnotherTrackingTool.Catalog
   alias AnotherTrackingTool.Catalog.{Series, TmdbGenre}
   alias AnotherTrackingTool.Repo
