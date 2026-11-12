@@ -317,4 +317,69 @@ defmodule AnotherTrackingTool.TrackingTest do
       assert [_] = Tracking.last_watched(user, :all)
     end
   end
+
+  describe "circle_latest" do
+    test "gives each person one entry, their most recent", ctx do
+      %{user: me} = ctx
+      marie = user_fixture()
+      first = media_item_fixture(%{kind: :movie, title_fr: "Premier"})
+      second = media_item_fixture(%{kind: :movie, title_fr: "Second"})
+
+      {:ok, _} = Tracking.mark_watched(marie, first, %{watched_on: ~D[2024-01-01]})
+      {:ok, _} = Tracking.mark_watched(marie, second, %{watched_on: ~D[2024-06-01]})
+
+      assert [watch] = Tracking.circle_latest(me)
+      assert watch.user.id == marie.id
+      assert watch.media_item.id == second.id
+    end
+
+    test "leaves you out of your own circle", ctx do
+      %{user: me, movie: movie} = ctx
+      {:ok, _} = Tracking.mark_watched(me, movie, %{watched_on: Date.utc_today()})
+
+      assert Tracking.circle_latest(me) == []
+    end
+
+    test "takes the later of a person's film and episode", ctx do
+      %{user: me} = ctx
+      theo = user_fixture()
+      film = media_item_fixture(%{kind: :movie})
+      show = media_item_fixture(%{kind: :tv})
+      episode = episode_fixture(show, season_fixture(show), %{episode_number: 4})
+
+      {:ok, _} = Tracking.mark_watched(theo, film, %{watched_on: ~D[2024-01-01]})
+      :ok = Tracking.mark_episode(theo, episode, %{watched_on: ~D[2024-09-09]})
+
+      assert [watch] = Tracking.circle_latest(me)
+      assert watch.episode.id == episode.id
+      assert watch.media_item.id == show.id
+    end
+
+    test "carries the rating of a film watch", ctx do
+      %{user: me} = ctx
+      lea = user_fixture()
+      film = media_item_fixture(%{kind: :movie})
+      {:ok, _} = Tracking.upsert_entry(lea, film, %{status: :completed, rating: 5})
+
+      assert [watch] = Tracking.circle_latest(me)
+      assert watch.rating == 5
+      assert watch.episode == nil
+    end
+
+    test "orders people newest first and honours the limit", ctx do
+      %{user: me} = ctx
+      older = user_fixture()
+      newer = user_fixture()
+      film = media_item_fixture(%{kind: :movie})
+
+      {:ok, _} = Tracking.mark_watched(older, film, %{watched_on: ~D[2024-01-01]})
+      {:ok, _} = Tracking.mark_watched(newer, film, %{watched_on: ~D[2024-06-01]})
+
+      assert [first, second] = Tracking.circle_latest(me)
+      assert first.user.id == newer.id
+      assert second.user.id == older.id
+      assert [only] = Tracking.circle_latest(me, 1)
+      assert only.user.id == newer.id
+    end
+  end
 end

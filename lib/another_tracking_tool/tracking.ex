@@ -37,5 +37,6 @@ defmodule AnotherTrackingTool.Tracking do
   defdelegate season_progress(user, media_item, season_number), to: Episodes
 
   defdelegate last_watched(user, period, limit \\ 5), to: Activity
+  defdelegate circle_latest(user, limit \\ 8), to: Activity
   defdelegate watch_totals(user, period), to: Stats
 end
