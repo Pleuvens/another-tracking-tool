@@ -137,7 +137,7 @@ defmodule AnotherTrackingToolWeb.DiscoverComponents do
       >
         <.icon name={icon} class="size-4" />
         <span class="text-ink">{watch_status_label(status)}</span>
-        <kbd class="rounded border border-line px-1 text-[9px]">{hint}</kbd>
+        <kbd class="hidden rounded border border-line px-1 text-[9px] sm:block">{hint}</kbd>
       </button>
     </div>
     """
