@@ -143,10 +143,29 @@ defmodule AnotherTrackingToolWeb.SearchLiveTest do
       assert html =~ "Series"
     end
 
-    test "says so when there is nothing left to suggest", %{conn: conn} do
-      {:ok, _lv, html} = live(conn, ~p"/search")
+    test "an exhausted deck points at the search field", %{conn: conn} do
+      {:ok, lv, html} = live(conn, ~p"/search")
 
       assert html =~ "That is every suggestion"
+      assert html =~ "Search by name"
+      assert lv |> element(~s(input#search_field)) |> has_element?()
+    end
+
+    test "a fruitless search offers the way back", %{conn: conn} do
+      film("In the deck")
+
+      TmdbStub.stub([{"/3/search/multi", %{"results" => []}}])
+
+      {:ok, lv, _html} = live(conn, ~p"/search")
+
+      html = lv |> form("form", %{"q" => "zzzz"}) |> render_change()
+      assert html =~ "No match for"
+      assert html =~ "Back to suggestions"
+
+      html = lv |> element("button", "Back to suggestions") |> render_click()
+
+      assert html =~ "In the deck"
+      refute html =~ "No match for"
     end
 
     test "a search replaces the deck and clearing it brings the deck back", %{conn: conn} do

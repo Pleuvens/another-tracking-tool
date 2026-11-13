@@ -16,11 +16,6 @@ msgstr ""
 msgid "My list"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/watchlist_live.ex:60
-#, elixir-autogen, elixir-format
-msgid "Nothing planned yet — go feed it some ideas"
-msgstr ""
-
 #: lib/another_tracking_tool_web/components/list_components.ex:74
 #, elixir-autogen, elixir-format
 msgid "%{watched} of %{total} episodes"
@@ -31,7 +26,37 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/watchlist_live.ex:62
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:68
 #, elixir-autogen, elixir-format
 msgid "Nothing with that status"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:52
+#, elixir-autogen, elixir-format
+msgid "Add a film or a series from Discover, or bring over what you already track elsewhere."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:61
+#, elixir-autogen, elixir-format
+msgid "Import a CSV"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:70
+#, elixir-autogen, elixir-format
+msgid "Pick another filter, or add something new from Discover."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:58
+#, elixir-autogen, elixir-format
+msgid "Search"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:73
+#, elixir-autogen, elixir-format
+msgid "Show everything"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/watchlist_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "Your list is empty"
 msgstr ""

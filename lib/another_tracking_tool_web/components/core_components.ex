@@ -82,6 +82,22 @@ defmodule AnotherTrackingToolWeb.CoreComponents do
     end
   end
 
+  attr :title, :string, required: true
+  slot :inner_block, required: true
+  slot :action
+
+  def empty_state(assigns) do
+    ~H"""
+    <div class="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-line p-8 text-center">
+      <b class="font-display text-lg text-ink">{@title}</b>
+      <p class="max-w-prose text-sm text-ink-soft">{render_slot(@inner_block)}</p>
+      <div :if={@action != []} class="flex flex-wrap justify-center gap-2">
+        {render_slot(@action)}
+      </div>
+    </div>
+    """
+  end
+
   attr :label, :string, required: true
   attr :value, :string, required: true
   attr :unit, :string, default: nil

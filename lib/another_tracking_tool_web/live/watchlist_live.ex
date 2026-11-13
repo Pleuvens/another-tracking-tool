@@ -47,17 +47,37 @@ defmodule AnotherTrackingToolWeb.WatchlistLive do
 
       <ListComponents.status_filters status={@status} counts={@counts} />
 
-      <p :if={@entries == []} class="mt-6 text-ink-soft">
-        {empty_message(@status)}
-      </p>
+      <div :if={@entries == []} class="mt-6">
+        <.empty_state :if={@status == :all} title={dgettext("watchlist", "Your list is empty")}>
+          {dgettext(
+            "watchlist",
+            "Add a film or a series from Discover, or bring over what you already track elsewhere."
+          )}
+          <:action>
+            <.button variant="primary" navigate={~p"/search"}>
+              {dgettext("watchlist", "Search")}
+            </.button>
+            <.button variant="outline" navigate={~p"/import"}>
+              {dgettext("watchlist", "Import a CSV")}
+            </.button>
+          </:action>
+        </.empty_state>
+
+        <.empty_state
+          :if={@status != :all}
+          title={dgettext("watchlist", "Nothing with that status")}
+        >
+          {dgettext("watchlist", "Pick another filter, or add something new from Discover.")}
+          <:action>
+            <.button variant="primary" phx-click="set_status_filter" phx-value-status="all">
+              {dgettext("watchlist", "Show everything")}
+            </.button>
+          </:action>
+        </.empty_state>
+      </div>
 
       <ListComponents.tile_grid entries={@entries} progress={@progress} seasons={@seasons} />
     </Layouts.app>
     """
   end
-
-  defp empty_message(:all),
-    do: dgettext("watchlist", "Nothing planned yet \u2014 go feed it some ideas")
-
-  defp empty_message(_status), do: dgettext("watchlist", "Nothing with that status")
 end

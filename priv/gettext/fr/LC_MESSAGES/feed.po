@@ -16,11 +16,6 @@ msgstr ""
 msgid "Activity"
 msgstr "Activité"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:73
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Go watch something."
-msgstr "Rien pour l'instant. Va regarder quelque chose."
-
 #: lib/another_tracking_tool_web/format.ex:76
 #, elixir-autogen, elixir-format
 msgid "day"
@@ -56,7 +51,7 @@ msgid_plural "%{count} episodes"
 msgstr[0] "%{count} épisode"
 msgstr[1] "%{count} épisodes"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:173
+#: lib/another_tracking_tool_web/components/feed_components.ex:178
 #, elixir-autogen, elixir-format
 msgid "All time"
 msgstr "Tout"
@@ -71,12 +66,12 @@ msgstr "Films"
 msgid "Series"
 msgstr "Séries"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:171
+#: lib/another_tracking_tool_web/components/feed_components.ex:176
 #, elixir-autogen, elixir-format
 msgid "This month"
 msgstr "Ce mois-ci"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:172
+#: lib/another_tracking_tool_web/components/feed_components.ex:177
 #, elixir-autogen, elixir-format
 msgid "This year"
 msgstr "Cette année"
@@ -86,7 +81,7 @@ msgstr "Cette année"
 msgid "Time watched"
 msgstr "Temps de visionnage"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:177
+#: lib/another_tracking_tool_web/components/feed_components.ex:182
 #, elixir-autogen, elixir-format
 msgid "everything you have logged"
 msgstr "tout ce que vous avez enregistré"
@@ -103,12 +98,12 @@ msgstr[1] "films"
 msgid "series"
 msgstr "séries"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:175
+#: lib/another_tracking_tool_web/components/feed_components.ex:180
 #, elixir-autogen, elixir-format
 msgid "so far this month"
 msgstr "depuis le début du mois"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:176
+#: lib/another_tracking_tool_web/components/feed_components.ex:181
 #, elixir-autogen, elixir-format
 msgid "so far this year"
 msgstr "depuis le début de l'année"
@@ -123,7 +118,7 @@ msgstr "Aujourd'hui"
 msgid "Yesterday"
 msgstr "Hier"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:106
+#: lib/another_tracking_tool_web/components/feed_components.ex:111
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{count} ep"
 msgid_plural "%{count} ep"
@@ -135,7 +130,7 @@ msgstr[1] "%{count} épisodes"
 msgid "Last watched"
 msgstr "Derniers visionnages"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:157
+#: lib/another_tracking_tool_web/components/feed_components.ex:162
 #, elixir-autogen, elixir-format
 msgid "up to %{code} · %{name}"
 msgstr "jusqu'à %{code} · %{name}"
@@ -168,7 +163,22 @@ msgid_plural "%{count}w ago"
 msgstr[0] "%{count} épisode"
 msgstr[1] "%{count} épisodes"
 
-#: lib/another_tracking_tool_web/components/feed_components.ex:124
+#: lib/another_tracking_tool_web/components/feed_components.ex:129
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr "Votre cercle"
+
+#: lib/another_tracking_tool_web/components/feed_components.ex:76
+#, elixir-autogen, elixir-format
+msgid "Find something to watch"
+msgstr "Trouver quoi regarder"
+
+#: lib/another_tracking_tool_web/components/feed_components.ex:72
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Nothing here yet"
+msgstr "Rien pour l'instant. Va regarder quelque chose."
+
+#: lib/another_tracking_tool_web/components/feed_components.ex:73
+#, elixir-autogen, elixir-format
+msgid "Your watches land here as you log them. Start with something of your own."
+msgstr "Vos visionnages arrivent ici au fur et à mesure. Commencez par quelque chose à vous."

@@ -24,9 +24,12 @@ defmodule AnotherTrackingToolWeb.FeedLiveTest do
     assert html =~ "Today"
   end
 
-  test "empty state when you have watched nothing", %{conn: conn} do
+  test "empty state points at Discover", %{conn: conn} do
     {:ok, _lv, html} = live(conn, ~p"/feed")
+
     assert html =~ "Nothing here yet"
+    assert html =~ "Find something to watch"
+    assert html =~ ~s(href="/search")
   end
 
   test "someone else's watch lands in the circle, not in your rows", %{conn: conn} do
