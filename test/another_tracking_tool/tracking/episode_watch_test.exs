@@ -71,7 +71,7 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
     episode_fixture(show, season, %{episode_number: 2})
 
     Tracking.mark_season(user, show, 1)
-    assert Tracking.season_progress(user, show, 1) == %{watched: 2, total: 2}
+    assert Tracking.episode_progress(user, show) == %{watched: 2, total: 2}
     assert Tracking.get_entry(user, show).status == :completed
   end
 
