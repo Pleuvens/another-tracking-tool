@@ -46,6 +46,13 @@ defmodule AnotherTrackingToolWeb.ListComponents do
             label={"S#{season(@seasons, entry)}"}
             class="absolute left-4 top-4"
           />
+          <span
+            :if={entry.status == :completed}
+            title={watch_status_label(:completed)}
+            class="absolute right-4 top-4 flex size-6 items-center justify-center rounded-full bg-ink text-paper-0"
+          >
+            <.icon name="hero-check" class="size-3.5" />
+          </span>
         </div>
 
         <span class="font-display text-sm font-bold text-ink">
@@ -86,11 +93,7 @@ defmodule AnotherTrackingToolWeb.ListComponents do
     """
   end
 
-  defp tile_state(assigns) do
-    ~H"""
-    <.status_pill status={@entry.status} />
-    """
-  end
+  defp tile_state(assigns), do: ~H""
 
   defp season(seasons, entry), do: Map.get(seasons, entry.media_item_id)
 
