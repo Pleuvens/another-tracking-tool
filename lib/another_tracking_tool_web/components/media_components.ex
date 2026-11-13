@@ -1,6 +1,7 @@
 defmodule AnotherTrackingToolWeb.MediaComponents do
   use AnotherTrackingToolWeb, :html
 
+  alias AnotherTrackingTool.Accounts.User
   alias AnotherTrackingTool.Catalog.MediaItem
   alias AnotherTrackingTool.WatchStatuses
   alias AnotherTrackingToolWeb.{Avatars, Format}
@@ -224,16 +225,27 @@ defmodule AnotherTrackingToolWeb.MediaComponents do
 
   def circle_panel(assigns) do
     ~H"""
-    <div class="mt-10 space-y-3">
+    <div class="flex flex-col gap-3 rounded-2xl border border-line bg-paper-0 p-4">
       <.section_label>{dgettext("tracking", "Your circle")}</.section_label>
-      <div class="flex items-center gap-4">
+
+      <p :if={@entries == []} class="text-sm text-ink-soft">
+        {dgettext("tracking", "No one yet — be the first.")}
+      </p>
+
+      <div :if={@entries != []} class="flex items-center gap-3">
         <.avatar_stack people={circle_avatars(@entries)} extra={max(length(@entries) - 5, 0)} />
-        <span :if={@circle_rating} class="font-display font-bold text-ink">
-          {@circle_rating} / 5
+        <span :if={@circle_rating} class="font-display text-xl font-bold text-ink">
+          {@circle_rating}
+          <span class="text-xs font-semibold text-ink-soft">/ 5</span>
         </span>
-        <span :if={@entries == []} class="text-sm text-ink-soft">
-          {dgettext("tracking", "No one yet — be the first.")}
-        </span>
+      </div>
+
+      <div :if={@entries != []} class="flex flex-col gap-2">
+        <div :for={entry <- @entries} class="flex items-center justify-between gap-3 text-sm">
+          <span class="truncate text-ink-soft">{User.display_name(entry.user)}</span>
+          <.stars :if={entry.rating} value={entry.rating} class="shrink-0 text-xs" />
+          <.status_pill :if={is_nil(entry.rating)} status={entry.status} />
+        </div>
       </div>
     </div>
     """
@@ -244,30 +256,41 @@ defmodule AnotherTrackingToolWeb.MediaComponents do
 
   def comments_panel(assigns) do
     ~H"""
-    <div class="mt-10 space-y-4">
+    <div class="flex flex-col gap-3 rounded-2xl border border-line bg-paper-0 p-4">
       <.section_label>{dgettext("tracking", "Comments")}</.section_label>
+
+      <p :if={@comments == []} class="text-sm text-ink-soft">
+        {dgettext("tracking", "No one has said anything yet.")}
+      </p>
+
+      <div :for={comment <- @comments} class="flex gap-2 text-sm">
+        <.avatar
+          initial={Avatars.initial(comment.user)}
+          color={Avatars.color(comment.user.id)}
+          class="size-6"
+        />
+        <div class="flex min-w-0 flex-col">
+          <span class="text-xs font-bold text-ink-soft">{User.display_name(comment.user)}</span>
+          <p class="break-words text-ink">{comment.body}</p>
+        </div>
+      </div>
 
       <.form
         for={@comment_form}
         id="comment_form"
         phx-change="change_comment"
         phx-submit="comment"
-        class="flex gap-2"
+        class="flex items-center gap-2"
       >
         <input
           type="text"
           name="comment[body]"
           value={@comment_form[:body].value}
           placeholder={dgettext("tracking", "Say something…")}
-          class="flex-1 rounded-full bg-paper-2 px-5 py-3 text-sm text-ink placeholder:text-ink-soft focus:outline-none"
+          class="min-w-0 flex-1 rounded-full bg-paper-2 px-4 py-2 text-sm text-ink placeholder:text-ink-soft focus:outline-none"
         />
         <.button variant="primary">{dgettext("tracking", "Post")}</.button>
       </.form>
-
-      <div :for={comment <- @comments} class="rounded-2xl bg-paper-2 p-4">
-        <div class="text-xs font-bold text-ink-soft">{comment.user.email}</div>
-        <div class="text-ink">{comment.body}</div>
-      </div>
     </div>
     """
   end
