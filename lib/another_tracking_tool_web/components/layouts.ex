@@ -44,7 +44,31 @@ defmodule AnotherTrackingToolWeb.Layouts do
 
     ~H"""
     <div class="md:flex md:min-h-screen">
-      <aside class="border-b border-line bg-paper-0 md:w-56 md:shrink-0 md:border-r md:border-b-0">
+      <header class="flex items-center gap-3 border-b border-line px-4 py-3 md:hidden">
+        <button
+          phx-click={toggle_menu()}
+          aria-controls="side-menu"
+          aria-label={dgettext("layouts", "Open menu")}
+          class="text-ink-soft hover:text-ink"
+        >
+          <.icon name="hero-bars-3" class="size-5" />
+        </button>
+        <span class="font-display text-lg font-bold text-ink">
+          {dgettext("layouts", "Track")}
+        </span>
+      </header>
+
+      <div
+        id="side-menu-backdrop"
+        phx-click={toggle_menu()}
+        class="fixed inset-0 z-30 hidden bg-ink/40 md:hidden"
+      >
+      </div>
+
+      <aside
+        id="side-menu"
+        class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0"
+      >
         <div class="flex flex-col gap-5 p-4 md:h-full">
           <div class="flex items-center gap-2 px-2 font-display text-lg font-bold text-ink">
             <span class="relative size-5 rounded-md border-[2.5px] border-ink">
@@ -182,6 +206,16 @@ defmodule AnotherTrackingToolWeb.Layouts do
     """
   end
 
+  defp toggle_menu do
+    JS.toggle_class("-translate-x-full", to: "#side-menu")
+    |> JS.toggle_class("hidden", to: "#side-menu-backdrop")
+  end
+
+  defp close_menu do
+    JS.add_class("-translate-x-full", to: "#side-menu")
+    |> JS.add_class("hidden", to: "#side-menu-backdrop")
+  end
+
   defp nav_counts(user) do
     %{
       list: Tracking.status_counts(user).all,
@@ -213,6 +247,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
     ~H"""
     <.link
       navigate={@navigate}
+      phx-click={close_menu()}
       aria-current={@active && "page"}
       class={[
         "flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm",
