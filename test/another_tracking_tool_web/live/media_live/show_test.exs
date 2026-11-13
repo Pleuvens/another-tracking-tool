@@ -144,4 +144,46 @@ defmodule AnotherTrackingToolWeb.MediaLive.ShowTest do
 
     assert render(lv) =~ "From afar"
   end
+
+  describe "the side column" do
+    test "lists who rated what rather than an average alone", ctx do
+      %{conn: conn, user: user, movie: movie} = ctx
+      marie = AnotherTrackingTool.AccountsFixtures.user_fixture(email: "marie@example.com")
+      theo = AnotherTrackingTool.AccountsFixtures.user_fixture(email: "theo@example.com")
+
+      {:ok, _} = Tracking.upsert_entry(marie, movie, %{status: :completed, rating: 5})
+      {:ok, _} = Tracking.set_status(theo, movie, :watching)
+      {:ok, _} = Tracking.rate(user, movie, 4)
+
+      {:ok, _lv, html} = live(conn, ~p"/media/#{movie.id}")
+
+      assert html =~ "marie"
+      assert html =~ "theo"
+      assert html =~ "Watching"
+      assert html =~ "4.5"
+    end
+
+    test "says when the circle is empty", %{conn: conn, movie: movie} do
+      {:ok, _lv, html} = live(conn, ~p"/media/#{movie.id}")
+
+      assert html =~ "No one yet"
+      assert html =~ "No one has said anything yet"
+    end
+
+    test "a comment shows its author by name", %{conn: conn, user: user, movie: movie} do
+      {:ok, _} = Tracking.create_comment(user, movie, "Seen it twice.")
+
+      {:ok, _lv, html} = live(conn, ~p"/media/#{movie.id}")
+
+      assert html =~ "Seen it twice."
+      refute html =~ user.email
+    end
+
+    test "the circle and the comments sit beside the detail", %{conn: conn, movie: movie} do
+      {:ok, _lv, html} = live(conn, ~p"/media/#{movie.id}")
+
+      assert html =~ "lg:grid-cols-[1fr_280px]"
+      assert html =~ "<aside"
+    end
+  end
 end

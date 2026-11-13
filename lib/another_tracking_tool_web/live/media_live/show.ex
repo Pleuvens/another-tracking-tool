@@ -188,28 +188,34 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="grid items-start gap-8 sm:grid-cols-[220px_1fr]">
-        <.poster
-          src={tmdb_image(@media_item.poster_path, "w500")}
-          alt={MediaItem.display_title(@media_item)}
-        />
+      <div class="grid items-start gap-8 lg:grid-cols-[1fr_280px]">
+        <div class="min-w-0">
+          <div class="grid items-start gap-8 sm:grid-cols-[220px_1fr]">
+            <.poster
+              src={tmdb_image(@media_item.poster_path, "w500")}
+              alt={MediaItem.display_title(@media_item)}
+            />
 
-        <div class="space-y-5">
-          <MediaComponents.title_block media_item={@media_item} />
-          <MediaComponents.tracking_panel my_entry={@my_entry} editing_date={@editing_date} />
+            <div class="space-y-5">
+              <MediaComponents.title_block media_item={@media_item} />
+              <MediaComponents.tracking_panel my_entry={@my_entry} editing_date={@editing_date} />
+            </div>
+          </div>
+
+          <MediaComponents.episodes_panel
+            :if={@media_item.kind == :tv}
+            seasons={@seasons}
+            watched_ids={@watched_ids}
+            progress={@progress}
+            open_seasons={@open_seasons}
+          />
         </div>
+
+        <aside class="flex flex-col gap-4 lg:sticky lg:top-8">
+          <MediaComponents.circle_panel entries={@entries} circle_rating={@circle_rating} />
+          <MediaComponents.comments_panel comments={@comments} comment_form={@comment_form} />
+        </aside>
       </div>
-
-      <MediaComponents.episodes_panel
-        :if={@media_item.kind == :tv}
-        seasons={@seasons}
-        watched_ids={@watched_ids}
-        progress={@progress}
-        open_seasons={@open_seasons}
-      />
-
-      <MediaComponents.circle_panel entries={@entries} circle_rating={@circle_rating} />
-      <MediaComponents.comments_panel comments={@comments} comment_form={@comment_form} />
     </Layouts.app>
     """
   end
