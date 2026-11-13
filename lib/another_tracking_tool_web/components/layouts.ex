@@ -8,6 +8,10 @@ defmodule AnotherTrackingToolWeb.Layouts do
 
   embed_templates "layouts/*"
 
+  @menu_id "side-menu"
+  @menu_backdrop_id "side-menu-backdrop"
+  @menu_closed_class "-translate-x-full"
+
   attr :flash, :map, required: true
   attr :current_scope, :map, default: nil
   attr :active, :atom, default: nil
@@ -101,7 +105,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
     <header class="flex items-center gap-3 border-b border-line px-4 py-3 md:hidden">
       <button
         phx-click={toggle_menu()}
-        aria-controls="side-menu"
+        aria-controls={menu_id()}
         aria-label={dgettext("layouts", "Open menu")}
         class="text-ink-soft hover:text-ink"
       >
@@ -120,15 +124,18 @@ defmodule AnotherTrackingToolWeb.Layouts do
 
     ~H"""
     <div
-      id="side-menu-backdrop"
+      id={menu_backdrop_id()}
       phx-click={toggle_menu()}
       class="fixed inset-0 z-30 hidden bg-ink/40 md:hidden"
     >
     </div>
 
     <aside
-      id="side-menu"
-      class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0"
+      id={menu_id()}
+      class={[
+        "fixed inset-y-0 left-0 z-40 w-60 overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0",
+        menu_closed_class()
+      ]}
     >
       <div class="flex flex-col gap-5 p-4 md:h-full">
         <.wordmark mark class="px-2" />
@@ -227,14 +234,18 @@ defmodule AnotherTrackingToolWeb.Layouts do
     """
   end
 
+  defp menu_id, do: @menu_id
+  defp menu_backdrop_id, do: @menu_backdrop_id
+  defp menu_closed_class, do: @menu_closed_class
+
   defp toggle_menu do
-    JS.toggle_class("-translate-x-full", to: "#side-menu")
-    |> JS.toggle_class("hidden", to: "#side-menu-backdrop")
+    JS.toggle_class(@menu_closed_class, to: "##{@menu_id}")
+    |> JS.toggle_class("hidden", to: "##{@menu_backdrop_id}")
   end
 
   defp close_menu do
-    JS.add_class("-translate-x-full", to: "#side-menu")
-    |> JS.add_class("hidden", to: "#side-menu-backdrop")
+    JS.add_class(@menu_closed_class, to: "##{@menu_id}")
+    |> JS.add_class("hidden", to: "##{@menu_backdrop_id}")
   end
 
   defp nav_counts(user) do
