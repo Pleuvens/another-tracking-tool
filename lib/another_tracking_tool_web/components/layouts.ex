@@ -198,7 +198,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
       >
         <.icon name="hero-magnifying-glass" class="size-4" />
         {dgettext("layouts", "Search films and series")}
-        <kbd class="rounded border border-line px-1 py-0.5 text-[10px] font-bold">
+        <kbd class="hidden rounded border border-line px-1 py-0.5 text-[10px] font-bold sm:block">
           {dgettext("layouts", "⌘K")}
         </kbd>
       </.link>

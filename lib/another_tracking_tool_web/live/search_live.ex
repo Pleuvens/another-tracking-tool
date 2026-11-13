@@ -153,7 +153,7 @@ defmodule AnotherTrackingToolWeb.SearchLive do
         <% else %>
           <DiscoverComponents.deck cards={@cards} />
           <DiscoverComponents.decision_row media_item_id={hd(@cards).media_item.id} />
-          <p class="text-center text-[11px] text-ink-soft">
+          <p class="hidden text-center text-[11px] text-ink-soft sm:block">
             {dgettext("tracking", "Use the buttons or the arrow keys.")}
           </p>
         <% end %>
