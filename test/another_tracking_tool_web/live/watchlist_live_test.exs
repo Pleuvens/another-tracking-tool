@@ -91,6 +91,12 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     html = lv |> element("button", "Dropped · 0") |> render_click()
 
     assert html =~ "Nothing with that status"
+    assert html =~ "Show everything"
+
+    html = lv |> element("button", "Show everything") |> render_click()
+
+    assert html =~ "Dropped · 0"
+    refute html =~ "Nothing with that status"
   end
 
   test "a declined title waits behind its own chip", %{conn: conn, user: user} do
@@ -106,9 +112,14 @@ defmodule AnotherTrackingToolWeb.WatchlistLiveTest do
     assert html =~ "Declined Movie"
   end
 
-  test "shows the empty state", %{conn: conn} do
+  test "an empty list points at the two ways to fill it", %{conn: conn} do
     {:ok, _lv, html} = live(conn, ~p"/watchlist")
-    assert html =~ "Nothing planned yet"
+
+    assert html =~ "Your list is empty"
+    assert html =~ "Search"
+    assert html =~ "Import a CSV"
+    assert html =~ ~s(href="/search")
+    assert html =~ ~s(href="/import")
   end
 
   test "reloads when my planned set changes, ignores other users", %{conn: conn, user: user} do

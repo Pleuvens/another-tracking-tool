@@ -69,9 +69,14 @@ defmodule AnotherTrackingToolWeb.FeedComponents do
     <div class="mt-8 space-y-3">
       <.section_label>{dgettext("feed", "Last watched")}</.section_label>
 
-      <p :if={@rows == []} class="text-sm text-ink-soft">
-        {dgettext("feed", "Nothing here yet. Go watch something.")}
-      </p>
+      <.empty_state :if={@rows == []} title={dgettext("feed", "Nothing here yet")}>
+        {dgettext("feed", "Your watches land here as you log them. Start with something of your own.")}
+        <:action>
+          <.button variant="primary" navigate={~p"/search"}>
+            {dgettext("feed", "Find something to watch")}
+          </.button>
+        </:action>
+      </.empty_state>
 
       <div :if={@rows != []} class="divide-y divide-line-soft rounded-2xl border border-line">
         <.last_watched_row :for={row <- @rows} row={row} />

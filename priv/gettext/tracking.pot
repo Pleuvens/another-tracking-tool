@@ -81,7 +81,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:118
+#: lib/another_tracking_tool_web/live/search_live.ex:123
 #, elixir-autogen, elixir-format
 msgid "Discover"
 msgstr ""
@@ -113,7 +113,7 @@ msgstr ""
 msgid "New ground for you"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:159
+#: lib/another_tracking_tool_web/live/search_live.ex:166
 #, elixir-autogen, elixir-format
 msgid "No match for “%{query}”"
 msgstr ""
@@ -123,7 +123,7 @@ msgstr ""
 msgid "Open page"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:124
+#: lib/another_tracking_tool_web/live/search_live.ex:130
 #, elixir-autogen, elixir-format
 msgid "Or search by name"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 msgid "Series"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:138
+#: lib/another_tracking_tool_web/live/search_live.ex:142
 #, elixir-autogen, elixir-format
 msgid "That is every suggestion"
 msgstr ""
@@ -143,12 +143,12 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:151
+#: lib/another_tracking_tool_web/live/search_live.ex:157
 #, elixir-autogen, elixir-format
 msgid "Use the buttons or the arrow keys."
 msgstr ""
 
-#: lib/another_tracking_tool_web/live/search_live.ex:141
+#: lib/another_tracking_tool_web/live/search_live.ex:143
 #, elixir-autogen, elixir-format
 msgid "You have made a call on everything we know about. Search for something by name instead."
 msgstr ""
@@ -176,4 +176,19 @@ msgstr ""
 #: lib/another_tracking_tool_web/components/media_components.ex:263
 #, elixir-autogen, elixir-format
 msgid "No one has said anything yet."
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:171
+#, elixir-autogen, elixir-format
+msgid "Back to suggestions"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:149
+#, elixir-autogen, elixir-format
+msgid "Search by name"
+msgstr ""
+
+#: lib/another_tracking_tool_web/live/search_live.ex:168
+#, elixir-autogen, elixir-format
+msgid "Try a shorter title, or a genre like “drama”."
 msgstr ""

@@ -3,6 +3,7 @@ defmodule AnotherTrackingToolWeb.SearchLive do
 
   alias AnotherTrackingTool.{Catalog, Tracking}
   alias AnotherTrackingToolWeb.DiscoverComponents
+  alias Phoenix.LiveView.JS
 
   @deck_depth 3
 
@@ -24,6 +25,10 @@ defmodule AnotherTrackingToolWeb.SearchLive do
       "" -> {:noreply, socket |> assign(query: q, results: []) |> load_deck()}
       query -> {:noreply, assign(socket, query: q, results: search(query, socket))}
     end
+  end
+
+  def handle_event("clear_search", _params, socket) do
+    {:noreply, socket |> assign(query: "", results: []) |> load_deck()}
   end
 
   def handle_event("decide", %{"id" => id, "status" => status}, socket) do
@@ -119,6 +124,7 @@ defmodule AnotherTrackingToolWeb.SearchLive do
 
       <form id="search_form" class="mt-4" phx-change="search" phx-submit="search">
         <.search_input
+          id="search_field"
           name="q"
           value={@query}
           placeholder={dgettext("tracking", "Or search by name")}
@@ -133,17 +139,17 @@ defmodule AnotherTrackingToolWeb.SearchLive do
         phx-window-keydown="decide_by_key"
       >
         <%= if @cards == [] do %>
-          <div class="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-line p-8 text-center">
-            <b class="font-display text-lg text-ink">
-              {dgettext("tracking", "That is every suggestion")}
-            </b>
-            <span class="text-sm text-ink-soft">
-              {dgettext(
-                "tracking",
-                "You have made a call on everything we know about. Search for something by name instead."
-              )}
-            </span>
-          </div>
+          <.empty_state title={dgettext("tracking", "That is every suggestion")}>
+            {dgettext(
+              "tracking",
+              "You have made a call on everything we know about. Search for something by name instead."
+            )}
+            <:action>
+              <.button variant="primary" phx-click={JS.focus(to: "#search_field")}>
+                {dgettext("tracking", "Search by name")}
+              </.button>
+            </:action>
+          </.empty_state>
         <% else %>
           <DiscoverComponents.deck cards={@cards} />
           <DiscoverComponents.decision_row media_item_id={hd(@cards).media_item.id} />
@@ -155,9 +161,17 @@ defmodule AnotherTrackingToolWeb.SearchLive do
         <DiscoverComponents.decided_bar decision={@decision} />
       </div>
 
-      <p :if={@query != "" and @results == []} class="mt-6 text-sm text-ink-soft">
-        {dgettext("tracking", "No match for “%{query}”", query: @query)}
-      </p>
+      <.empty_state
+        :if={@query != "" and @results == []}
+        title={dgettext("tracking", "No match for “%{query}”", query: @query)}
+      >
+        {dgettext("tracking", "Try a shorter title, or a genre like “drama”.")}
+        <:action>
+          <.button variant="primary" phx-click="clear_search">
+            {dgettext("tracking", "Back to suggestions")}
+          </.button>
+        </:action>
+      </.empty_state>
 
       <DiscoverComponents.results_grid results={@results} query={@query} />
     </Layouts.app>
