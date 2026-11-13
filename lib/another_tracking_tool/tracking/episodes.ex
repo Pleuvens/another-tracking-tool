@@ -68,30 +68,23 @@ defmodule AnotherTrackingTool.Tracking.Episodes do
     after_change(user, media_item.id, {:episodes_changed, season_number})
   end
 
+  def unmark_season(%User{id: user_id} = user, %MediaItem{} = media_item, season_number) do
+    episode_ids =
+      from(e in Episode,
+        where: e.media_item_id == ^media_item.id and e.season_number == ^season_number,
+        select: e.id
+      )
+
+    Repo.delete_all(
+      from w in EpisodeWatch,
+        where: w.user_id == ^user_id and w.episode_id in subquery(episode_ids)
+    )
+
+    after_change(user, media_item.id, {:episodes_changed, season_number})
+  end
+
   def episode_progress(%User{id: user_id}, %MediaItem{id: media_item_id}),
     do: user_id |> progress_for([media_item_id]) |> Map.fetch!(media_item_id)
-
-  def season_progress(%User{id: user_id}, %MediaItem{id: media_item_id}, season_number) do
-    watched =
-      Repo.one(
-        from w in EpisodeWatch,
-          join: e in Episode,
-          on: e.id == w.episode_id,
-          where:
-            w.user_id == ^user_id and e.media_item_id == ^media_item_id and
-              e.season_number == ^season_number,
-          select: count(w.id)
-      )
-
-    total =
-      Repo.one(
-        from e in Episode,
-          where: e.media_item_id == ^media_item_id and e.season_number == ^season_number,
-          select: count(e.id)
-      )
-
-    %{watched: watched, total: total}
-  end
 
   def current_seasons(_user_id, []), do: %{}
 

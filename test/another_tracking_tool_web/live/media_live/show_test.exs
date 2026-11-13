@@ -20,7 +20,50 @@ defmodule AnotherTrackingToolWeb.MediaLive.ShowTest do
       episode =
         episode_fixture(show, season, %{episode_number: 1, name: "Good News About Hell"})
 
-      %{show: show, episode: episode, user: user}
+      %{show: show, season: season, episode: episode, user: user}
+    end
+
+    test "folds the finished seasons and opens the one in progress", ctx do
+      %{conn: conn, user: user, show: show, season: season} = ctx
+      second = season_fixture(show, %{season_number: 2})
+      old = episode_fixture(show, season, %{episode_number: 2, name: "Half Loop"})
+      current = episode_fixture(show, second, %{episode_number: 1, name: "Hello, Ms. Cobel"})
+      episode_fixture(show, second, %{episode_number: 2, name: "Goodbye, Mrs. Selvig"})
+
+      :ok = Tracking.mark_episode(user, current)
+
+      {:ok, _lv, html} = live(conn, ~p"/media/#{show.id}")
+
+      assert html =~ "Hello, Ms. Cobel"
+      refute html =~ "Half Loop"
+      refute html =~ old.name
+    end
+
+    test "a season unfolds on click", ctx do
+      %{conn: conn, show: show, season: season} = ctx
+      season_fixture(show, %{season_number: 2})
+      episode_fixture(show, season, %{episode_number: 2, name: "Half Loop"})
+
+      {:ok, lv, _html} = live(conn, ~p"/media/#{show.id}")
+
+      html =
+        lv |> element("button[phx-click='toggle_season'][phx-value-season='1']") |> render_click()
+
+      assert html =~ "Half Loop"
+    end
+
+    test "a finished season offers to clear itself", ctx do
+      %{conn: conn, user: user, show: show, episode: episode} = ctx
+
+      :ok = Tracking.mark_episode(user, episode)
+
+      {:ok, lv, html} = live(conn, ~p"/media/#{show.id}")
+      assert html =~ "Clear season"
+
+      lv |> element("button[phx-click='unmark_season']") |> render_click()
+
+      assert Tracking.watched_episode_ids(user, show) |> MapSet.size() == 0
+      assert render(lv) =~ "Mark season watched"
     end
 
     test "lists episodes; toggling marks watched and updates progress", ctx do

@@ -36,10 +36,10 @@ defmodule AnotherTrackingTool.Tracking do
   defdelegate mark_episode(user, episode, attrs \\ %{}), to: Episodes
   defdelegate unmark_episode(user, episode), to: Episodes
   defdelegate mark_season(user, media_item, season_number), to: Episodes
+  defdelegate unmark_season(user, media_item, season_number), to: Episodes
   defdelegate episode_progress(user, media_item), to: Episodes
   defdelegate progress_for(user_id, media_item_ids), to: Episodes
   defdelegate current_seasons(user_id, media_item_ids), to: Episodes
-  defdelegate season_progress(user, media_item, season_number), to: Episodes
 
   defdelegate last_watched(user, period, limit \\ 5), to: LastWatched
   defdelegate circle_latest(user, limit \\ 8), to: Circle

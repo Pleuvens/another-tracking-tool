@@ -71,7 +71,7 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
     episode_fixture(show, season, %{episode_number: 2})
 
     Tracking.mark_season(user, show, 1)
-    assert Tracking.season_progress(user, show, 1) == %{watched: 2, total: 2}
+    assert Tracking.episode_progress(user, show) == %{watched: 2, total: 2}
     assert Tracking.get_entry(user, show).status == :completed
   end
 
@@ -97,5 +97,26 @@ defmodule AnotherTrackingTool.Tracking.EpisodeWatchTest do
 
     assert [%{at: at}] = Tracking.last_watched(user, :all)
     assert DateTime.to_date(at) == ~D[2019-03-03]
+  end
+
+  test "unmark_season clears a whole season and leaves the others", ctx do
+    %{user: user, show: show, season: season} = ctx
+    second = season_fixture(show, %{season_number: 2})
+
+    first_one = episode_fixture(show, season, %{episode_number: 1})
+    first_two = episode_fixture(show, season, %{episode_number: 2})
+    second_one = episode_fixture(show, second, %{episode_number: 1})
+
+    :ok = Tracking.mark_episode(user, first_one)
+    :ok = Tracking.mark_episode(user, first_two)
+    :ok = Tracking.mark_episode(user, second_one)
+
+    :ok = Tracking.unmark_season(user, show, 1)
+
+    watched = Tracking.watched_episode_ids(user, show)
+
+    refute MapSet.member?(watched, first_one.id)
+    refute MapSet.member?(watched, first_two.id)
+    assert MapSet.member?(watched, second_one.id)
   end
 end

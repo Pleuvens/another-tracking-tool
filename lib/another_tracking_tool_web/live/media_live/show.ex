@@ -98,6 +98,31 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     {:noreply, socket |> load_tracking() |> load_episodes()}
   end
 
+  def handle_event("unmark_season", %{"season" => season_number}, socket) do
+    Tracking.unmark_season(
+      me(socket),
+      socket.assigns.media_item,
+      String.to_integer(season_number)
+    )
+
+    {:noreply, socket |> load_tracking() |> load_episodes()}
+  end
+
+  def handle_event("toggle_season", %{"season" => season_number}, socket) do
+    season = String.to_integer(season_number)
+    open = socket.assigns.open_seasons
+
+    {:noreply,
+     assign(
+       socket,
+       :open_seasons,
+       if(MapSet.member?(open, season),
+         do: MapSet.delete(open, season),
+         else: MapSet.put(open, season)
+       )
+     )}
+  end
+
   @impl true
   def handle_info({event, _payload}, socket)
       when event in [:entry_upserted, :entry_deleted, :comment_created, :comment_deleted] do
@@ -124,10 +149,36 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
     |> assign(:seasons, Catalog.seasons_with_episodes(media_item))
     |> assign(:watched_ids, Tracking.watched_episode_ids(me(socket), media_item))
     |> assign(:progress, Tracking.episode_progress(me(socket), media_item))
+    |> open_the_season_in_progress()
   end
 
-  defp load_episodes(socket),
-    do: assign(socket, seasons: [], watched_ids: MapSet.new(), progress: %{watched: 0, total: 0})
+  defp load_episodes(socket) do
+    socket
+    |> assign(seasons: [], watched_ids: MapSet.new(), progress: %{watched: 0, total: 0})
+    |> assign_new(:open_seasons, fn -> MapSet.new() end)
+  end
+
+  # the first time episodes arrive, unfold wherever the user left off
+  defp open_the_season_in_progress(%{assigns: %{seasons: []}} = socket),
+    do: assign_new(socket, :open_seasons, fn -> MapSet.new() end)
+
+  defp open_the_season_in_progress(socket) do
+    if Map.get(socket.assigns, :open_seasons) do
+      socket
+    else
+      assign(socket, :open_seasons, MapSet.new([in_progress_season(socket)]))
+    end
+  end
+
+  defp in_progress_season(%{assigns: %{seasons: seasons, watched_ids: watched_ids}}) do
+    partly_watched =
+      Enum.find(seasons, fn season ->
+        watched = Enum.count(season.episodes, &MapSet.member?(watched_ids, &1.id))
+        watched > 0 and watched < length(season.episodes)
+      end)
+
+    (partly_watched || List.last(seasons)).season_number
+  end
 
   defp all_episodes(socket), do: Enum.flat_map(socket.assigns.seasons, & &1.episodes)
 
@@ -154,6 +205,7 @@ defmodule AnotherTrackingToolWeb.MediaLive.Show do
         seasons={@seasons}
         watched_ids={@watched_ids}
         progress={@progress}
+        open_seasons={@open_seasons}
       />
 
       <MediaComponents.circle_panel entries={@entries} circle_rating={@circle_rating} />
