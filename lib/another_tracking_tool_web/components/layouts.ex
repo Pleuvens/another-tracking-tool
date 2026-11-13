@@ -17,8 +17,8 @@ defmodule AnotherTrackingToolWeb.Layouts do
     ~H"""
     <header class="border-b border-line">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-        <a href="/" class="font-display text-lg font-bold text-ink">
-          {dgettext("layouts", "Track")}
+        <a href="/">
+          <.wordmark />
         </a>
         <nav class="flex items-center gap-5 text-sm font-bold text-ink-soft">
           <.link :if={Accounts.first_user?()} navigate={~p"/users/register"} class="hover:text-ink">
@@ -53,9 +53,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
         >
           <.icon name="hero-bars-3" class="size-5" />
         </button>
-        <span class="font-display text-lg font-bold text-ink">
-          {dgettext("layouts", "Track")}
-        </span>
+        <.wordmark />
       </header>
 
       <div
@@ -70,12 +68,7 @@ defmodule AnotherTrackingToolWeb.Layouts do
         class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0"
       >
         <div class="flex flex-col gap-5 p-4 md:h-full">
-          <div class="flex items-center gap-2 px-2 font-display text-lg font-bold text-ink">
-            <span class="relative size-5 rounded-md border-[2.5px] border-ink">
-              <span class="absolute inset-x-0.5 bottom-0.5 h-1 rounded-sm bg-ink"></span>
-            </span>
-            {dgettext("layouts", "Track")}
-          </div>
+          <.wordmark mark class="px-2" />
 
           <.nav_group label={dgettext("layouts", "Watch")}>
             <.nav_item navigate={~p"/feed"} icon="hero-chart-bar" active={@active == :feed}>
@@ -203,6 +196,20 @@ defmodule AnotherTrackingToolWeb.Layouts do
         </kbd>
       </.link>
     </div>
+    """
+  end
+
+  attr :mark, :boolean, default: false
+  attr :class, :any, default: nil
+
+  defp wordmark(assigns) do
+    ~H"""
+    <span class={["flex items-center gap-2 font-display text-lg font-bold text-ink", @class]}>
+      <span :if={@mark} class="relative size-5 rounded-md border-[2.5px] border-ink">
+        <span class="absolute inset-x-0.5 bottom-0.5 h-1 rounded-sm bg-ink"></span>
+      </span>
+      {dgettext("layouts", "Track")}
+    </span>
     """
   end
 
