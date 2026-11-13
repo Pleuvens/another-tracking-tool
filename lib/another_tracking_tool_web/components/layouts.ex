@@ -40,113 +40,10 @@ defmodule AnotherTrackingToolWeb.Layouts do
   end
 
   def app(assigns) do
-    assigns = assign(assigns, :counts, nav_counts(assigns.current_scope.user))
-
     ~H"""
     <div class="md:flex md:min-h-screen">
-      <header class="flex items-center gap-3 border-b border-line px-4 py-3 md:hidden">
-        <button
-          phx-click={toggle_menu()}
-          aria-controls="side-menu"
-          aria-label={dgettext("layouts", "Open menu")}
-          class="text-ink-soft hover:text-ink"
-        >
-          <.icon name="hero-bars-3" class="size-5" />
-        </button>
-        <.wordmark />
-      </header>
-
-      <div
-        id="side-menu-backdrop"
-        phx-click={toggle_menu()}
-        class="fixed inset-0 z-30 hidden bg-ink/40 md:hidden"
-      >
-      </div>
-
-      <aside
-        id="side-menu"
-        class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0"
-      >
-        <div class="flex flex-col gap-5 p-4 md:h-full">
-          <.wordmark mark class="px-2" />
-
-          <.nav_group label={dgettext("layouts", "Watch")}>
-            <.nav_item navigate={~p"/feed"} icon="hero-chart-bar" active={@active == :feed}>
-              {dgettext("layouts", "Activity")}
-            </.nav_item>
-            <.nav_item
-              navigate={~p"/search"}
-              icon="hero-magnifying-glass"
-              active={@active == :search}
-            >
-              {dgettext("layouts", "Discover")}
-            </.nav_item>
-            <.nav_item
-              navigate={~p"/watchlist"}
-              icon="hero-bookmark"
-              active={@active == :watchlist}
-              count={@counts.list}
-            >
-              {dgettext("layouts", "My list")}
-            </.nav_item>
-          </.nav_group>
-
-          <.nav_group label={dgettext("layouts", "You")}>
-            <.nav_item
-              navigate={~p"/users/settings"}
-              icon="hero-user-circle"
-              active={@active == :profile}
-            >
-              {dgettext("layouts", "Profile")}
-            </.nav_item>
-            <.nav_item
-              navigate={~p"/import"}
-              icon="hero-arrow-down-tray"
-              active={@active == :import}
-            >
-              {dgettext("layouts", "Import")}
-            </.nav_item>
-          </.nav_group>
-
-          <.nav_group :if={@current_scope.user.admin} label={dgettext("layouts", "Admin")}>
-            <.nav_item
-              navigate={~p"/invites"}
-              icon="hero-envelope"
-              active={@active == :invites}
-              count={@counts.invites}
-            >
-              {dgettext("layouts", "Invites")}
-            </.nav_item>
-            <.nav_item
-              navigate={~p"/integrations"}
-              icon="hero-puzzle-piece"
-              active={@active == :integrations}
-            >
-              {dgettext("layouts", "Integrations")}
-            </.nav_item>
-          </.nav_group>
-
-          <div class="flex items-center gap-2 border-t border-line px-2 pt-3 md:mt-auto">
-            <.avatar
-              initial={Avatars.initial(@current_scope.user)}
-              color={Avatars.color(@current_scope.user.id)}
-              class="size-7"
-            />
-            <div class="flex min-w-0 flex-col">
-              <span class="truncate text-xs font-bold text-ink">
-                {User.display_name(@current_scope.user)}
-              </span>
-              <.link
-                href={~p"/users/log-out"}
-                method="delete"
-                class="text-left text-[11px] text-ink-soft hover:text-ink"
-              >
-                {dgettext("layouts", "Log out")}
-              </.link>
-            </div>
-          </div>
-        </div>
-      </aside>
+      <.mobile_bar />
+      <.side_menu user={@current_scope.user} active={@active} />
 
       <main class="flex-1 px-4 py-8 sm:px-8">
         {render_slot(@inner_block)}
@@ -196,6 +93,123 @@ defmodule AnotherTrackingToolWeb.Layouts do
         </kbd>
       </.link>
     </div>
+    """
+  end
+
+  defp mobile_bar(assigns) do
+    ~H"""
+    <header class="flex items-center gap-3 border-b border-line px-4 py-3 md:hidden">
+      <button
+        phx-click={toggle_menu()}
+        aria-controls="side-menu"
+        aria-label={dgettext("layouts", "Open menu")}
+        class="text-ink-soft hover:text-ink"
+      >
+        <.icon name="hero-bars-3" class="size-5" />
+      </button>
+      <.wordmark />
+    </header>
+    """
+  end
+
+  attr :user, :map, required: true
+  attr :active, :atom, default: nil
+
+  defp side_menu(assigns) do
+    assigns = assign(assigns, :counts, nav_counts(assigns.user))
+
+    ~H"""
+    <div
+      id="side-menu-backdrop"
+      phx-click={toggle_menu()}
+      class="fixed inset-0 z-30 hidden bg-ink/40 md:hidden"
+    >
+    </div>
+
+    <aside
+      id="side-menu"
+      class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full overflow-y-auto border-r border-line bg-paper-0 transition-transform md:static md:w-56 md:shrink-0 md:translate-x-0"
+    >
+      <div class="flex flex-col gap-5 p-4 md:h-full">
+        <.wordmark mark class="px-2" />
+
+        <.nav_group label={dgettext("layouts", "Watch")}>
+          <.nav_item navigate={~p"/feed"} icon="hero-chart-bar" active={@active == :feed}>
+            {dgettext("layouts", "Activity")}
+          </.nav_item>
+          <.nav_item
+            navigate={~p"/search"}
+            icon="hero-magnifying-glass"
+            active={@active == :search}
+          >
+            {dgettext("layouts", "Discover")}
+          </.nav_item>
+          <.nav_item
+            navigate={~p"/watchlist"}
+            icon="hero-bookmark"
+            active={@active == :watchlist}
+            count={@counts.list}
+          >
+            {dgettext("layouts", "My list")}
+          </.nav_item>
+        </.nav_group>
+
+        <.nav_group label={dgettext("layouts", "You")}>
+          <.nav_item
+            navigate={~p"/users/settings"}
+            icon="hero-user-circle"
+            active={@active == :profile}
+          >
+            {dgettext("layouts", "Profile")}
+          </.nav_item>
+          <.nav_item
+            navigate={~p"/import"}
+            icon="hero-arrow-down-tray"
+            active={@active == :import}
+          >
+            {dgettext("layouts", "Import")}
+          </.nav_item>
+        </.nav_group>
+
+        <.nav_group :if={@user.admin} label={dgettext("layouts", "Admin")}>
+          <.nav_item
+            navigate={~p"/invites"}
+            icon="hero-envelope"
+            active={@active == :invites}
+            count={@counts.invites}
+          >
+            {dgettext("layouts", "Invites")}
+          </.nav_item>
+          <.nav_item
+            navigate={~p"/integrations"}
+            icon="hero-puzzle-piece"
+            active={@active == :integrations}
+          >
+            {dgettext("layouts", "Integrations")}
+          </.nav_item>
+        </.nav_group>
+
+        <div class="flex items-center gap-2 border-t border-line px-2 pt-3 md:mt-auto">
+          <.avatar
+            initial={Avatars.initial(@user)}
+            color={Avatars.color(@user.id)}
+            class="size-7"
+          />
+          <div class="flex min-w-0 flex-col">
+            <span class="truncate text-xs font-bold text-ink">
+              {User.display_name(@user)}
+            </span>
+            <.link
+              href={~p"/users/log-out"}
+              method="delete"
+              class="text-left text-[11px] text-ink-soft hover:text-ink"
+            >
+              {dgettext("layouts", "Log out")}
+            </.link>
+          </div>
+        </div>
+      </div>
+    </aside>
     """
   end
 
