@@ -110,41 +110,79 @@ defmodule AnotherTrackingToolWeb.MediaComponents do
   attr :seasons, :list, required: true
   attr :watched_ids, :any, required: true
   attr :progress, :map, required: true
+  attr :open_seasons, :any, required: true
 
   def episodes_panel(assigns) do
     ~H"""
     <div class="mt-10 space-y-4">
       <div class="flex items-center justify-between">
         <.section_label>{dgettext("tracking", "Episodes")}</.section_label>
-        <span class="text-xs text-ink-soft">{@progress.watched}/{@progress.total}</span>
-      </div>
-      <div class="h-2 overflow-hidden rounded-full bg-paper-2">
-        <div
-          class="h-full bg-ink transition-all"
-          style={"width: #{Format.percent(@progress.watched, @progress.total)}%"}
-        >
-        </div>
+        <span class="text-xs text-ink-soft">
+          {dgettext("tracking", "%{watched} of %{total} watched",
+            watched: @progress.watched,
+            total: @progress.total
+          )}
+        </span>
       </div>
 
       <p :if={@seasons == []} class="text-sm text-ink-soft">
         {dgettext("tracking", "Episodes are still loading…")}
       </p>
 
-      <div :for={season <- @seasons} class="space-y-2">
-        <div class="flex items-center justify-between">
-          <h3 class="font-display font-bold text-ink">
-            {season.name || dgettext("tracking", "Season %{n}", n: season.season_number)}
-          </h3>
-          <button
-            phx-click="mark_season"
-            phx-value-season={season.season_number}
-            class="text-xs font-bold text-ink-soft hover:text-ink"
-          >
-            {dgettext("tracking", "Mark season watched")}
-          </button>
-        </div>
+      <.season_block
+        :for={season <- Enum.sort_by(@seasons, & &1.season_number, :desc)}
+        season={season}
+        watched_ids={@watched_ids}
+        open={MapSet.member?(@open_seasons, season.season_number)}
+      />
+    </div>
+    """
+  end
+
+  attr :season, :map, required: true
+  attr :watched_ids, :any, required: true
+  attr :open, :boolean, required: true
+
+  defp season_block(assigns) do
+    assigns =
+      assigns
+      |> assign(:watched, watched_in(assigns.season, assigns.watched_ids))
+      |> assign(:total, length(assigns.season.episodes))
+
+    ~H"""
+    <div class="overflow-hidden rounded-xl border border-line">
+      <div class="flex flex-wrap items-center gap-3 bg-paper-0 p-3">
+        <button
+          phx-click="toggle_season"
+          phx-value-season={@season.season_number}
+          aria-expanded={to_string(@open)}
+          class="flex min-w-36 flex-1 items-center gap-2.5 text-left"
+        >
+          <.icon
+            name="hero-chevron-right"
+            class={["size-3.5 shrink-0 text-ink-soft transition-transform", @open && "rotate-90"]}
+          />
+          <b class="font-display text-sm text-ink">{season_name(@season)}</b>
+          <span class="h-0.5 max-w-36 flex-1 overflow-hidden rounded-full bg-line">
+            <span class="block h-full bg-ink" style={"width: #{Format.percent(@watched, @total)}%"}></span>
+          </span>
+          <span class="shrink-0 text-xs tabular-nums text-ink-soft">{@watched}/{@total}</span>
+        </button>
+
+        <button
+          phx-click={if @watched == @total, do: "unmark_season", else: "mark_season"}
+          phx-value-season={@season.season_number}
+          class="rounded-full border border-line px-2.5 py-0.5 text-[11px] font-bold text-ink-soft hover:text-ink"
+        >
+          {if @watched == @total,
+            do: dgettext("tracking", "Clear season"),
+            else: dgettext("tracking", "Mark season watched")}
+        </button>
+      </div>
+
+      <div :if={@open} class="divide-y divide-line-soft border-t border-line">
         <.episode_row
-          :for={episode <- season.episodes}
+          :for={episode <- @season.episodes}
           episode={episode}
           watched={MapSet.member?(@watched_ids, episode.id)}
         />
@@ -160,18 +198,26 @@ defmodule AnotherTrackingToolWeb.MediaComponents do
       phx-value-id={@episode.id}
       phx-value-watched={to_string(@watched)}
       class={[
-        "flex w-full items-center gap-3 rounded-xl bg-paper-2 px-3 py-2 text-left text-sm",
-        if(@watched, do: "text-ink", else: "text-ink-soft hover:text-ink")
+        "flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-paper-2",
+        if(@watched, do: "text-ink", else: "text-ink-soft")
       ]}
     >
-      <span class="w-8 shrink-0 font-bold tabular-nums">
+      <span class="w-10 shrink-0 font-bold tabular-nums">
         {@episode.season_number}×{@episode.episode_number}
       </span>
       <span class="flex-1 truncate">{@episode.name}</span>
-      <.icon :if={@watched} name="hero-check-circle-solid" class="size-5 text-ink" />
+      <.icon :if={@watched} name="hero-check-circle-solid" class="size-5 shrink-0 text-ink" />
     </button>
     """
   end
+
+  defp season_name(%{name: nil, season_number: number}),
+    do: dgettext("tracking", "Season %{n}", n: number)
+
+  defp season_name(%{name: name}), do: name
+
+  defp watched_in(season, watched_ids),
+    do: Enum.count(season.episodes, &MapSet.member?(watched_ids, &1.id))
 
   attr :entries, :list, required: true
   attr :circle_rating, :any, default: nil

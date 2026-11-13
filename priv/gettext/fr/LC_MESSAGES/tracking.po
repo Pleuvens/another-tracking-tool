@@ -7,12 +7,12 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:202
+#: lib/another_tracking_tool_web/components/media_components.ex:248
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr "Commentaires"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:189
+#: lib/another_tracking_tool_web/components/media_components.ex:235
 #, elixir-autogen, elixir-format
 msgid "No one yet — be the first."
 msgstr "Personne pour l'instant — soyez le premier."
@@ -22,17 +22,17 @@ msgstr "Personne pour l'instant — soyez le premier."
 msgid "Not found."
 msgstr "Introuvable."
 
-#: lib/another_tracking_tool_web/components/media_components.ex:218
+#: lib/another_tracking_tool_web/components/media_components.ex:264
 #, elixir-autogen, elixir-format
 msgid "Post"
 msgstr "Publier"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:215
+#: lib/another_tracking_tool_web/components/media_components.ex:261
 #, elixir-autogen, elixir-format
 msgid "Say something…"
 msgstr "Dites quelque chose…"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:242
+#: lib/another_tracking_tool_web/components/media_components.ex:288
 #, elixir-autogen, elixir-format
 msgid "Sometime, who's counting"
 msgstr "Un jour, dans le passé"
@@ -42,27 +42,27 @@ msgstr "Un jour, dans le passé"
 msgid "Watched on"
 msgstr "Vu le"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:182
+#: lib/another_tracking_tool_web/components/media_components.ex:228
 #, elixir-autogen, elixir-format
 msgid "Your circle"
 msgstr "Votre cercle"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:118
+#: lib/another_tracking_tool_web/components/media_components.ex:119
 #, elixir-autogen, elixir-format
 msgid "Episodes"
 msgstr "Épisodes"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:130
+#: lib/another_tracking_tool_web/components/media_components.ex:129
 #, elixir-autogen, elixir-format
 msgid "Episodes are still loading…"
 msgstr "Les épisodes se chargent encore…"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:143
+#: lib/another_tracking_tool_web/components/media_components.ex:179
 #, elixir-autogen, elixir-format
 msgid "Mark season watched"
 msgstr "Marquer la saison comme vue"
 
-#: lib/another_tracking_tool_web/components/media_components.ex:136
+#: lib/another_tracking_tool_web/components/media_components.ex:215
 #, elixir-autogen, elixir-format
 msgid "Season %{n}"
 msgstr "Saison %{n}"
@@ -77,84 +77,94 @@ msgstr "Note"
 msgid "Status"
 msgstr "Statut"
 
-#: lib/another_tracking_tool_web/live/search_live.ex:103
+#: lib/another_tracking_tool_web/live/search_live.ex:118
 #, elixir-autogen, elixir-format
 msgid "Discover"
 msgstr "Découvrir"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:218
+#: lib/another_tracking_tool_web/components/discover_components.ex:223
 #, elixir-autogen, elixir-format
 msgid "%{count} episode"
 msgid_plural "%{count} episodes"
 msgstr[0] "%{count} épisode"
 msgstr[1] "%{count} épisodes"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:224
+#: lib/another_tracking_tool_web/components/discover_components.ex:226
 #, elixir-autogen, elixir-format
 msgid "%{count} min"
 msgstr "%{count} min"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:114
+#: lib/another_tracking_tool_web/components/discover_components.ex:115
 #, elixir-autogen, elixir-format
 msgid "%{name} rated it"
 msgstr "%{name} lui a mis"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:203
+#: lib/another_tracking_tool_web/components/discover_components.ex:204
 #, elixir-autogen, elixir-format
 msgid "Film"
 msgstr "Film"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:121
+#: lib/another_tracking_tool_web/components/discover_components.ex:122
 #, elixir-autogen, elixir-format
 msgid "New ground for you"
 msgstr "Du neuf pour vous"
 
-#: lib/another_tracking_tool_web/live/search_live.ex:144
+#: lib/another_tracking_tool_web/live/search_live.ex:159
 #, elixir-autogen, elixir-format
 msgid "No match for “%{query}”"
 msgstr "Aucun résultat pour « %{query} »"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:85
+#: lib/another_tracking_tool_web/components/discover_components.ex:86
 #, elixir-autogen, elixir-format
 msgid "Open page"
 msgstr "Voir la fiche"
 
-#: lib/another_tracking_tool_web/live/search_live.ex:109
+#: lib/another_tracking_tool_web/live/search_live.ex:124
 #, elixir-autogen, elixir-format
 msgid "Or search by name"
 msgstr "Ou chercher par nom"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:202
+#: lib/another_tracking_tool_web/components/discover_components.ex:203
 #, elixir-autogen, elixir-format
 msgid "Series"
 msgstr "Série"
 
-#: lib/another_tracking_tool_web/live/search_live.ex:123
+#: lib/another_tracking_tool_web/live/search_live.ex:138
 #, elixir-autogen, elixir-format
 msgid "That is every suggestion"
 msgstr "Plus aucune suggestion"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:173
+#: lib/another_tracking_tool_web/components/discover_components.ex:174
 #, elixir-autogen, elixir-format
 msgid "Undo"
 msgstr "Annuler"
 
-#: lib/another_tracking_tool_web/live/search_live.ex:136
+#: lib/another_tracking_tool_web/live/search_live.ex:151
 #, elixir-autogen, elixir-format
 msgid "Use the buttons or the arrow keys."
 msgstr "Utilisez les boutons ou les flèches."
 
-#: lib/another_tracking_tool_web/live/search_live.ex:126
+#: lib/another_tracking_tool_web/live/search_live.ex:141
 #, elixir-autogen, elixir-format
 msgid "You have made a call on everything we know about. Search for something by name instead."
 msgstr "Vous avez tranché sur tout ce qu'on connaît. Cherchez un titre par son nom."
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:106
+#: lib/another_tracking_tool_web/components/discover_components.ex:107
 #, elixir-autogen, elixir-format
 msgid "You watch a lot of %{genre}"
 msgstr "Vous regardez beaucoup de %{genre}"
 
-#: lib/another_tracking_tool_web/components/discover_components.ex:98
+#: lib/another_tracking_tool_web/components/discover_components.ex:99
 #, elixir-autogen, elixir-format
 msgid "Your most-watched genre: %{genre}"
 msgstr "Votre genre le plus regardé : %{genre}"
+
+#: lib/another_tracking_tool_web/components/media_components.ex:121
+#, elixir-autogen, elixir-format
+msgid "%{watched} of %{total} watched"
+msgstr "%{watched} vus sur %{total}"
+
+#: lib/another_tracking_tool_web/components/media_components.ex:178
+#, elixir-autogen, elixir-format
+msgid "Clear season"
+msgstr "Vider la saison"
